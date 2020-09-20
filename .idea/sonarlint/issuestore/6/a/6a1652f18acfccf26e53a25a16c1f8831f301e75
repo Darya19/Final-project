@@ -1,0 +1,6 @@
+
+[
+java:S4719"9Replace charset name argument with StandardCharsets.UTF_8(­†Áûÿÿÿÿ8°ÁëÅÊ.
+H
+java:S1481"&Remove this unused "a" local variable.(ÿµ´ûÿÿÿÿ8ª—ËÆÊ.
+U	java:S106"9Replace this use of System.out or System.err by a logger.(ÃüÇ£8°ÁëÅÊ.
