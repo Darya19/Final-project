@@ -7,8 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Profile</title>
     <link rel="stylesheet" href="/bootstrap/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
     <link rel="stylesheet" href="/bootstrap/fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
     <link rel="stylesheet" href="/bootstrap/css/smoothproducts.css">
 </head>
@@ -29,70 +31,79 @@
     <section class="main-block profile">
         <div class="container">
             <div class="main-information">
-                <h2 class="text-info">${enrollee.userName} ${enrollee.lastName}</h2>
-                <p>application status: <strong>${enrollee.applicationStatus}</strong></p>
-                <p>identification number: <strong>${enrollee.identificationNumber}</strong></p>
+                <div class="text-info">
+                <h1 class="text-center">${enrollee.userName} ${enrollee.lastName}</h1>
+                </div>
+                <div class="text-center">
+                    <h6 class="text-muted">application status:</h6><h5>wait</h5>
+                <h6 class="text-muted">identification number:</h6>
+                <h5>by190</h5>
+                </div>
             </div>
         </div>
     </section>
+    <p></p>
     <section class="faulty-block profile">
         <div class="container">
-            <div class="faculty-information">
-                <div class="heading">
-                    <h2 class="text-center">Faculty information</h2>
-                </div>
-                <div class="item">
                     <div class="row">
-                        <div class="col-md-6">
-                            <h3>Chosen faculty</h3>
-                            <h4 class="organization">Amazing Co.</h4>
-                        </div>
-                        <div class="col-md-4"><span class="faculty">${faculty}</span></div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="row">
-                        <div class="col-4">
-                            <h3>Chosen specialty</h3>
-                        </div>
-                        <div class="col-md-4"><span class="specialty">${specialty}</span></div>
-                    </div>
-                </div>
-            </div>
-            <div class="group">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="subjects marks-info-card">
-                            <h2>Marks</h2>
-                            <h3>${subject1}</h3>
-                            <div class="progress">
-                                <div class="progress-bar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                                     style="width: 100%;"><span class="sr-only">100%</span></div>
+                        <div class="col-md-8">
+                            <div class="shadow p-3 mb-5 bg-white rounded"><span class="border-bottom border-light"></span>
+                            <div class="faculty info">
+                          <h5 class="text-muted">Faculty information:</h5>
+                                <div class="row">
+                            <div class="col-4">
+                                <div class="text-muted"> Chosen faculty:</div>
                             </div>
-                            <h3>${subject2}</h3>
-                            <div class="progress">
-                                <div class="progress-bar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"
-                                     style="width: 90%;"><span class="sr-only">90%</span></div>
-                            </div>
-                            <h3>${subject3}</h3>
-                            <div class="progress">
-                                <div class="progress-bar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
-                                     style="width: 80%;"><span class="sr-only">80%</span></div>
-                            </div>
-                            <h3>certificate</h3>
-                            <div class="progress">
-                                <div class="progress-bar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
-                                     style="width: 80%;"><span class="sr-only">80%</span></div>
-                            </div>
-                            <h3>total</h3>
-                            <div class="progress">
-                                <div class="progress-bar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
-                                     style="width: 80%;"><span class="sr-only">80%</span></div>
+                                <div class="col-4">${faculty.facultyName}</div>
+                                    <div class="col-2">
+                                    <button class="btn btn-primary btn-sm" type="button">change</button>
+                                </div>
+                                </div>
+                                </div>
+                                <p></p>
+                                <div class="row">
+                                <div class="col-4">
+                                    <div class="text-muted"> Chosen specialty:</div></div>
+                                <div class="col-4">${faculty.facultyName}</div>
+                                    <div class="col-2">
+                                    <button class="btn btn-primary btn-sm" type="button">change</button>
+                                    </div>
+                                    </div>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="shadow p-3 mb-5 bg-white rounded">
+                            <div class="subjects marks-info-card">
+                                <h4 class="text-muted">Marks:</h4>
+                                <h7>math</h7>
+                                <div class="progress">
+                                    <div class="progress-bar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+                                         style="width: 50%;"><span class="sr-only">100%</span></div>
+                                </div>
+                                <h7>english</h7>
+                                <div class="progress">
+                                    <div class="progress-bar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"
+                                         style="width: 50%;"><span class="sr-only">90%</span></div>
+                                </div>
+                                <h7>science</h7>
+                                <div class="progress">
+                                    <div class="progress-bar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+                                         style="width: 50%;"><span class="sr-only">80%</span></div>
+                                </div>
+                                <h7>certificate</h7>
+                                <div class="progress">
+                                    <div class="progress-bar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+                                         style="width: 50%;"><span class="sr-only">80%</span>80%</div>
+                                </div>
+                                <h7>total</h7>
+                                <div class="progress">
+                                    <div class="progress-bar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+                                         style="width: 50%;"><span class="sr-only">80%</span></div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
         </div>
     </section>
 </main>
@@ -122,8 +133,10 @@
 <script src="/bootstrap/js/jquery.min.js"></script>
 <script src="/bootstrap/bootstrap/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
 <script src="/bootstrap/js/smoothproducts.min.js"></script>
 <script src="/bootstrap/js/theme.js"></script>
+
 </body>
 
 </html>
