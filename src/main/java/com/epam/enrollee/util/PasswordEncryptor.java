@@ -23,4 +23,8 @@ public class PasswordEncryptor {
         }
         return md5Hex;
     }
+
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        System.out.println(encryptPassword("1111"));
+    }
 }

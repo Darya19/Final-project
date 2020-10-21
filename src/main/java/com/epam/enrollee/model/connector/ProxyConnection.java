@@ -10,7 +10,7 @@ public class ProxyConnection implements Connection {
     private Connection connection;
 
     ProxyConnection(Connection connection) {
-        this.connection = connection; //TODO init connection
+        this.connection = connection;
     }
 
     @Override

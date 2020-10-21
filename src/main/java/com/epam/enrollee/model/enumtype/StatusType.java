@@ -3,7 +3,8 @@ package com.epam.enrollee.model.enumtype;
 public enum StatusType {
     BLOCKED("blocked"),
     ACTIVE("active"),
-    DELETED("deleted");//TODO write status
+    INACTIVE("inactive"),
+    DELETED("deleted");
 
     private String status;
 

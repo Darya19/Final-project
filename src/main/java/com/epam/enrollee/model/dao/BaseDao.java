@@ -1,9 +1,6 @@
 package com.epam.enrollee.model.dao;
 
-import com.epam.enrollee.exception.UserDaoException;
-import com.epam.enrollee.model.entity.User;
-import com.epam.enrollee.model.enumtype.RoleType;
-import com.epam.enrollee.model.enumtype.StatusType;
+import com.epam.enrollee.exception.DaoException;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,27 +9,23 @@ import java.util.Optional;
 
 public interface BaseDao<T> {
 
-    int createUser(User user) throws UserDaoException;
+    int add(T t) throws DaoException;
 
-    int removeUser(User user) throws UserDaoException;
+    int remove(T t) throws DaoException;
 
-    Optional<T> findUserById(int parameter) throws UserDaoException;
+    Optional<List<T>> findById(int parameter) throws DaoException;
 
-    Optional<T> findUserByEmail(String email) throws UserDaoException;
+    Optional<List<T>> findAll() throws DaoException;
 
-    Optional<T> findUserByRole(RoleType Role) throws UserDaoException;
+    //TODO sort methods
 
-    Optional<T> findUserByStatus(StatusType status) throws UserDaoException;
-
-    Optional<List<User>> findAll() throws UserDaoException;//TODO sort methods
-
-    default void closeStatement(Statement statement) throws UserDaoException {
+    default void closeStatement(Statement statement) throws DaoException {
         try {
             if (statement != null) {
                 statement.close();
             }
         } catch (SQLException e) {
-            throw new UserDaoException("database issues", e);
+            throw new DaoException("database issues", e);
         }
     }
 }

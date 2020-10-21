@@ -2,6 +2,7 @@ package com.epam.enrollee.controller.command;
 
 import com.epam.enrollee.controller.command.impl.LoginCommand;
 import com.epam.enrollee.controller.command.impl.LogoutCommand;
+import com.epam.enrollee.controller.command.impl.ProfileCommand;
 import com.epam.enrollee.controller.command.impl.RegisterCommand;
 
 public enum CommandType {
@@ -18,6 +19,11 @@ public enum CommandType {
     REGISTER {
         {
             this.command = new RegisterCommand();
+        }
+    },
+    PROFILE {
+        {
+            this.command = new ProfileCommand();
         }
     };
 

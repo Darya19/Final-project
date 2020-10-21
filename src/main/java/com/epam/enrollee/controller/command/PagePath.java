@@ -7,6 +7,7 @@ public class PagePath {
     public static final String ERROR_404 ="/jsp/error404.jsp";
     public static final String REGISTER ="/jsp/register.jsp";
     public static final String PROFILE ="/jsp/profile.jsp";
+    public static final String STATEMENT ="/jsp/statement.jsp";
 
 //TODO mainstudent mainadmin
     private PagePath() {

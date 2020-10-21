@@ -1,12 +1,12 @@
 package com.epam.enrollee.model.service.impl;
 
-import com.epam.enrollee.exception.UserDaoException;
-import com.epam.enrollee.exception.UserServiceException;
+import com.epam.enrollee.exception.DaoException;
+import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.dao.impl.UserDaoImpl;
+import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.User;
-import com.epam.enrollee.model.service.BaseUserService;
+import com.epam.enrollee.model.service.BaseService;
 import com.epam.enrollee.util.PasswordEncryptor;
-import com.google.protobuf.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,53 +14,59 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
-public class UserServiceImpl implements BaseUserService {
+public class UserServiceImpl implements BaseService {
+
+    UserDaoImpl dao = new UserDaoImpl();
 
     private Logger logger = LogManager.getLogger();
 
     @Override
-    public int createUser(User user) throws UserServiceException {
+    public int createUser(Enrollee user) throws ServiceException {
         return 0;
     }
 
     @Override
-    public int removeUser(User user) throws UserServiceException {
+    public int removeUser(Enrollee user) throws ServiceException {
         return 0;
     }
 
     @Override
-    public Optional findUserByEmail(String email) throws UserServiceException {
+    public Optional<User> findUserByEmail(String email) throws ServiceException {
+        try {
+            Optional<User> foundUser = dao.findUserByEmail(email);
+            return foundUser;
+        } catch (DaoException e) {
+            throw new ServiceException("");//TODO message
+        }
+    }
+
+    @Override
+    public Optional findUserByRole(String role) throws ServiceException {
         return Optional.empty();
     }
 
     @Override
-    public Optional findUserByRole(String role) throws UserServiceException {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional findUserByStatus(String Status) throws UserServiceException {
+    public Optional findUserByStatus(String Status) throws ServiceException {
         return Optional.empty();
     }
 
 
     @Override
-    public Optional findUserById(int id) throws UserServiceException {
+    public Optional findUserById(int id) throws ServiceException {
         return Optional.empty();
     }
 
     @Override
-    public List findAll() throws UserServiceException {
+    public List findAll() throws ServiceException {
         return null;
     }
 
     @Override
-    public List<User> update(User user) throws UserServiceException {
+    public List<Enrollee> update(Enrollee user) throws ServiceException {
         return null;
     }
 
     public boolean checkEmailAndPassword(String email, String password) throws ServiceException {
-        UserDaoImpl dao = new UserDaoImpl();
         try {
             String foundPassword = dao.findPasswordByEmail(email).get();
             if (!foundPassword.isEmpty()) {
@@ -70,7 +76,7 @@ public class UserServiceImpl implements BaseUserService {
                 }
             }
             return false;
-        } catch (UserDaoException | NoSuchAlgorithmException e) {
+        } catch (DaoException | NoSuchAlgorithmException e) {
             throw new ServiceException(""); //TODO message in exc
         }
     }

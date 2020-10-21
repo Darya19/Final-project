@@ -17,7 +17,7 @@ public enum ConnectionPool {
 
     INSTANCE;
 
-    private static final int DEFAULT_POOL_SIZE = 10;
+    private static final int DEFAULT_POOL_SIZE = 4;
     private BlockingQueue<ProxyConnection> freeConnections; //свободные соеденения
     private BlockingQueue<ProxyConnection> givenAwayConnections; // отданные соеденнения
 
@@ -25,20 +25,20 @@ public enum ConnectionPool {
 
     ConnectionPool() {
         this.freeConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
-        this.givenAwayConnections = new LinkedBlockingDeque<>();
+        this.givenAwayConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         ResourceBundle resource = ResourceBundle.getBundle("database");
         String url = resource.getString("db.url");
         String user = resource.getString("db.user");
         String password = resource.getString("db.password");
         String driverName = resource.getString("db.driverName");
         try {
-            Class.forName(driverName);
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
                 Connection connection = DriverManager.getConnection(url, user, password);
                 freeConnections.offer(new ProxyConnection(connection));
             }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("impossible register db driver", e);
+//        } catch (ClassNotFoundException e) {
+//            throw new RuntimeException("impossible register db driver", e);
         } catch (SQLException e) {
             throw new RuntimeException("impossible create connection to db", e);
         }
