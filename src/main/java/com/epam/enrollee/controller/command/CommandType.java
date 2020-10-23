@@ -1,9 +1,6 @@
 package com.epam.enrollee.controller.command;
 
-import com.epam.enrollee.controller.command.impl.LoginCommand;
-import com.epam.enrollee.controller.command.impl.LogoutCommand;
-import com.epam.enrollee.controller.command.impl.ProfileCommand;
-import com.epam.enrollee.controller.command.impl.RegisterCommand;
+import com.epam.enrollee.controller.command.impl.*;
 
 public enum CommandType {
     LOGIN {
@@ -24,6 +21,26 @@ public enum CommandType {
     PROFILE {
         {
             this.command = new ProfileCommand();
+        }
+    },
+    TO_FACULTIES_PAGE {
+        {
+            this.command = new ToFacultiesPageCommand();
+        }
+    },
+    TO_MAIN_PAGE {
+        {
+            this.command = new ToMainPageCommand();
+        }
+    },
+    TO_CONTACTS_PAGE {
+        {
+            this.command = new ToContactsPageCommand();
+        }
+    },
+    TO_REGISTER_PAGE {
+        {
+            this.command = new ToRegisterPageCommand();
         }
     };
 

@@ -19,7 +19,7 @@ import java.util.Optional;
 public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
 
     private static final String FIND_ENROLLEE_BY_EMAIL =
-            "SELECT user_id, email, role, status, user_name, user_last_name, identification_number FROM user JOIN account a on user.user_id_fk = a.user_id WHERE email=?";
+            "SELECT user_id, email, role, status, enrollee_name, enrollee_last_name, enrolle_surname FROM enrollee JOIN user on enrollee.enrollee_id = user.user_id WHERE email=?";
 
     @Override
     public int add(Enrollee enrollee) throws DaoException {
@@ -63,7 +63,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             enrollee.setStatus(StatusType.valueOf(resultSet.getString(ColumnName.STATUS).toUpperCase()));
             enrollee.setUserName(resultSet.getString(ColumnName.USER_NAME));
             enrollee.setLastName(resultSet.getString(ColumnName.USER_LAST_NAME));
-            enrollee.setIdentificationNumber(resultSet.getString(ColumnName.IDENTIFICATION_NUMBER));
+           // enrollee.setIdentificationNumber(resultSet.getString(ColumnName.IDENTIFICATION_NUMBER));
             enrollees.add(enrollee);
         }
         return enrollees;

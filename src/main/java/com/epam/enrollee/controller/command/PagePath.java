@@ -8,6 +8,9 @@ public class PagePath {
     public static final String REGISTER ="/jsp/register.jsp";
     public static final String PROFILE ="/jsp/profile.jsp";
     public static final String STATEMENT ="/jsp/statement.jsp";
+    public static final String FACULTIES ="/jsp/faculties.jsp";
+    public static final String CONTACTS ="/jsp/contacts.jsp";
+
 
 //TODO mainstudent mainadmin
     private PagePath() {

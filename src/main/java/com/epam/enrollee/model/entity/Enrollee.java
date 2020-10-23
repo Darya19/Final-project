@@ -6,7 +6,9 @@ public class Enrollee extends User {
 
     private String userName;
     private String lastName;
-    private String identificationNumber;
+    private String Surname;
+    private Passport passport;
+    private Address address;
     private ApplicationStatus applicationStatus;
 
     public Enrollee() {
@@ -29,48 +31,36 @@ public class Enrollee extends User {
         this.lastName = lastName;
     }
 
-    public String getIdentificationNumber() {
-        return identificationNumber;
+    public String getSurname() {
+        return Surname;
     }
 
-    public void setIdentificationNumber(String identificationNumber) {
-        this.identificationNumber = identificationNumber;
+    public void setSurname(String surname) {
+        Surname = surname;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        boolean result = super.equals(o);
-        if (!result) return false;
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        Enrollee enrollee = (Enrollee) o;
-
-        if (getUserName() != null ? !getUserName().equals(enrollee.getUserName()) : enrollee.getUserName() != null) return false;
-        if (getLastName() != null ? !getLastName().equals(enrollee.getLastName()) : enrollee.getLastName() != null)
-            return false;
-        return getIdentificationNumber() != null ? getIdentificationNumber().equals(enrollee.getIdentificationNumber()) : enrollee.getIdentificationNumber() == null;
+    public Passport getPassport() {
+        return passport;
     }
 
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getUserName() != null ? getUserName().hashCode() : 0);
-        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
-        result = 31 * result + (getIdentificationNumber() != null ? getIdentificationNumber().hashCode() : 0);
-        return result;
+    public void setPassport(Passport passport) {
+        this.passport = passport;
     }
 
-    @Override
-    public String toString() {
-        super.toString();
-        final StringBuilder sb = new StringBuilder();
-        sb.append("name='").append(userName).append('\'');
-        sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", identificationNumber='").append(identificationNumber).append('\'');
-        sb.append('}');
-        return sb.toString();
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public ApplicationStatus getApplicationStatus() {
+        return applicationStatus;
+    }
+
+    public void setApplicationStatus(ApplicationStatus applicationStatus) {
+        this.applicationStatus = applicationStatus;
     }
 }
 

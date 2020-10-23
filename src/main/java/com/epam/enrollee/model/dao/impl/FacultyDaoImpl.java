@@ -17,7 +17,7 @@ import java.util.Optional;
 public class FacultyDaoImpl implements BaseDao<Faculty> {
 
     private static final String FIND_FACULTY_BY_USER_ID =
-            "SELECT faculty_id , faculty_name FROM faculty WHERE faculty_id IN (SELECT DISTINCT faculty_id_fk FROM user_faculty WHERE user_id_fk=?)";
+            "SELECT faculty_id , faculty_name FROM faculty WHERE faculty_id IN (SELECT DISTINCT faculty_id_fk FROM enrollee_faculty WHERE enrollee_id_fk=?)";
 
     @Override
     public int add(Faculty faculty) throws DaoException {
