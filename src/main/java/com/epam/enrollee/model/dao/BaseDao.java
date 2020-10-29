@@ -5,13 +5,14 @@ import com.epam.enrollee.exception.DaoException;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface BaseDao<T> {
 
-    int add(T t) throws DaoException;
+    boolean add(Map<String, Object> parameters) throws DaoException;
 
-    int remove(T t) throws DaoException;
+    boolean remove(T t) throws DaoException;
 
     Optional<List<T>> findById(int parameter) throws DaoException;
 

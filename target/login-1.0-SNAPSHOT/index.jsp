@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Upload file</title>
+    <title>Index</title>
 </head>
 <body>
 
-<jsp:forward page="/jsp/register.jsp"/>
+<a href="projectServlet?command=to_register_page">registe</a>
 
 </body>
 </html>

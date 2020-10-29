@@ -2,9 +2,9 @@ package com.epam.enrollee.util;
 
 import com.epam.enrollee.model.entity.Enrollee;
 
-public class builder {
+public class Builder {
 
-    public Enrollee buildUser(){
+    public Enrollee buildEnrollee(){
         return new Enrollee();
     }
 }

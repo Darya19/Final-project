@@ -30,8 +30,6 @@ f
 6src/main/java/com/epam/enrollee/model/entity/User.java,c\0\c0da377a456f2484602f0c347d7fb7d8352e1c47
 z
 Jsrc/main/java/com/epam/enrollee/controller/command/impl/LogoutCommand.java,0\9\096055e85bf579bae027a629bfc8d39cfc0e3252
-w
-Gsrc/main/java/com/epam/enrollee/model/service/impl/UserServiceImpl.java,8\3\836f1fb060bf5557279a33a5f43853c39ca16678
 p
 @src/main/java/com/epam/enrollee/controller/command/PagePath.java,1\3\13904a3294ab915758ee7d7f9f4a93c5d7459ae7
 y
@@ -88,3 +86,21 @@ z
 Jsrc/main/java/com/epam/enrollee/model/service/impl/FacultyServiceImpl.java,e\4\e44713d4b9b2fed4663fab38f8e33ee06dc4c536
 k
 ;src/main/java/com/epam/enrollee/util/PasswordEncryptor.java,4\b\4b581348d1cee1298951c936ff6240e59a848189
+j
+:src/main/java/com/epam/enrollee/model/entity/Passport.java,a\d\ad8358a5aaf455f10cd6c1da63374df46604b729
+i
+9src/main/java/com/epam/enrollee/model/entity/Address.java,a\f\af90f3213c73d5d6437cff92c74b8bf08ea26b6e
+t
+Dsrc/main/java/com/epam/enrollee/model/dao/impl/SpecialtyDaoImpl.java,5\9\594c43908317895cd21b0882a6010a1103cc98b1
+t
+Dsrc/main/java/com/epam/enrollee/propertiesreader/MessageManager.java,5\e\5e1abd4bb82d727030fc51005004a6e5957dcf83
+p
+@src/main/java/com/epam/enrollee/validator/EnrolleeValidator.java,5\e\5ecfb77485c3fdd57ef8ed30c99ee0814a5b9d4e
+t
+Dsrc/main/java/com/epam/enrollee/model/connector/ProxyConnection.java,2\5\257c033c27d26e5d0d73d23f19419771866f4134
+s
+Csrc/main/java/com/epam/enrollee/model/connector/ConnectionPool.java,2\2\22863785201e5d9ec97f2b80de78e46ebb593ae7
+|
+Lsrc/main/java/com/epam/enrollee/controller/command/impl/RegisterCommand.java,8\b\8b451baf67eadf3e1b0a952dcf1a97675f646e3a
+P
+ src/main/webapp/jsp/register.jsp,f\0\f07901c1a6737c04764b8bbbfdfdefe4ca1e4cff

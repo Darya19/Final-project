@@ -2,25 +2,31 @@ package com.epam.enrollee.model.entity;
 
 import com.epam.enrollee.model.enumtype.ApplicationStatus;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Enrollee extends User {
 
-    private String userName;
+    private String firstName;
     private String lastName;
-    private String Surname;
-    private Passport passport;
-    private Address address;
+    private String middleName;
+    private int chosenFacultyId;
+    private int chosenSpecialtyId;
+    private Map<Integer, Integer> testsSubjectsAndMarks;
+
     private ApplicationStatus applicationStatus;
 
     public Enrollee() {
         super();
+      testsSubjectsAndMarks = new HashMap<>();
     }
 
-    public String getUserName() {
-        return userName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -31,28 +37,52 @@ public class Enrollee extends User {
         this.lastName = lastName;
     }
 
-    public String getSurname() {
-        return Surname;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setSurname(String surname) {
-        Surname = surname;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
-    public Passport getPassport() {
-        return passport;
+    public int getChosenFacultyId() {
+        return chosenFacultyId;
     }
 
-    public void setPassport(Passport passport) {
-        this.passport = passport;
+    public void setChosenFacultyId(int chosenFacultyId) {
+        this.chosenFacultyId = chosenFacultyId;
     }
 
-    public Address getAddress() {
-        return address;
+    public int getChosenSpecialtyId() {
+        return chosenSpecialtyId;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setChosenSpecialtyId(int chosenSpecialtyId) {
+        this.chosenSpecialtyId = chosenSpecialtyId;
+    }
+
+    public Map<Integer, Integer> getTestsSubjectsAndMarks() {
+        return testsSubjectsAndMarks;
+    }
+
+    public void setTestsSubjectsAndMarks(Map<Integer, Integer> testsSubjectsAndMarks) {
+        this.testsSubjectsAndMarks = testsSubjectsAndMarks;
+    }
+
+    public Integer get(Object key) {
+        return testsSubjectsAndMarks.get(key);
+    }
+
+    public Integer put(Integer key, Integer value) {
+        return testsSubjectsAndMarks.put(key, value);
+    }
+
+    public Integer remove(Object key) {
+        return testsSubjectsAndMarks.remove(key);
+    }
+
+    public int size() {
+        return testsSubjectsAndMarks.size();
     }
 
     public ApplicationStatus getApplicationStatus() {

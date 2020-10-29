@@ -26,21 +26,18 @@ public enum ConnectionPool {
     ConnectionPool() {
         this.freeConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         this.givenAwayConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
-        ResourceBundle resource = ResourceBundle.getBundle("database");
-        String url = resource.getString("db.url");
-        String user = resource.getString("db.user");
-        String password = resource.getString("db.password");
-        String driverName = resource.getString("db.driverName");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
+        String url = resourceBundle.getString("db.url");
+        String user = resourceBundle.getString("db.user");
+        String password = resourceBundle.getString("db.password");
         try {
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
                 Connection connection = DriverManager.getConnection(url, user, password);
                 freeConnections.offer(new ProxyConnection(connection));
             }
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException("impossible register db driver", e);
         } catch (SQLException e) {
-            throw new RuntimeException("impossible create connection to db", e);
+            throw new RuntimeException("impossible create connection to db or register db driver", e);
         }
     }
 

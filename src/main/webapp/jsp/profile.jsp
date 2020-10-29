@@ -13,7 +13,7 @@
         <div class="container">
             <div class="main-information">
                 <div class="text-info">
-                    <h1 class="text-center">${enrollee.userName} ${enrollee.lastName}</h1>
+                    <h1 class="text-center">${enrollee.firstName} ${enrollee.lastName}</h1>
                 </div>
                 <div class="text-center">
                     <h6 class="text-muted">application status:</h6><h5>wait</h5>

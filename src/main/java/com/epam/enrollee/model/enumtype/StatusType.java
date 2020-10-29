@@ -1,7 +1,7 @@
 package com.epam.enrollee.model.enumtype;
 
 public enum StatusType {
-    BLOCKED("blocked"),
+
     ACTIVE("active"),
     INACTIVE("inactive"),
     DELETED("deleted");

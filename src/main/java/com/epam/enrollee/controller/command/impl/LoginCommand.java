@@ -10,20 +10,20 @@ import com.epam.enrollee.model.entity.User;
 import com.epam.enrollee.model.enumtype.RoleType;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 import com.epam.enrollee.model.service.impl.FacultyServiceImpl;
-import com.epam.enrollee.model.service.impl.UserServiceImpl;
+import com.epam.enrollee.propertiesreader.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 import static com.epam.enrollee.controller.command.PagePath.*;
+import static com.epam.enrollee.controller.command.RequestParameters.ERROR_LOGIN_MESSAGE;
 
 
 public class LoginCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        UserServiceImpl userService = new UserServiceImpl();
         EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
         FacultyServiceImpl facultyService = new FacultyServiceImpl();
         HttpSession session;
@@ -31,8 +31,8 @@ public class LoginCommand implements Command {
         String email = request.getParameter(RequestParameters.EMAIL);
         String pass = request.getParameter(RequestParameters.PASSWORD);
         try {
-            if (userService.checkEmailAndPassword(email, pass)) {
-                Optional<User> optionalUser = userService.findUserByEmail(email);
+            if (enrolleeService.checkEmailAndPassword(email, pass)) {
+                Optional<User> optionalUser = enrolleeService.findUserByEmail(email);
                 if (optionalUser.isPresent()) {
                     session = request.getSession(true);
                     if (optionalUser.get().getRole().equals(RoleType.USER)) {
@@ -50,13 +50,14 @@ public class LoginCommand implements Command {
                         User user = optionalUser.get();
                         session.setAttribute("user", user);
                         session.setAttribute("previous page", LOGIN);
+                       // session.setAttribute("locale", );
                         page = STATEMENT;
                     }
                 } else {
                     page = ERROR_404;
                 }
             } else {
-                request.setAttribute("errorLoginMessage", "incorrect login or password");
+                request.setAttribute(ERROR_LOGIN_MESSAGE, MessageManager.getProperty("login.loginerror"));
                 page = LOGIN;
             }
         } catch (ServiceException e) {

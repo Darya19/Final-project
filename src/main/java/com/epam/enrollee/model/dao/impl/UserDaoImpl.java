@@ -14,47 +14,46 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class UserDaoImpl implements BaseDao<User> {
-    private static final String CREATE_USER = "INSERT INTO account (user_id, email, role, status) " +
+    private static final String CREATE_USER = "INSERT INTO user (user_id, email, role, status) " +
             "VALUES (?,?,?,?)";
-    private static final String REMOVE_USER = "DELETE FROM account WHERE email=?";
+    private static final String REMOVE_USER = "DELETE FROM user WHERE email=?";
     private static final String FIND_USER_BY_ID =
-            "SELECT user_id, email, role, status FROM account WHERE id=?";
+            "SELECT user_id, email, role, status FROM user WHERE id=?";
     private static final String FIND_USER_BY_EMAIL =
-            "SELECT user_id, email, role, status FROM account WHERE email=?";
+            "SELECT user_id, email, role, status FROM user WHERE email=?";
     private static final String FIND_USERS_BY_STATUS =
-            "SELECT user_id, email, role, status FROM account WHERE status=?";
-    private static final String FIND_ALL_USERS = "SELECT user_id, email, role, status FROM account";
+            "SELECT user_id, email, role, status FROM user WHERE status=?";
+    private static final String FIND_ALL_USERS = "SELECT user_id, email, role, status FROM user";
     private static final String FIND_USERS_BY_ROLE =
-            "SELECT user_id, email, role, status FROM account WHERE role=? ORDER BY id";
-    private static final String FIND_PASSWORD_BY_EMAIL = "SELECT password from account where email=?";
+            "SELECT user_id, email, role, status FROM user WHERE role=? ORDER BY id";
+    private static final String FIND_PASSWORD_BY_EMAIL = "SELECT password from user where email=?";
     private static final String UPDATE_USER = "UPDATE account SET email=?, password=?, role=? where user_id=?";
 
 
     @Override
-    public int add(User user) throws DaoException {
+    public boolean add(Map<String, Object> parameters) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(CREATE_USER)) {
-            statement.setInt(1, user.getUserId());
-            statement.setString(2, user.getEmail());
-            statement.setString(3, user.getRole().toString());
-            statement.setString(4, user.getStatus().toString());
-            int updatedRows = statement.executeUpdate();
-            return updatedRows;
+//            statement.setInt(1, user.getUserId());
+//            statement.setString(2, user.getEmail());
+//            statement.setString(3, user.getRole().toString());
+//            statement.setString(4, user.getStatus().toString());
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException("database issues", e);
         }
     }
 
     @Override
-    public int remove(User user) throws DaoException {
+    public boolean remove(User user) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(REMOVE_USER)) {
             statement.setString(1, user.getEmail());
-            int updatedRows = statement.executeUpdate();
-            return updatedRows;
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException("database issues", e);
         }
@@ -78,14 +77,18 @@ public class UserDaoImpl implements BaseDao<User> {
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL)) {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
-            User foundUser = createUserListFromResultSet(resultSet).get(0);
-            return Optional.of(foundUser);
+            List<User> foundUsers = createUserListFromResultSet(resultSet);
+            if (foundUsers.size() > 0) {
+                return Optional.of(foundUsers.get(0));
+            } else {
+                return Optional.empty();
+            }
         } catch (SQLException e) {
             throw new DaoException("database issues", e);
         }
     }
 
-    public Optional<List<User>> findUserByRole(RoleType role) throws DaoException {
+    public Optional<List<User>> findUsersByRole(RoleType role) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_ROLE)) {
             statement.setString(1, role.getRole());
@@ -97,7 +100,7 @@ public class UserDaoImpl implements BaseDao<User> {
         }
     }
 
-    public Optional<List<User>> findUserByStatus(StatusType status) throws DaoException {
+    public Optional<List<User>> findUsersByStatus(StatusType status) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_STATUS)) {
             statement.setString(1, status.getStatus());

@@ -21,6 +21,7 @@
                                                                                          type="password" id="password" name="password"></div>
                     <button class="btn btn-primary btn-block" type="submit">Log In</button>
                 </form>
+                <p>${error_login_massage}</p>
             </div>
         </section>
     </main>
