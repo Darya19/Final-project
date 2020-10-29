@@ -65,11 +65,10 @@ public class EnrolleeServiceImpl {
         parameters = validator.validateRegistrationData(parameters);
         try {
             Optional<User> user = userDao.findUserByEmail(parameters.get(EMAIL));
-            Optional<Integer> optionalFaculty = specialtyDao.findFacultyIdBySpecialtyId
-                    (Integer.valueOf(parameters.get(RequestParameters.SPECIALTY_ID)));
+            Optional<Integer> optionalFacultyId = specialtyDao.findFacultyIdBySpecialtyId
+                    (Integer.parseInt(parameters.get(RequestParameters.SPECIALTY_ID)));
             Optional<List<Subject>> optionalSubjects = subjectDao.findSubjectsBySpecialtyName
                     (parameters.get(RequestParameters.SPECIALTY_ID));
-
             if (user.isPresent()) {
                 parameters.put(EMAIL, "");
             }
@@ -78,8 +77,8 @@ public class EnrolleeServiceImpl {
                 parameters.put(PASSWORD, "");
             }
             int foundFaculty;
-            if (optionalFaculty.isPresent()) {
-                foundFaculty = optionalFaculty.get();
+            if (optionalFacultyId.isPresent()) {
+                foundFaculty = optionalFacultyId.get();
                 parameters.put(FACULTY_ID, String.valueOf(foundFaculty));
             } else {
                 parameters.put(FACULTY_ID, "");
@@ -115,7 +114,6 @@ public class EnrolleeServiceImpl {
         NumberParser parser = new NumberParser();
         Map<String, Object> createdObjects = new HashMap<>();
         Enrollee enrollee = new Enrollee();
-        Address address = new Address();
         Passport passport = new Passport();
         int facultyId = parser.parseToInt(parameters.get(FACULTY_ID));
         int specialtyId = parser.parseToInt(parameters.get(SPECIALTY_ID));
@@ -140,15 +138,6 @@ public class EnrolleeServiceImpl {
         enrollee.put(subjectId3, markValue3);
         enrollee.put(subjectId4, markValue4);
         createdObjects.put(ENROLLEE, enrollee);
-        if (!parameters.get(FLAT).isEmpty()) {
-            address.setFlatNumber(parameters.get(FLAT));
-        }
-        address.setCountry(parameters.get(COUNTRY));
-        address.setCity(parameters.get(CITY));
-        address.setStreet(parameters.get(STREET));
-        address.setHouseNumber(parameters.get(HOUSE));
-        address.setPhoneNumber(parameters.get(PHONE_NUMBER));
-        createdObjects.put(ADDRESS, address);
         passport.setPersonalNumber(parameters.get(PERSONAL_NUMBER));
         passport.setPassportSeriesAndNumber(parameters.get(PASSPORT_SERIES_AND_NUMBER));
         try {
@@ -158,5 +147,4 @@ public class EnrolleeServiceImpl {
             throw new ServiceException(e);
         }
     }
-
 }

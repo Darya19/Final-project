@@ -53,61 +53,11 @@
                     <c:if test="${not empty parameters and empty parameters['personal_number'] }">
                         <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
                     </c:if></div>
-                <div class="form-group"><label for="country"><fmt:message key="register.country"/> </label>
-                    <input class="form-control item" type="text" id="country" name="country"
-                           required value="${parameters.get("country")}">
-                    <c:if test="${not empty parameters and empty parameters['country'] }">
-                        <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
-                    </c:if>
-                </div>
-                <div class="form-group"><label for="city"><fmt:message key="register.city"/></label>
-                    <input class="form-control item" type="text" id="city" name="city"
-                           required value="${parameters.get("city")}">
-                    <c:if test="${not empty parameters and empty parameters['city'] }">
-                        <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
-                    </c:if>
-                </div>
-                <div class="form-row">
-                    <div class="col-7">
-                        <label for="street"><fmt:message key="register.street"/> </label>
-                        <input type="text" class="form-control" id="street" name="street"
-                               required value="${parameters.get("street")}">
-                        <c:if test="${not empty parameters and empty parameters['street'] }">
-                            <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
-                        </c:if>
-                    </div>
-                    <div class="col">
-                        <label for="house"><fmt:message key="register.house"/></label>
-                        <input type="text" class="form-control" id="house" name="house"
-                               required value="${parameters.get("house")}">
-                        <c:if test="${not empty parameters and empty parameters['house'] }">
-                            <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
-                        </c:if>
-                    </div>
-                    <div class="col">
-                        <label for="flat"><fmt:message key="register.flat"/> </label>
-                        <input type="text" class="form-control" id="flat" name="flat"
-                               value="${parameters.get("flat")}">
-                    </div>
-                </div>
-                <p></p>
-                <h6><fmt:message key="register.phonenumber"/></h6>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"><fmt:message
-                                key="register.phoneprefix"/></span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="(29)1234567" aria-label="phone_number"
-                           aria-describedby="basic-addon1" id="phone_number" name="phone_number"
-                           required value="${parameters.get("phone_number")}">
-                <c:if test="${not empty parameters and empty parameters['phone_number'] }">
-                    <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
-                </c:if>
-                </div>
+
                 <h6><fmt:message key="register.faculty"/></h6>
                 <div class="input-group mb-3">
                     <select class="custom-select" id="faculty_id" name="faculty_id">
-                        <option selected>choose faculty</option>
+                        <option selected value="0">choose faculty</option>
                         <c:forEach items="${faculties}" var="faculty">
                             <option value="${faculty.facultyId}">${faculty.facultyName}</option>
                         </c:forEach>
@@ -119,7 +69,7 @@
                 <h6><fmt:message key="register.specialty"/></h6>
                 <div class="input-group mb-3">
                     <select class="custom-select" id="specialty_id" name="specialty_id">
-                        <option selected>choose specialty</option>
+                        <option selected value="0">choose specialty</option>
                         <c:forEach var="specialty" items="${specialties}">
                             <option value="${specialty.specialtyId}">${specialty.specialtyName}</option>
                         </c:forEach>
@@ -132,7 +82,7 @@
                 <div class="form-row">
                     <div class="col-7">
                         <select class="custom-select" id="subject_1" name="subject_id_1">
-                            <option selected>choose subject</option>
+                            <option selected value="0">choose subject</option>
                             <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject.subjectId}">${subject.subjectName}</option>
                             </c:forEach>
@@ -146,7 +96,7 @@
                 <div class="form-row">
                     <div class="col-7">
                         <select class="custom-select" id="subject_2" name="subject_id_2">
-                            <option selected>choose subject</option>
+                            <option selected value="0">choose subject</option>
                             <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject.subjectId}">${subject.subjectName}</option>
                             </c:forEach>
@@ -159,7 +109,7 @@
                 <div class="form-row">
                     <div class="col-7">
                         <select class="custom-select" id="subject_3" name="subject_id_3">
-                            <option selected>choose subject</option>
+                            <option selected value="0">choose subject</option>
                             <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject.subjectId}">${subject.subjectName}</option>
                             </c:forEach>
@@ -175,8 +125,7 @@
                 <div class="form-row">
                     <div class="col-7">
                         <select class="custom-select" id="subject_4" name="subject_id_4">
-                            <option selected>choose subject</option>
-                        <p><fmt:message key="register.certificate"/></p>
+                            <option selected value="0">choose subject</option>
                             <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject.subjectId}">${subject.subjectName}</option>
                             </c:forEach>

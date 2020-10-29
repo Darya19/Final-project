@@ -4,7 +4,6 @@ import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.model.connector.ConnectionPool;
 import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
-import com.epam.enrollee.model.entity.Address;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.Passport;
 import com.epam.enrollee.model.enumtype.RoleType;
@@ -25,20 +24,17 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
     private Logger logger = LogManager.getLogger();
 
     private static final String FIND_ENROLLEE_BY_EMAIL =
-            "SELECT user_id,email,role,status,enrollee_first_name,enrollee_last_name,enrollee_middle_name," +
+            "SELECT enrollee_id,email,role,status,enrollee_first_name,enrollee_last_name,enrollee_middle_name," +
                     "faculty_id_fk as faculty_id,specialty_id_fk as specialty_id, GROUP_CONCAT(subject_id_fk " +
                     "SEPARATOR ',') as subject_id, GROUP_CONCAT(mark_value SEPARATOR ',') as mark_value FROM " +
-                    "enrollee JOIN user on user.user_id = enrollee.enrollee_id JOIN enrollee_faculty on " +
+                    "enrollee JOIN enrollee_faculty on " +
                     "enrollee.enrollee_id = enrollee_faculty.enrollee_id_fk JOIN enrollee_specialty on " +
                     "enrollee.enrollee_id = enrollee_specialty.enrollee_id_fk JOIN mark on enrollee.enrollee_id" +
                     "= mark.enrollee_id_fk WHERE email=?";
     private static final String ADD_ENROLLEE =
-            "INSERT INTO enrollee (enrollee_first_name, enrollee_last_name, enrollee_middle_name, " +
-                    "address_id_fk, passport_id_fk, application_status) " +
-                    "VALUES (?,?,?,?,?,?)";
-    private static final String ADD_ADDRESS =
-            "INSERT INTO address (country, city, street, house_number, flat_number, telephone_number) " +
-                    "VALUES (?,?,?,?,?,?)";
+            "INSERT INTO enrollee (email, password, status, role, enrollee_first_name, enrollee_last_name, " +
+                    "enrollee_middle_name, passport_id) " +
+                    "VALUES (?,?,?,?,?,?,?,?)";
     private static final String ADD_PASSPORT =
             "INSERT INTO passport (personal_number, passport_series_and_number) " +
                     "VALUES (?,?)";
@@ -55,18 +51,14 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
     @Override
     public boolean add(Map<String, Object> objectMap) throws DaoException {
         boolean isEnrolleeAdded = false;
-        boolean isAddressAdded;
-        boolean isPassportAdded;
+        boolean isPassportAdded = false;
         int passportId = 0;
-        int addressId = 0;
         int enrolleeId = 0;
         Enrollee enrollee = (Enrollee) objectMap.get(ENROLLEE);
-        Address address = (Address) objectMap.get(ADDRESS);
         Passport passport = (Passport) objectMap.get(PASSPORT);
         Connection connection = ConnectionPool.INSTANCE.getConnection();
         PreparedStatement enrolleeStatement = null;
         PreparedStatement passportStatement = null;
-        PreparedStatement addressStatement = null;
         PreparedStatement markStatement = null;
         PreparedStatement specialtyStatement = null;
         PreparedStatement facultyStatement = null;
@@ -74,7 +66,6 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             connection.setAutoCommit(false);
             enrolleeStatement = connection.prepareStatement(ADD_ENROLLEE, Statement.RETURN_GENERATED_KEYS);
             passportStatement = connection.prepareStatement(ADD_PASSPORT, Statement.RETURN_GENERATED_KEYS);
-            addressStatement = connection.prepareStatement(ADD_ADDRESS, Statement.RETURN_GENERATED_KEYS);
             markStatement = connection.prepareStatement(ADD_MARKS);
             specialtyStatement = connection.prepareStatement(ADD_ENROLLEE_IN_SPECIALTY);
             facultyStatement = connection.prepareStatement(ADD_ENROLLEE_IN_FACULTY);
@@ -85,27 +76,15 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             if (passportResultSet.next()) {
                 passportId = passportResultSet.getInt(1);
             }
-            addressStatement.setString(1, address.getCountry());
-            addressStatement.setString(2, address.getCity());
-            addressStatement.setString(3, address.getStreet());
-            addressStatement.setString(4, address.getHouseNumber());
-            addressStatement.setString(5, address.getFlatNumber());
-            addressStatement.setString(6, address.getPhoneNumber());
-            isAddressAdded = addressStatement.executeUpdate() > 0;
-            ResultSet addressResultSet = passportStatement.getGeneratedKeys();
-            if (addressResultSet.next()) {
-                addressId = addressResultSet.getInt(1);
-            }
-            if (isAddressAdded && isPassportAdded) {
+            if (isPassportAdded) {
                 enrolleeStatement.setString(1, enrollee.getFirstName());
                 enrolleeStatement.setString(2, enrollee.getLastName());
                 enrolleeStatement.setString(3, enrollee.getMiddleName());
-                enrolleeStatement.setInt(4, addressId);
-                enrolleeStatement.setInt(1, passportId);
+                enrolleeStatement.setInt(4, passportId);
                 isEnrolleeAdded = enrolleeStatement.executeUpdate() > 0;
                 ResultSet enrolleeResultSet = passportStatement.getGeneratedKeys();
                 if (enrolleeResultSet.next()) {
-                    enrolleeId = addressResultSet.getInt(1);
+                    enrolleeId = enrolleeResultSet.getInt(1);
                 }
                 if(isEnrolleeAdded){
                     facultyStatement.setInt(1,enrolleeId);
@@ -133,7 +112,6 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             throw new DaoException("impossible add new enrollee", e);
         } finally {
             closeStatement(enrolleeStatement);
-            closeStatement(addressStatement);
             closeStatement(passportStatement);
             closeStatement(facultyStatement);
             closeStatement(specialtyStatement);

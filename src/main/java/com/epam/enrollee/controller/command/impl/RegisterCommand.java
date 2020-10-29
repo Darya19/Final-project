@@ -6,9 +6,6 @@ import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameters;
 import com.epam.enrollee.exception.CommandException;
 import com.epam.enrollee.exception.ServiceException;
-import com.epam.enrollee.model.entity.Address;
-import com.epam.enrollee.model.entity.Enrollee;
-import com.epam.enrollee.model.entity.Passport;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,12 +27,6 @@ public class RegisterCommand implements Command {
         parameters.put(RequestParameters.MIDDLE_NAME, request.getParameter(RequestParameters.MIDDLE_NAME));
         parameters.put(RequestParameters.PASSPORT_SERIES_AND_NUMBER, request.getParameter(RequestParameters.PASSPORT_SERIES_AND_NUMBER));
         parameters.put(RequestParameters.PERSONAL_NUMBER, request.getParameter(RequestParameters.PERSONAL_NUMBER));
-        parameters.put(RequestParameters.COUNTRY, request.getParameter(RequestParameters.COUNTRY));
-        parameters.put(RequestParameters.CITY, request.getParameter(RequestParameters.CITY));
-        parameters.put(RequestParameters.STREET, request.getParameter(RequestParameters.STREET));
-        parameters.put(RequestParameters.HOUSE, request.getParameter(RequestParameters.HOUSE));
-        parameters.put(RequestParameters.FLAT, request.getParameter(RequestParameters.FLAT));
-        parameters.put(RequestParameters.PHONE_NUMBER, request.getParameter(RequestParameters.PHONE_NUMBER));
         parameters.put(RequestParameters.FACULTY_ID, request.getParameter(RequestParameters.FACULTY_ID));
         parameters.put(RequestParameters.SPECIALTY_ID, request.getParameter(RequestParameters.SPECIALTY_ID));
         parameters.put(RequestParameters.SUBJECT_ID_1, request.getParameter(RequestParameters.SUBJECT_ID_1));

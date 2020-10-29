@@ -19,32 +19,25 @@ public class EnrolleeValidator {
     private static final String STRING_PARAMETER_PATTERN =
             "([a-zA-Z]{2,30})";
     private static final String INT_PARAMETER_PATTERN =
-            "([0-9])";
+            "[0-9]";
     private final String PASSPORT_PATTERN =
             "([A-Z]{2}[0-9]{7})";
     private static final String PERSONAL_NUMBER_PATTERN =
             "([0-9]{7}[A-Z][1-9]{3}[A-Z]{2}[1-9])";
-    private static final String ADDRESS_NUMBER_PATTERN =
-            "([0-9/]{1,7})";
-    private static final String PHONE_NUMBER_PATTERN =
-            "([0-9()]{7,9})";
     private static final String MARK_PATTERN =
             "([0-9]{1,3})";
     private static final int MARK_MAX_VALUE = 100;
     private static final int MARK_MIN_VALUE = 0;
 
     public boolean isEmailValid(String email) {
-        pattern = Pattern.compile(EMAIL_PATTERN);
-        matcher = pattern.matcher(email);
-        return matcher.matches();
+        return email.matches(EMAIL_PATTERN);
     }
 
     public Map<String, String> validateRegistrationData(Map<String, String> parameters) {
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            if (key.equals(LAST_NAME) || key.equals(FIRST_NAME) || key.equals(MIDDLE_NAME)
-                    || key.equals(COUNTRY) || key.equals(CITY) || key.equals(STREET)) {
+            if (key.equals(LAST_NAME) || key.equals(FIRST_NAME) || key.equals(MIDDLE_NAME)) {
                 if (!isStringParameterValid(value)) {
                     parameters.put(key, "");
                 }
@@ -53,7 +46,7 @@ public class EnrolleeValidator {
             if (key.equals(SUBJECT_ID_1) || key.equals(SUBJECT_ID_2) || key.equals(SUBJECT_ID_3) ||
                     key.equals(SPECIALTY_ID) || key.equals(FACULTY_ID)) {
                 if (!isIntParameterValid(key)) {
-                    parameters.put(key, "");
+                    parameters.put(key, "0");
                 }
             }
             if (key.equals(EMAIL)) {
@@ -82,17 +75,6 @@ public class EnrolleeValidator {
                     parameters.put(key, "");
                 }
             }
-
-            if (key.equals(PHONE_NUMBER)) {
-                if (!isPhoneNumberValid(value)) {
-                    parameters.put(key, "");
-                }
-            }
-            if (key.equals(HOUSE) || key.equals(FLAT)) {
-                if (!isAddressNumberValid(value)) {
-                    parameters.put(key, "");
-                }
-            }
         }
         return parameters;
     }
@@ -116,15 +98,6 @@ public class EnrolleeValidator {
     private boolean isPersonalNumberValid(String personalNumber) {
         return personalNumber.matches(PERSONAL_NUMBER_PATTERN);
     }
-
-    private boolean isAddressNumberValid(String addressNumber) {
-        if (!addressNumber.isEmpty()) {
-            return addressNumber.matches(ADDRESS_NUMBER_PATTERN);
-        } else {
-            return false;
-        }
-    }
-
     private boolean isMarkValid(String mark) {
         NumberParser parser = new NumberParser();
         if (mark.matches(MARK_PATTERN)) {
@@ -134,9 +107,4 @@ public class EnrolleeValidator {
             return false;
         }
     }
-
-    private boolean isPhoneNumberValid(String phoneNumber) {
-        return phoneNumber.matches(PHONE_NUMBER_PATTERN);
-    }
-
 }
