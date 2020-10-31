@@ -19,12 +19,19 @@ import static com.epam.enrollee.model.dao.ColumnName.SUBJECT_NAME;
 
 public class SubjectDaoImpl implements BaseDao<Subject> {
 
+    public static SubjectDaoImpl instance;
     private static final String FIND_ALL_SUBJECTS =
             "SELECT subject_id , subject_name FROM subject";
-    private static final String FIND_SUBJECTS_BY_SPECIALTY_NAME =
-            "SELECT subject_id, subject_name FROM subject_specialty JOIN subject ON subject.subject_id " +
-                    "= subject_specialty.subject_id_fk JOIN specialty s on s.specialty_id = subject_specialty.specialty_id_fk " +
-                    "WHERE specialty_name=?";
+    private static final String FIND_SUBJECTS_BY_SPECIALTY_ID =
+            "SELECT subject_id, subject_name FROM subject JOIN subject_specialty ON subject.subject_id " +
+                    "= subject_specialty.subject_id_fk WHERE specialty_id_fk=?";
+
+    public static SubjectDaoImpl getInstance() {
+        if (instance == null) {
+            instance = new SubjectDaoImpl();
+        }
+        return instance;
+    }
 
     @Override
     public boolean add(Map<String, Object> parameters) throws DaoException {
@@ -37,7 +44,7 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
     }
 
     @Override
-    public Optional<List<Subject>> findById(int parameter) throws DaoException {
+    public Optional<Subject> findById(int parameter) throws DaoException {
         return Optional.empty();
     }
 
@@ -56,11 +63,12 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
             throw new DaoException("database issues", e);
         }
     }
-//check
-    public Optional<List<Subject>> findSubjectsBySpecialtyName(String specialtyName) throws DaoException {
+
+    //uncheck
+    public Optional<List<Subject>> findSubjectsBySpecialtyId(int specialtyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_SUBJECTS_BY_SPECIALTY_NAME)) {
-            statement.setString(1, specialtyName);
+             PreparedStatement statement = connection.prepareStatement(FIND_SUBJECTS_BY_SPECIALTY_ID)) {
+            statement.setInt(1, specialtyId);
             ResultSet resultSet = statement.executeQuery();
             List<Subject> subjects = createSubjectListFromResultSet(resultSet);
             if (!subjects.isEmpty()) {

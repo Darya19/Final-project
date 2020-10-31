@@ -7,17 +7,15 @@ import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.Faculty;
 import com.epam.enrollee.model.entity.User;
-import com.epam.enrollee.model.enumtype.RoleType;
+import com.epam.enrollee.model.type.RoleType;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 import com.epam.enrollee.model.service.impl.FacultyServiceImpl;
-import com.epam.enrollee.propertiesreader.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 import static com.epam.enrollee.controller.command.PagePath.*;
-import static com.epam.enrollee.controller.command.RequestParameters.ERROR_LOGIN_MESSAGE;
 
 
 public class LoginCommand implements Command {
@@ -36,7 +34,7 @@ public class LoginCommand implements Command {
                 if (optionalUser.isPresent()) {
                     session = request.getSession(true);
                     if (optionalUser.get().getRole().equals(RoleType.USER)) {
-                        Optional<Enrollee> optionalEnrollee = enrolleeService.findEnrolleeByEmail(email);
+                        Optional<Enrollee> optionalEnrollee = enrolleeService.createEnrolleeByEmail(email);
                         if (optionalEnrollee.isPresent()) {
                             Enrollee enrollee = optionalEnrollee.get();
                             session.setAttribute("enrollee", enrollee);
@@ -54,19 +52,17 @@ public class LoginCommand implements Command {
                         page = STATEMENT;
                     }
                 } else {
-                    page = ERROR_404;
+                    page = ERROR_500;
                 }
             } else {
-                request.setAttribute(ERROR_LOGIN_MESSAGE, MessageManager.getProperty("login.loginerror"));
                 page = LOGIN;
             }
         } catch (ServiceException e) {
-            page = ERROR_404;
+            page = ERROR_500;
         }
         return page;
         /*TODO неправильный логин возвращаем туже страницу add if status
-        правильные: переход на страницу в зависимости от роли с использованием ифа, далее проверяется статус
-         почта многопоточку не использовать*/
+                почта многопоточку не использовать*/
 
     }
 }

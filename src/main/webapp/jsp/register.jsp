@@ -41,8 +41,8 @@
                 </div>
                 <div class="form-group"><label for="passport_series_and_number"><fmt:message key="register.passport"/> </label>
                     <input class="form-control item" type="text" id="passport_series_and_number" name="passport_series_and_number"
-                           required value="${parameters.get("passport")}">
-                    <c:if test="${not empty parameters and empty parameters['passport'] }">
+                           required value="${parameters.get("passport_series_and_number")}">
+                    <c:if test="${not empty parameters and empty parameters['passport_series_and_number'] }">
                         <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
                     </c:if>
                 </div>
@@ -62,9 +62,6 @@
                             <option value="${faculty.facultyId}">${faculty.facultyName}</option>
                         </c:forEach>
                     </select>
-                    <c:if test="${not empty parameters and empty parameters['faculty'] }">
-                    <small><label class="alert-danger"> <fmt:message key="register.wrongfaculty"/></label></small>
-                        </c:if>
                 </div>
                 <h6><fmt:message key="register.specialty"/></h6>
                 <div class="input-group mb-3">
@@ -74,7 +71,7 @@
                             <option value="${specialty.specialtyId}">${specialty.specialtyName}</option>
                         </c:forEach>
                     </select>
-                    <c:if test="${not empty parameters and empty parameters['specialty'] }">
+                    <c:if test="${not empty parameters and empty parameters['specialty_id'] }">
                         <small><label class="alert-danger"> <fmt:message key="register.wrongfaculty"/></label></small>
                     </c:if>
                 </div>
@@ -114,9 +111,6 @@
                                 <option value="${subject.subjectId}">${subject.subjectName}</option>
                             </c:forEach>
                         </select>
-                        <c:if test="${not empty parameters and empty parameters['subject_3'] }">
-                            <small><label class="alert-danger"> <fmt:message key="register.wrongsubject"/></label></small>
-                        </c:if>
                     </div>
                     <div class="col">
                         <input type="text" class="form-control" placeholder="mark" id="mark_3" name="mark_3">
@@ -130,7 +124,7 @@
                                 <option value="${subject.subjectId}">${subject.subjectName}</option>
                             </c:forEach>
                         </select>
-                        <c:if test="${not empty parameters and empty parameters['subject_4'] }">
+                        <c:if test="${not empty parameters and empty parameters['subject_id_4'] }">
                             <small><label class="alert-danger"> <fmt:message key="register.wrongsubject"/></label></small>
                         </c:if>
                     </div>

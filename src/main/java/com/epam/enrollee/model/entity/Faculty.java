@@ -7,19 +7,6 @@ public class Faculty {
 
     private int facultyId;
     private String facultyName;
-    private List<Integer> specialtiesId;
-
-    public Faculty() {
-        specialtiesId = new ArrayList<>();
-    }
-
-    public List<Integer> getSpecialtiesId() {
-        return specialtiesId;
-    }
-
-    public void setSpecialtiesId(List<Integer> specialtiesId) {
-        this.specialtiesId = specialtiesId;
-    }
 
     public int getFacultyId() {
         return facultyId;
@@ -37,15 +24,4 @@ public class Faculty {
         this.facultyName = facultyName;
     }
 
-    public boolean add(Integer integer) {
-        return getSpecialtiesId().add(integer);
-    }
-
-    public Integer get(int index) {
-        return getSpecialtiesId().get(index);
-    }
-
-    public Integer remove(int index) {
-        return getSpecialtiesId().remove(index);
-    }
 }

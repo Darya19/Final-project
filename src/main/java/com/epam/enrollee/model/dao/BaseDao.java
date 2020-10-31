@@ -14,11 +14,9 @@ public interface BaseDao<T> {
 
     boolean remove(T t) throws DaoException;
 
-    Optional<List<T>> findById(int parameter) throws DaoException;
+    Optional<T> findById(int parameter) throws DaoException;
 
     Optional<List<T>> findAll() throws DaoException;
-
-    //TODO sort methods
 
     default void closeStatement(Statement statement) throws DaoException {
         try {

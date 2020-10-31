@@ -1,7 +1,8 @@
-package com.epam.enrollee.controller.command;
+package com.epam.enrollee.util;
 
-public class RequestParameters {
-    /*register page parameters*/
+public class MapKeys {
+
+    public static final String ENROLLEE_ID = "enrolle_id";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String FIRST_NAME = "first_name";
@@ -20,17 +21,15 @@ public class RequestParameters {
     public static final String SUBJECT_ID_4 = "subject_id_4";
     public static final String MARK_4 = "mark_4";
     public static final String REPEATED_PASSWORD = "repeated_password";
-
-
-    public static final String ERROR_LOGIN_MESSAGE = "error_login_message";
-    public static final String WRONG_REPEATED_PASSWORD = "wrong_repeated_password";
-    public static final String PARAMETERS = "parameters";
-    public static final String FACULTIES = "faculties";
-    public static final String SPECIALTIES = "specialties";
-    public static final String SUBJECTS = "subjects";
     public static final String ENROLLEE = "enrollee";
     public static final String PASSPORT = "passport";
+    public static final String ENROLLEE_REGISTER = "enrollee_register";
+    public static final String PARAMETERS = "parameters";
+    public static final String ROLE = "role";
+    public static final String STATUS = "status";
+    public static final String FACULTY = "faculty";
+    public static final String SPECIALTY = "specialty";
 
-    private RequestParameters() {
+    private MapKeys() {
     }
 }

@@ -1,7 +1,7 @@
 package com.epam.enrollee.model.entity;
 
-import com.epam.enrollee.model.enumtype.RoleType;
-import com.epam.enrollee.model.enumtype.StatusType;
+import com.epam.enrollee.model.type.RoleType;
+import com.epam.enrollee.model.type.StatusType;
 
 public class User {
 

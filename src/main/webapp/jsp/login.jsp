@@ -1,5 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<fmt:setLocale value="en"/>
+<fmt:setBundle basename="prop.pagecontent"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +24,7 @@
                                                                                          type="password" id="password" name="password"></div>
                     <button class="btn btn-primary btn-block" type="submit">Log In</button>
                 </form>
-                <p>${error_login_massage}</p>
+                <p><fmt:message key="login.loginerror"></p>
             </div>
         </section>
     </main>

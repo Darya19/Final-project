@@ -6,7 +6,12 @@ import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameters;
 import com.epam.enrollee.exception.CommandException;
 import com.epam.enrollee.exception.ServiceException;
+import com.epam.enrollee.model.entity.*;
+import com.epam.enrollee.model.service.impl.EnrolleeMarkRegisterServiceImpl;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
+import com.epam.enrollee.model.service.impl.FacultyServiceImpl;
+import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
+import com.epam.enrollee.util.MapKeys;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,41 +24,67 @@ public class RegisterCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
         EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
+        EnrolleeMarkRegisterServiceImpl markRegisterService = new EnrolleeMarkRegisterServiceImpl();
+        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session;
         String page = null;
-        parameters.put(RequestParameters.FIRST_NAME, request.getParameter(RequestParameters.FIRST_NAME));
-        parameters.put(RequestParameters.LAST_NAME, request.getParameter(RequestParameters.LAST_NAME));
-        parameters.put(RequestParameters.MIDDLE_NAME, request.getParameter(RequestParameters.MIDDLE_NAME));
-        parameters.put(RequestParameters.PASSPORT_SERIES_AND_NUMBER, request.getParameter(RequestParameters.PASSPORT_SERIES_AND_NUMBER));
-        parameters.put(RequestParameters.PERSONAL_NUMBER, request.getParameter(RequestParameters.PERSONAL_NUMBER));
-        parameters.put(RequestParameters.FACULTY_ID, request.getParameter(RequestParameters.FACULTY_ID));
-        parameters.put(RequestParameters.SPECIALTY_ID, request.getParameter(RequestParameters.SPECIALTY_ID));
-        parameters.put(RequestParameters.SUBJECT_ID_1, request.getParameter(RequestParameters.SUBJECT_ID_1));
-        parameters.put(RequestParameters.MARK_1, request.getParameter(RequestParameters.MARK_1));
-        parameters.put(RequestParameters.SUBJECT_ID_2, request.getParameter(RequestParameters.SUBJECT_ID_2));
-        parameters.put(RequestParameters.MARK_2, request.getParameter(RequestParameters.MARK_2));
-        parameters.put(RequestParameters.SUBJECT_ID_3, request.getParameter(RequestParameters.SUBJECT_ID_3));
-        parameters.put(RequestParameters.MARK_3, request.getParameter(RequestParameters.MARK_3));
-        parameters.put(RequestParameters.SUBJECT_ID_4, request.getParameter(RequestParameters.SUBJECT_ID_4));
-        parameters.put(RequestParameters.MARK_4, request.getParameter(RequestParameters.MARK_4));
-        parameters.put(RequestParameters.PASSWORD, request.getParameter(RequestParameters.PASSWORD));
-        parameters.put(RequestParameters.REPEATED_PASSWORD, request.getParameter(RequestParameters.REPEATED_PASSWORD));
-        parameters.put(RequestParameters.EMAIL, request.getParameter(RequestParameters.EMAIL));
+        int enrolleeId = 0;
+        boolean isRegister;
+        Enrollee enrollee = null;
+        parameters.put(MapKeys.FIRST_NAME, request.getParameter(RequestParameters.FIRST_NAME));
+        parameters.put(MapKeys.LAST_NAME, request.getParameter(RequestParameters.LAST_NAME));
+        parameters.put(MapKeys.MIDDLE_NAME, request.getParameter(RequestParameters.MIDDLE_NAME));
+        parameters.put(MapKeys.PASSPORT_SERIES_AND_NUMBER, request.getParameter(RequestParameters.PASSPORT_SERIES_AND_NUMBER));
+        parameters.put(MapKeys.PERSONAL_NUMBER, request.getParameter(RequestParameters.PERSONAL_NUMBER));
+        parameters.put(MapKeys.FACULTY_ID, request.getParameter(RequestParameters.FACULTY_ID));
+        parameters.put(MapKeys.SPECIALTY_ID, request.getParameter(RequestParameters.SPECIALTY_ID));
+        parameters.put(MapKeys.SUBJECT_ID_1, request.getParameter(RequestParameters.SUBJECT_ID_1));
+        parameters.put(MapKeys.MARK_1, request.getParameter(RequestParameters.MARK_1));
+        parameters.put(MapKeys.SUBJECT_ID_2, request.getParameter(RequestParameters.SUBJECT_ID_2));
+        parameters.put(MapKeys.MARK_2, request.getParameter(RequestParameters.MARK_2));
+        parameters.put(MapKeys.SUBJECT_ID_3, request.getParameter(RequestParameters.SUBJECT_ID_3));
+        parameters.put(MapKeys.MARK_3, request.getParameter(RequestParameters.MARK_3));
+        parameters.put(MapKeys.SUBJECT_ID_4, request.getParameter(RequestParameters.SUBJECT_ID_4));
+        parameters.put(MapKeys.MARK_4, request.getParameter(RequestParameters.MARK_4));
+        parameters.put(MapKeys.PASSWORD, request.getParameter(RequestParameters.PASSWORD));
+        parameters.put(MapKeys.REPEATED_PASSWORD, request.getParameter(RequestParameters.REPEATED_PASSWORD));
+        parameters.put(MapKeys.EMAIL, request.getParameter(RequestParameters.EMAIL));
         try {
             parameters = enrolleeService.checkEnrolleeParameters(parameters);
             if (parameters.containsValue("")) {
-                request.setAttribute(RequestParameters.PARAMETERS, parameters);
+                request.setAttribute(MapKeys.PARAMETERS, parameters);
                 page = PagePath.REGISTER;
             } else {
-                Optional<Map<String, Object>> optionalObjectMap = enrolleeService.create(parameters);
-                if (optionalObjectMap.isPresent()) {
-                    Map<String, Object> objectMap = optionalObjectMap.get();
-                    session = request.getSession();
-                    session.setAttribute(RequestParameters.ENROLLEE, objectMap.get(RequestParameters.ENROLLEE));
-                    session.setAttribute(RequestParameters.PASSPORT, objectMap.get(RequestParameters.PASSPORT));
-                    session.setAttribute(RequestParameters.ADDRESS,objectMap.get(RequestParameters.ADDRESS));
-                    page = PagePath.PROFILE;
+                session = request.getSession();
+                isRegister = enrolleeService.registerEnrollee(parameters);
+                if (isRegister) {
+                    Optional<Enrollee> optionalEnrollee = enrolleeService.createEnrolleeByEmail
+                            (parameters.get(MapKeys.EMAIL));
+                    if (optionalEnrollee.isPresent()) {
+                        enrollee = optionalEnrollee.get();
+                        enrolleeId = enrollee.getUserId();
+                    }
+                    Optional<EnrolleeMarkRegister> optionalEnrolleeRegister = markRegisterService
+                            .findEnrolleeMarkRegister(enrolleeId);
+                    Optional<Passport> optionalPassport = enrolleeService.findEnrolleePassport(enrolleeId);
+                    if (optionalEnrolleeRegister.isPresent() && optionalPassport.isPresent()) {
+                        EnrolleeMarkRegister enrolleeRegister = optionalEnrolleeRegister.get();
+                        Passport passport = optionalPassport.get();
+                        session.setAttribute(MapKeys.ENROLLEE, enrollee);
+                        session.setAttribute(MapKeys.ENROLLEE_REGISTER, enrolleeRegister);
+                        session.setAttribute(RequestParameters.PASSPORT, passport);
+                        Optional<Faculty> optionalFaculty = facultyService.findEnrolleeFaculty(enrollee.getChosenFacultyId());
+                        Optional<Specialty> optionalSpecialty = specialtyService.findEnrolleeSpecialty(enrollee.getChosenSpecialtyId());
+                        if (optionalFaculty.isPresent() && optionalSpecialty.isPresent()) {
+                            Faculty faculty = optionalFaculty.get();
+                            Specialty specialty = optionalSpecialty.get();
+                            request.setAttribute(MapKeys.FACULTY, faculty);
+                            request.setAttribute(MapKeys.SPECIALTY, specialty);
+                        }
+                        page = PagePath.PROFILE;
+                    }
                 } else {
                     page = PagePath.ERROR_500;
                 }

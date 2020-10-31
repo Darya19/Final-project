@@ -3,7 +3,7 @@ package com.epam.enrollee.model.service.impl;
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
-import com.epam.enrollee.model.entity.Enrollee;
+import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Subject;
 import com.epam.enrollee.model.service.BaseService;
 
@@ -29,10 +29,10 @@ public class SubjectServiceImpl implements BaseService<Subject> {
 
     @Override
     public Optional<List<Subject>> findAll() throws ServiceException {
-        SubjectDaoImpl dao = new SubjectDaoImpl();
+        SubjectDaoImpl dao = SubjectDaoImpl.getInstance();
         try {
             Optional<List<Subject>> subjects = dao.findAll();
-            if(subjects.isPresent()){
+            if (subjects.isPresent()) {
                 return subjects;
             } else return Optional.empty();
         } catch (DaoException e) {
@@ -41,7 +41,7 @@ public class SubjectServiceImpl implements BaseService<Subject> {
     }
 
     @Override
-    public List<Subject> update(Subject value) throws ServiceException {
+    public Optional<List<Subject>> update(Subject value) throws ServiceException {
         return null;
     }
 }

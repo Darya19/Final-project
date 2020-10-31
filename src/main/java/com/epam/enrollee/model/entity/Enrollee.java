@@ -1,9 +1,6 @@
 package com.epam.enrollee.model.entity;
 
-import com.epam.enrollee.model.enumtype.ApplicationStatus;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.epam.enrollee.model.type.ApplicationStatus;
 
 public class Enrollee extends User {
 
@@ -12,13 +9,11 @@ public class Enrollee extends User {
     private String middleName;
     private int chosenFacultyId;
     private int chosenSpecialtyId;
-    private Map<Integer, Integer> testsSubjectsAndMarks;
 
     private ApplicationStatus applicationStatus;
 
     public Enrollee() {
         super();
-      testsSubjectsAndMarks = new HashMap<>();
     }
 
     public String getFirstName() {
@@ -59,30 +54,6 @@ public class Enrollee extends User {
 
     public void setChosenSpecialtyId(int chosenSpecialtyId) {
         this.chosenSpecialtyId = chosenSpecialtyId;
-    }
-
-    public Map<Integer, Integer> getTestsSubjectsAndMarks() {
-        return testsSubjectsAndMarks;
-    }
-
-    public void setTestsSubjectsAndMarks(Map<Integer, Integer> testsSubjectsAndMarks) {
-        this.testsSubjectsAndMarks = testsSubjectsAndMarks;
-    }
-
-    public Integer get(Object key) {
-        return testsSubjectsAndMarks.get(key);
-    }
-
-    public Integer put(Integer key, Integer value) {
-        return testsSubjectsAndMarks.put(key, value);
-    }
-
-    public Integer remove(Object key) {
-        return testsSubjectsAndMarks.remove(key);
-    }
-
-    public int size() {
-        return testsSubjectsAndMarks.size();
     }
 
     public ApplicationStatus getApplicationStatus() {

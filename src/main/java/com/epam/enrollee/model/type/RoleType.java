@@ -1,4 +1,4 @@
-package com.epam.enrollee.model.enumtype;
+package com.epam.enrollee.model.type;
 
 public enum RoleType {
     ADMIN("admin"),

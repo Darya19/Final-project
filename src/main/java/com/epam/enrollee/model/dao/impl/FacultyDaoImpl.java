@@ -10,25 +10,32 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
-
-import static com.epam.enrollee.model.dao.ColumnName.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class FacultyDaoImpl implements BaseDao<Faculty> {
 
+    public static FacultyDaoImpl instance;
+
     private static final String FIND_FACULTY_BY_USER_ID =
-            "SELECT faculty_id , faculty_name FROM faculty WHERE faculty_id IN (SELECT DISTINCT faculty_id_fk FROM enrollee_faculty WHERE enrollee_id_fk=?)";
+            "SELECT faculty_id , faculty_name FROM faculty WHERE faculty_id IN " +
+                    "(SELECT DISTINCT faculty_id_fk FROM enrollee_faculty WHERE enrollee_id_fk=?)";
     private static final String FIND_FACULTY_BY_FACULTY_ID =
-            "SELECT faculty_id, faculty_name, GROUP_CONCAT(specialty_id ORDER BY specialty_id ASC separator ',')" +
-                    "AS specialty_id FROM faculty LEFT JOIN specialty ON specialty.faculty_id_fk = faculty.faculty_id " +
-                    "WHERE faculty_id=? GROUP BY faculty_id";
+            "SELECT faculty_id, faculty_name FROM faculty WHERE faculty_id=?";
     private static final String FIND_ALL_FACULTIES =
-            "SELECT faculty_id, faculty_name, GROUP_CONCAT(specialty_id ORDER BY specialty_id ASC separator ',')" +
-                    "AS specialty_id FROM faculty LEFT JOIN specialty ON specialty.faculty_id_fk = faculty.faculty_id " +
-                    "GROUP BY faculty_id";
+            "SELECT faculty_id, faculty_name FROM faculty";
+
+    public static FacultyDaoImpl getInstance() {
+        if (instance == null) {
+            instance = new FacultyDaoImpl();
+        }
+        return instance;
+    }
 
     @Override
-    public boolean add (Map<String, Object> parameters) throws DaoException {
+    public boolean add(Map<String, Object> parameters) throws DaoException {
         return true;
     }
 
@@ -38,14 +45,15 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
     }
 
     @Override
-    public Optional<List<Faculty>> findById(int facultyId) throws DaoException {
+    public Optional<Faculty> findById(int facultyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_FACULTY_BY_FACULTY_ID)) {
             statement.setInt(1, facultyId);
             ResultSet resultSet = statement.executeQuery();
             List<Faculty> faculties = createFacultyListFromResultSet(resultSet);
             if (!faculties.isEmpty()) {
-                return Optional.of(faculties);
+                Faculty faculty = faculties.get(0);
+                return Optional.of(faculty);
             } else {
                 return Optional.empty();
             }
@@ -53,7 +61,8 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
             throw new DaoException("database issues", e);
         }
     }
-//check
+
+    //check
     @Override
     public Optional<List<Faculty>> findAll() throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -90,13 +99,8 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
         List<Faculty> faculties = new ArrayList<>();
         while (resultSet.next()) {
             Faculty faculty = new Faculty();
-            faculty.setFacultyId(resultSet.getInt(FACULTY_ID));
-            faculty.setFacultyName(resultSet.getString(FACULTY_NAME));
-            String[] specialties = resultSet.getString(SPECIALTY_ID).split(",");
-            List<String> specialtiesList = Arrays.asList(specialties);
-            for (String id : specialtiesList) {
-                faculty.add(Integer.valueOf(id));
-            }
+            faculty.setFacultyId(resultSet.getInt(ColumnName.FACULTY_ID));
+            faculty.setFacultyName(resultSet.getString(ColumnName.FACULTY_NAME));
             faculties.add(faculty);
         }
         return faculties;

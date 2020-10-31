@@ -6,38 +6,36 @@ import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.Passport;
-import com.epam.enrollee.model.enumtype.RoleType;
-import com.epam.enrollee.model.enumtype.StatusType;
+import com.epam.enrollee.model.type.RoleType;
+import com.epam.enrollee.model.type.StatusType;
+import com.epam.enrollee.util.MapKeys;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.util.*;
-
-import static com.epam.enrollee.controller.command.RequestParameters.*;
-import static com.epam.enrollee.model.dao.ColumnName.MARK_VALUE;
-import static com.epam.enrollee.model.dao.ColumnName.SUBJECT_ID;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
 
-    private Logger logger = LogManager.getLogger();
+    public static EnrolleeDaoImpl instance;
 
+    private static Logger logger = LogManager.getLogger();
     private static final String FIND_ENROLLEE_BY_EMAIL =
-            "SELECT enrollee_id,email,role,status,enrollee_first_name,enrollee_last_name,enrollee_middle_name," +
-                    "faculty_id_fk as faculty_id,specialty_id_fk as specialty_id, GROUP_CONCAT(subject_id_fk " +
-                    "SEPARATOR ',') as subject_id, GROUP_CONCAT(mark_value SEPARATOR ',') as mark_value FROM " +
-                    "enrollee JOIN enrollee_faculty on " +
-                    "enrollee.enrollee_id = enrollee_faculty.enrollee_id_fk JOIN enrollee_specialty on " +
-                    "enrollee.enrollee_id = enrollee_specialty.enrollee_id_fk JOIN mark on enrollee.enrollee_id" +
-                    "= mark.enrollee_id_fk WHERE email=?";
+            "SELECT enrollee_id,email,role,status,enrollee_first_name,enrollee_last_name," +
+                    "enrollee_middle_name, faculty_id_fk as faculty_id,specialty_id_fk as " +
+                    "specialty_id FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id " +
+                    "= enrollee_faculty.enrollee_id_fk JOIN enrollee_specialty on enrollee.enrollee_id " +
+                    "= enrollee_specialty.enrollee_id_fk WHERE email=?";
     private static final String ADD_ENROLLEE =
-            "INSERT INTO enrollee (email, password, status, role, enrollee_first_name, enrollee_last_name, " +
-                    "enrollee_middle_name, passport_id) " +
+            "INSERT INTO enrollee (email, password, status, role, enrollee_first_name, " +
+                    "enrollee_last_name, enrollee_middle_name, passport_id_fk) " +
                     "VALUES (?,?,?,?,?,?,?,?)";
     private static final String ADD_PASSPORT =
-            "INSERT INTO passport (personal_number, passport_series_and_number) " +
-                    "VALUES (?,?)";
+            "INSERT INTO passport (personal_number, passport_series_and_number) VALUES (?,?)";
     private static final String ADD_MARKS =
             "INSERT INTO mark (enrollee_id_fk, subject_id_fk, mark_value) " +
                     "VALUES (?,?,?)";
@@ -47,15 +45,23 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
     private static final String ADD_ENROLLEE_IN_FACULTY =
             "INSERT INTO enrollee_faculty (enrollee_id_fk,faculty_id_fk) " +
                     "VALUES (?,?)";
+    private static final String FIND_PASSPORT_BY_ENROLLE_ID =
+            "SELECT passport_id, personal_number, passport_series_and_number FROM passport " +
+                    "JOIN enrollee e on passport.passport_id = e.passport_id_fk WHERE enrollee_id=?";
+
+    public static EnrolleeDaoImpl getInstance() {
+        if (instance == null) {
+            instance = new EnrolleeDaoImpl();
+        }
+        return instance;
+    }
 
     @Override
     public boolean add(Map<String, Object> objectMap) throws DaoException {
         boolean isEnrolleeAdded = false;
-        boolean isPassportAdded = false;
+        boolean isPassportAdded;
         int passportId = 0;
         int enrolleeId = 0;
-        Enrollee enrollee = (Enrollee) objectMap.get(ENROLLEE);
-        Passport passport = (Passport) objectMap.get(PASSPORT);
         Connection connection = ConnectionPool.INSTANCE.getConnection();
         PreparedStatement enrolleeStatement = null;
         PreparedStatement passportStatement = null;
@@ -69,40 +75,53 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             markStatement = connection.prepareStatement(ADD_MARKS);
             specialtyStatement = connection.prepareStatement(ADD_ENROLLEE_IN_SPECIALTY);
             facultyStatement = connection.prepareStatement(ADD_ENROLLEE_IN_FACULTY);
-            passportStatement.setString(1, passport.getPersonalNumber());
-            passportStatement.setString(2, passport.getPassportSeriesAndNumber());
+            passportStatement.setString(1, (String) objectMap.get(MapKeys.PERSONAL_NUMBER));
+            passportStatement.setString(2, (String) objectMap.get(MapKeys.PASSPORT_SERIES_AND_NUMBER));
             isPassportAdded = passportStatement.executeUpdate() > 0;
             ResultSet passportResultSet = passportStatement.getGeneratedKeys();
             if (passportResultSet.next()) {
                 passportId = passportResultSet.getInt(1);
             }
             if (isPassportAdded) {
-                enrolleeStatement.setString(1, enrollee.getFirstName());
-                enrolleeStatement.setString(2, enrollee.getLastName());
-                enrolleeStatement.setString(3, enrollee.getMiddleName());
-                enrolleeStatement.setInt(4, passportId);
+                enrolleeStatement.setString(1, (String) objectMap.get(MapKeys.EMAIL));
+                enrolleeStatement.setString(2, (String) objectMap.get(MapKeys.PASSWORD));
+                enrolleeStatement.setString(3, String.valueOf(objectMap.get(MapKeys.STATUS)));
+                enrolleeStatement.setString(4, String.valueOf(objectMap.get(MapKeys.ROLE)));
+                enrolleeStatement.setString(5, (String) objectMap.get(MapKeys.FIRST_NAME));
+                enrolleeStatement.setString(6, (String) objectMap.get(MapKeys.LAST_NAME));
+                enrolleeStatement.setString(7, (String) objectMap.get(MapKeys.MIDDLE_NAME));
+                enrolleeStatement.setInt(8, passportId);
                 isEnrolleeAdded = enrolleeStatement.executeUpdate() > 0;
-                ResultSet enrolleeResultSet = passportStatement.getGeneratedKeys();
+                ResultSet enrolleeResultSet = enrolleeStatement.getGeneratedKeys();
                 if (enrolleeResultSet.next()) {
                     enrolleeId = enrolleeResultSet.getInt(1);
                 }
-                if(isEnrolleeAdded){
-                    facultyStatement.setInt(1,enrolleeId);
-                    facultyStatement.setInt(2, enrollee.getChosenFacultyId());
+                if (isEnrolleeAdded) {
+                    facultyStatement.setInt(1, enrolleeId);
+                    facultyStatement.setInt(2, (Integer) objectMap.get(MapKeys.FACULTY_ID));
                     facultyStatement.executeUpdate();
-                    specialtyStatement.setInt(1,enrolleeId);
-                    specialtyStatement.setInt(2, enrollee.getChosenSpecialtyId());
+                    specialtyStatement.setInt(1, enrolleeId);
+                    specialtyStatement.setInt(2, (Integer) objectMap.get(MapKeys.SPECIALTY_ID));
                     specialtyStatement.executeUpdate();
-                    for(Map.Entry<Integer, Integer> pair : enrollee.getTestsSubjectsAndMarks().entrySet()){
-                        int subjectId = pair.getKey();
-                        int markValue = pair.getValue();
-                        markStatement.setInt(1,enrolleeId);
-                        markStatement.setInt(2, subjectId);
-                        markStatement.setInt(3, markValue);
-                        markStatement.executeUpdate();
-                    }
+                    markStatement.setInt(1, enrolleeId);
+                    markStatement.setInt(2, (Integer) objectMap.get(MapKeys.SUBJECT_ID_1));
+                    markStatement.setInt(3, (Integer) objectMap.get(MapKeys.MARK_1));
+                    markStatement.executeUpdate();
+                    markStatement.setInt(1, enrolleeId);
+                    markStatement.setInt(2, (Integer) objectMap.get(MapKeys.SUBJECT_ID_2));
+                    markStatement.setInt(3, (Integer) objectMap.get(MapKeys.MARK_2));
+                    markStatement.executeUpdate();
+                    markStatement.setInt(1, enrolleeId);
+                    markStatement.setInt(2, (Integer) objectMap.get(MapKeys.SUBJECT_ID_3));
+                    markStatement.setInt(3, (Integer) objectMap.get(MapKeys.MARK_3));
+                    markStatement.executeUpdate();
+                    markStatement.setInt(1, enrolleeId);
+                    markStatement.setInt(2, (Integer) objectMap.get(MapKeys.SUBJECT_ID_4));
+                    markStatement.setInt(3, (Integer) objectMap.get(MapKeys.MARK_4));
+                    markStatement.executeUpdate();
                 }
             }
+            connection.commit();
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -117,12 +136,13 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             closeStatement(specialtyStatement);
             closeStatement(markStatement);
             try {
+                connection.setAutoCommit(true);
                 connection.close();
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                logger.log(Level.ERROR, "impossible return connection to pool");
             }
         }
-       return isEnrolleeAdded;
+        return isEnrolleeAdded;
     }
 
     @Override
@@ -131,7 +151,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
     }
 
     @Override
-    public Optional<List<Enrollee>> findById(int parameter) throws DaoException {
+    public Optional<Enrollee> findById(int parameter) throws DaoException {
         return Optional.empty();
     }
 
@@ -146,9 +166,25 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
             List<Enrollee> enrollees = createEnrolleeListFromResultSet(resultSet);
-            if (enrollees.isEmpty()) {
+            if (!enrollees.isEmpty()) {
                 Enrollee enrollee = enrollees.get(0);
                 return Optional.of(enrollee);
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
+    }
+
+    public Optional<Passport> findPassportByEnrolleeId(int enrolleeId) throws DaoException {
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_PASSPORT_BY_ENROLLE_ID)) {
+            statement.setInt(1, enrolleeId);
+            ResultSet resultSet = statement.executeQuery();
+           Passport passport = createPassportFromResultSet(resultSet);
+            if (passport != null) {
+                return Optional.of(passport);
             } else {
                 return Optional.empty();
             }
@@ -161,7 +197,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         List<Enrollee> enrollees = new ArrayList<>();
         while (resultSet.next()) {
             Enrollee enrollee = new Enrollee();
-            enrollee.setUserId(resultSet.getInt(ColumnName.USER_ID));
+            enrollee.setUserId(resultSet.getInt(ColumnName.ENROLLE_ID));
             enrollee.setEmail(resultSet.getString(ColumnName.EMAIL));
             enrollee.setRole(RoleType.valueOf(resultSet.getString(ColumnName.ROLE).toUpperCase()));
             enrollee.setStatus(StatusType.valueOf(resultSet.getString(ColumnName.STATUS).toUpperCase()));
@@ -170,17 +206,18 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             enrollee.setMiddleName(resultSet.getString(ColumnName.ENROLLEE_MIDDLE_NAME));
             enrollee.setChosenFacultyId(resultSet.getInt(ColumnName.FACULTY_ID));
             enrollee.setChosenSpecialtyId(resultSet.getInt(ColumnName.SPECIALTY_ID));
-            enrollee.put(resultSet.getInt(ColumnName.SUBJECT_ID), resultSet.getInt(ColumnName.MARK_VALUE));
-            enrollees.add(enrollee);
-            String[] subjects = resultSet.getString(SUBJECT_ID).split(",");
-            List<String> subjectsList = Arrays.asList(subjects);
-            String[] marks = resultSet.getString(MARK_VALUE).split(",");
-            List<String> marksList = Arrays.asList(marks);
-            for (int i = 0; i < subjectsList.size(); i++) {
-                enrollee.put(Integer.valueOf(subjectsList.get(i)), Integer.valueOf(marksList.get(i)));
-            }
             enrollees.add(enrollee);
         }
         return enrollees;
+    }
+
+    private Passport createPassportFromResultSet(ResultSet resultSet) throws SQLException {
+        Passport passport = new Passport();
+        while (resultSet.next()){
+            passport.setPassportId(resultSet.getInt(ColumnName.PASSPORT_ID));
+            passport.setPersonalNumber(resultSet.getString(ColumnName.PERSONAL_NUMBER));
+            passport.setPassportSeriesAndNumber(resultSet.getString(ColumnName.PASSPORT_SERIES_AND_NUMBER));
+        }
+        return passport;
     }
 }

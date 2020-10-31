@@ -4,31 +4,40 @@ import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.model.connector.ConnectionPool;
 import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
-import com.epam.enrollee.model.entity.*;
+import com.epam.enrollee.model.entity.Faculty;
+import com.epam.enrollee.model.entity.Specialty;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import static com.epam.enrollee.model.dao.ColumnName.*;
+import static com.epam.enrollee.model.dao.ColumnName.FACULTY_ID;
+import static com.epam.enrollee.model.dao.ColumnName.SPECIALTY_NAME;
 
 public class SpecialtyDaoImpl implements BaseDao<Specialty> {
 
-    private static final String FIND_SUBJECTS_BY_SPECIALTY_NAME =
-            "SELECT subject_id, subject_name FROM subject_specialty JOIN subject ON subject.subject_id " +
-                    "= subject_specialty.subject_id_fk JOIN specialty on specialty.specialty_id " +
-                    "= subject_specialty.specialty_id_fk WHERE specialty_name=?";
+    public static SpecialtyDaoImpl instance;
+
     private static final String FIND_ALL_SPECIALTIES =
-            "SELECT specialty_id, specialty_name, GROUP_CONCAT(subject_id_fk ORDER BY subject_id_fk ASC separator ',') " +
-                    "AS subject_id FROM specialty LEFT JOIN subject_specialty" +
-                    " ON specialty.specialty_id = subject_specialty.specialty_id_fk GROUP BY specialty_id";
+            "SELECT specialty_id, specialty_name FROM specialty ";
     private static final String FIND_FACULTY_ID_BY_SPECIALTY_ID =
             "SELECT faculty_id_fk as faculty_id FROM  specialty WHERE specialty_id=?";
+    private static final String FIND_SPECIALTY_BY_SPECIALTY_ID =
+            "SELECT specialty_id, specialty_name FROM specialty WHERE specialty_id=?";
+    public static SpecialtyDaoImpl getInstance() {
+        if (instance == null) {
+            instance = new SpecialtyDaoImpl();
+        }
+        return instance;
+    }
 
     @Override
-    public boolean add(Map<String,Object> parameters) throws DaoException {
+    public boolean add(Map<String, Object> parameters) throws DaoException {
         return true;
     }
 
@@ -38,10 +47,24 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
     }
 
     @Override
-    public Optional<List<Specialty>> findById(int parameter) throws DaoException {
-        return Optional.empty();
+    public Optional<Specialty> findById(int specialtyId) throws DaoException {
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_SPECIALTY_BY_SPECIALTY_ID)) {
+            statement.setInt(1, specialtyId);
+            ResultSet resultSet = statement.executeQuery();
+            List<Specialty> specialties = createSpecialtyListFromResultSet(resultSet);
+            if (!specialties.isEmpty()) {
+                Specialty specialty = specialties.get(0);
+                return Optional.of(specialty);
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
     }
-//check
+
+    //check
     @Override
     public Optional<List<Specialty>> findAll() throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -81,11 +104,6 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
             Specialty specialty = new Specialty();
             specialty.setSpecialtyId(resultSet.getInt(ColumnName.SPECIALTY_ID));
             specialty.setSpecialtyName(resultSet.getString(SPECIALTY_NAME));
-            String[] subjects = resultSet.getString(SUBJECT_ID).split(",");
-            List<String> subjectsList = Arrays.asList(subjects);
-            for (String id : subjectsList) {
-                specialty.add(Integer.valueOf(id));
-            }
             specialties.add(specialty);
         }
         return specialties;
