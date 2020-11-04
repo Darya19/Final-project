@@ -19,7 +19,7 @@ public class EnrolleeMarkRegister {
         this.testsSubjectsAndMarks = testsSubjectsAndMarks;
     }
 
-    public Integer get(Object key) {
+    public Integer get(Subject key) {
         return testsSubjectsAndMarks.get(key);
     }
 
@@ -27,7 +27,7 @@ public class EnrolleeMarkRegister {
         return testsSubjectsAndMarks.put(key, value);
     }
 
-    public Integer remove(Object key) {
+    public Integer remove(Subject key) {
         return testsSubjectsAndMarks.remove(key);
     }
 

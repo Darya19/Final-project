@@ -99,7 +99,7 @@ public class EnrolleeValidator {
         return personalNumber.matches(PERSONAL_NUMBER_PATTERN);
     }
 
-    private boolean isMarkValid(String mark) {
+    public boolean isMarkValid(String mark) {
         NumberParser parser = new NumberParser();
         if (mark.matches(MARK_PATTERN)) {
             int intMark = parser.parseToInt(mark);

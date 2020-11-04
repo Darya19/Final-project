@@ -16,7 +16,7 @@ public interface BaseDao<T> {
 
     Optional<T> findById(int parameter) throws DaoException;
 
-    Optional<List<T>> findAll() throws DaoException;
+    List<T> findAll() throws DaoException;
 
     default void closeStatement(Statement statement) throws DaoException {
         try {

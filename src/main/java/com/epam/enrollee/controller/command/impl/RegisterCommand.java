@@ -21,6 +21,8 @@ import java.util.Optional;
 
 public class RegisterCommand implements Command {
 
+    private static final String PARAMETERS = "parameters";
+
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
         EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
@@ -36,7 +38,8 @@ public class RegisterCommand implements Command {
         parameters.put(MapKeys.FIRST_NAME, request.getParameter(RequestParameters.FIRST_NAME));
         parameters.put(MapKeys.LAST_NAME, request.getParameter(RequestParameters.LAST_NAME));
         parameters.put(MapKeys.MIDDLE_NAME, request.getParameter(RequestParameters.MIDDLE_NAME));
-        parameters.put(MapKeys.PASSPORT_SERIES_AND_NUMBER, request.getParameter(RequestParameters.PASSPORT_SERIES_AND_NUMBER));
+        parameters.put(MapKeys.PASSPORT_SERIES_AND_NUMBER, request.getParameter
+                (RequestParameters.PASSPORT_SERIES_AND_NUMBER));
         parameters.put(MapKeys.PERSONAL_NUMBER, request.getParameter(RequestParameters.PERSONAL_NUMBER));
         parameters.put(MapKeys.FACULTY_ID, request.getParameter(RequestParameters.FACULTY_ID));
         parameters.put(MapKeys.SPECIALTY_ID, request.getParameter(RequestParameters.SPECIALTY_ID));
@@ -54,7 +57,7 @@ public class RegisterCommand implements Command {
         try {
             parameters = enrolleeService.checkEnrolleeParameters(parameters);
             if (parameters.containsValue("")) {
-                request.setAttribute(MapKeys.PARAMETERS, parameters);
+                request.setAttribute(PARAMETERS, parameters);
                 page = PagePath.REGISTER;
             } else {
                 session = request.getSession();
@@ -69,23 +72,21 @@ public class RegisterCommand implements Command {
                     Optional<EnrolleeMarkRegister> optionalEnrolleeRegister = markRegisterService
                             .findEnrolleeMarkRegister(enrolleeId);
                     Optional<Passport> optionalPassport = enrolleeService.findEnrolleePassport(enrolleeId);
-                    if (optionalEnrolleeRegister.isPresent() && optionalPassport.isPresent()) {
-                        EnrolleeMarkRegister enrolleeRegister = optionalEnrolleeRegister.get();
-                        Passport passport = optionalPassport.get();
+                    Optional<Faculty> optionalFaculty = facultyService.findEnrolleeFaculty
+                            (enrollee.getChosenFacultyId());
+                    Optional<Specialty> optionalSpecialty = specialtyService.findEnrolleeSpecialty
+                            (enrollee.getChosenSpecialtyId());
+                    if (optionalEnrolleeRegister.isPresent() && optionalPassport.isPresent()
+                    && optionalFaculty.isPresent() && optionalSpecialty.isPresent()) {
                         session.setAttribute(MapKeys.ENROLLEE, enrollee);
-                        session.setAttribute(MapKeys.ENROLLEE_REGISTER, enrolleeRegister);
-                        session.setAttribute(RequestParameters.PASSPORT, passport);
-                        Optional<Faculty> optionalFaculty = facultyService.findEnrolleeFaculty(enrollee.getChosenFacultyId());
-                        Optional<Specialty> optionalSpecialty = specialtyService.findEnrolleeSpecialty(enrollee.getChosenSpecialtyId());
-                        if (optionalFaculty.isPresent() && optionalSpecialty.isPresent()) {
-                            Faculty faculty = optionalFaculty.get();
-                            Specialty specialty = optionalSpecialty.get();
-                            request.setAttribute(MapKeys.FACULTY, faculty);
-                            request.setAttribute(MapKeys.SPECIALTY, specialty);
+                        session.setAttribute(MapKeys.REGISTER, optionalEnrolleeRegister.get()
+                                .getTestsSubjectsAndMarks());
+                        session.setAttribute(MapKeys.PASSPORT, optionalPassport.get());
+                            request.setAttribute(MapKeys.FACULTY, optionalFaculty.get());
+                            request.setAttribute(MapKeys.SPECIALTY, optionalSpecialty.get());
                         }
                         page = PagePath.PROFILE;
-                    }
-                } else {
+                    } else {
                     page = PagePath.ERROR_500;
                 }
             }

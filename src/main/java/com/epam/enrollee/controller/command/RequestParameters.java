@@ -20,16 +20,7 @@ public class RequestParameters {
     public static final String SUBJECT_ID_4 = "subject_id_4";
     public static final String MARK_4 = "mark_4";
     public static final String REPEATED_PASSWORD = "repeated_password";
-
-
-    public static final String ERROR_LOGIN_MESSAGE = "error_login_message";
-    public static final String WRONG_REPEATED_PASSWORD = "wrong_repeated_password";
-    public static final String PARAMETERS = "parameters";
-    public static final String FACULTIES = "faculties";
-    public static final String SPECIALTIES = "specialties";
-    public static final String SUBJECTS = "subjects";
-    public static final String ENROLLEE = "enrollee";
-    public static final String PASSPORT = "passport";
+    public static final String EDIT_PART = "edit_part";
 
     private RequestParameters() {
     }

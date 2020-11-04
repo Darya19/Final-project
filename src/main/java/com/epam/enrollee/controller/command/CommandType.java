@@ -33,14 +33,34 @@ public enum CommandType {
             this.command = new ToMainPageCommand();
         }
     },
-    TO_CONTACTS_PAGE {
-        {
-            this.command = new ToContactsPageCommand();
-        }
-    },
     TO_REGISTER_PAGE {
         {
             this.command = new ToRegisterPageCommand();
+        }
+    },
+    TO_LOGOUT_PAGE {
+        {
+            this.command = new ToLogoutPageCommand();
+        }
+    },
+    TO_LOGIN_PAGE {
+        {
+            this.command = new ToLoginPageCommand();
+        }
+    },
+    TO_EDIT_PROFILE_PAGE {
+        {
+            this.command = new ToEditProfilePageCommand();
+        }
+    },
+    EDIT {
+        {
+            this.command = new EditCommand();
+        }
+    },
+    TO_SPECIALTIES_PAGE {
+        {
+            this.command = new ToSpecialtiesPageCommand();
         }
     };
 

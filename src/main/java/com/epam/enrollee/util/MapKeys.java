@@ -23,7 +23,7 @@ public class MapKeys {
     public static final String REPEATED_PASSWORD = "repeated_password";
     public static final String ENROLLEE = "enrollee";
     public static final String PASSPORT = "passport";
-    public static final String ENROLLEE_REGISTER = "enrollee_register";
+    public static final String REGISTER = "register";
     public static final String PARAMETERS = "parameters";
     public static final String ROLE = "role";
     public static final String STATUS = "status";

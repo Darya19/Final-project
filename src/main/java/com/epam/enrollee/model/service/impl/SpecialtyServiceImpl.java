@@ -31,10 +31,10 @@ public class SpecialtyServiceImpl implements BaseService<Specialty> {
     }
 
     @Override
-    public Optional<List<Specialty>> findAll() throws ServiceException {
+    public List<Specialty> findAll() throws ServiceException {
         SpecialtyDaoImpl dao = SpecialtyDaoImpl.getInstance();
         try {
-            Optional<List<Specialty>> specialties = dao.findAll();
+           List<Specialty> specialties = dao.findAll();
                 return specialties;
         } catch (DaoException e) {
             throw new ServiceException(e);
@@ -52,7 +52,17 @@ public class SpecialtyServiceImpl implements BaseService<Specialty> {
     }
 
     @Override
-    public Optional<List<Specialty>> update(Specialty value) throws ServiceException {
+    public List<Specialty> update(Specialty value) throws ServiceException {
         return null;
+    }
+
+    public List<Specialty> findSpecialtiesOfFaculty(int facultyId) throws ServiceException {
+        SpecialtyDaoImpl dao = SpecialtyDaoImpl.getInstance();
+        try{
+            List<Specialty> specialties = dao.findSpecialtiesListByFacultyId(facultyId);
+            return specialties;}
+        catch (DaoException e){
+            throw new ServiceException(e);
+        }
     }
 }

@@ -5,7 +5,7 @@
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
-    <title>Profile</title>
+    <title><fmt:message key="profile.title"/></title>
 </head>
 
 <body>
@@ -15,12 +15,15 @@
         <div class="container">
             <div class="main-information">
                 <div class="text-info">
+                    <p></p>
+                    <p></p>
                     <h1 class="text-center">${enrollee.firstName} ${enrollee.middleName} ${enrollee.lastName}</h1>
                 </div>
                 <div class="text-center">
                     <h6 class="text-muted"><fmt:message key="profile.applicationstatus"/></h6><h4>${enrollee.applicationStatus}</h4>
                     <h6 class="text-muted"><fmt:message key="profile.personalnumber"/></h6><h5>${passport.personalNumber}</h5>
                     <h6 class="text-muted"><fmt:message key="profile.passportseriesandnumber"/></h6><h5>${passport.passportSeriesAndNumber}</h5>
+                    <button class="btn btn-primary btn-sm" type="button" onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_personal_information"'><fmt:message key="profile.edit"/></button>
                 </div>
             </div>
         </div>
@@ -39,7 +42,7 @@
                                 </div>
                                 <div class="col-4">${faculty.facultyName}</div>
                                 <div class="col-2">
-                                    <button class="btn btn-primary btn-sm" type="button"><fmt:message key="profile.edit"/></button>
+
                                 </div>
                             </div>
                         </div>
@@ -50,20 +53,20 @@
                             </div>
                             <div class="col-4">${specialty.specialtyName}</div>
                             <div class="col-2">
-                                <button class="btn btn-primary btn-sm" type="button"><fmt:message key="profile.edit"/></button>
                             </div>
                         </div>
+    <button class="btn btn-primary btn-sm" type="button" onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_specialty"'><fmt:message key="profile.edit"/></button>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="shadow p-3 mb-5 bg-white rounded">
                         <div class="subjects marks-info-card">
                             <h4 class="text-muted"><fmt:message key="profile.results"/></h4>
-                             <c:forEach items="${enrollee_register}" var="register">
+                             <c:forEach items="${register}" var="register">
                             <h7>${register.key.subjectName}</h7>
                             <div class="progress">
-                                <div class="progress-bar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                                     style="width: 50%;"><span class="sr-only">${register.value}</span>${register.value}
+                                <div class="progress-bar" aria-valuenow="${register.value}" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: ${register.value}%;"><span class="sr-only"></span>${register.value}
                                 </div>
                             </div>
                              </c:forEach>
@@ -73,10 +76,13 @@
                                      style="width: 50%;"><span class="sr-only">80%</span></div>
                             </div>
                         </div>
+                        <p></p>
+                        <button class="btn btn-primary btn-sm" type="button" onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_marks"'><fmt:message key="profile.edit"/></button>
                     </div>
                 </div>
             </div>
         </div>
+
     </section>
 </main>
 <c:import url="//jsp//fragment//footer.jsp"/>

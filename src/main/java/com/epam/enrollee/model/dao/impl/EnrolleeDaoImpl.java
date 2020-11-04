@@ -6,6 +6,7 @@ import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.Passport;
+import com.epam.enrollee.model.type.ApplicationStatus;
 import com.epam.enrollee.model.type.RoleType;
 import com.epam.enrollee.model.type.StatusType;
 import com.epam.enrollee.util.MapKeys;
@@ -48,6 +49,12 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
     private static final String FIND_PASSPORT_BY_ENROLLE_ID =
             "SELECT passport_id, personal_number, passport_series_and_number FROM passport " +
                     "JOIN enrollee e on passport.passport_id = e.passport_id_fk WHERE enrollee_id=?";
+    private static final String UPDATE_ENROLLEE =
+            "UPDATE enrollee SET enrollee_first_name=?, enrollee_last_name=?, enrollee_last_name=? where enrollee_id=?";
+    private static final String UPDATE_PASSPORT =
+            "UPDATE passport SET passport_series_and_number=?, personal_number=? where passport_id=?";
+    private static final String UPDATE_SPECIALTY =
+            "UPDATE enrollee_specialty SET specialty_id_fk=? where enrollee_id_fk=?";
 
     public static EnrolleeDaoImpl getInstance() {
         if (instance == null) {
@@ -150,14 +157,57 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         return true;
     }
 
+
+    public boolean updateEnrollee(Enrollee enrollee) throws DaoException {
+boolean isUpdated;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_ENROLLEE)) {
+            statement.setString(1, enrollee.getFirstName());
+            statement.setString(2, enrollee.getLastName());
+            statement.setString(3, enrollee.getMiddleName());
+            statement.setInt(4, enrollee.getUserId());
+            isUpdated = statement.executeUpdate() > 0;
+            return isUpdated;
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
+    }
+
+    public boolean updatePassport(Passport passport) throws DaoException {
+        boolean isUpdated;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_PASSPORT)) {
+            statement.setString(1, passport.getPassportSeriesAndNumber());
+            statement.setString(2, passport.getPersonalNumber());
+            statement.setInt(3, passport.getPassportId());
+            isUpdated = statement.executeUpdate() > 0;
+            return isUpdated;
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
+    }
+
+    public boolean updateEnrolleeSpecialty(Enrollee enrollee) throws DaoException {
+        boolean isUpdated;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_SPECIALTY)) {
+            statement.setInt(1, enrollee.getChosenSpecialtyId());
+            statement.setInt(2, enrollee.getUserId());
+            isUpdated = statement.executeUpdate() > 0;
+            return isUpdated;
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
+    }
+
     @Override
     public Optional<Enrollee> findById(int parameter) throws DaoException {
         return Optional.empty();
     }
 
     @Override
-    public Optional<List<Enrollee>> findAll() throws DaoException {
-        return Optional.empty();
+    public List<Enrollee> findAll() throws DaoException {
+        return null;
     }
 
     public Optional<Enrollee> findEnrolleeByEmail(String email) throws DaoException {
@@ -201,6 +251,8 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             enrollee.setEmail(resultSet.getString(ColumnName.EMAIL));
             enrollee.setRole(RoleType.valueOf(resultSet.getString(ColumnName.ROLE).toUpperCase()));
             enrollee.setStatus(StatusType.valueOf(resultSet.getString(ColumnName.STATUS).toUpperCase()));
+            enrollee.setApplicationStatus(ApplicationStatus
+                    .valueOf(resultSet.getString(ColumnName.APPLICATION_STATUS).toUpperCase()));
             enrollee.setFirstName(resultSet.getString(ColumnName.ENROLLEE_FIRST_NAME));
             enrollee.setLastName(resultSet.getString(ColumnName.ENROLLEE_LAST_NAME));
             enrollee.setMiddleName(resultSet.getString(ColumnName.ENROLLEE_MIDDLE_NAME));

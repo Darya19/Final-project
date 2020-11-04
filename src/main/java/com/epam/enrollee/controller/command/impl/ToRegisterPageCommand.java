@@ -19,6 +19,9 @@ import java.util.Optional;
 
 
 public class ToRegisterPageCommand implements Command {
+    private static final String FACULTIES = "faculties";
+    private static final String SPECIALTIES = "specialties";
+    private static final String SUBJECTS = "subjects";
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
         String page = null;
@@ -27,19 +30,15 @@ public class ToRegisterPageCommand implements Command {
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
         SubjectServiceImpl subjectService = new SubjectServiceImpl();
         try {
-            Optional<List<Faculty>> faculties = facultyService.findAll();
-            Optional<List<Specialty>> specialties = specialtyService.findAll();
-            Optional<List<Subject>> subjects = subjectService.findAll();
-            if (faculties.isPresent() && specialties.isPresent() && subjects.isPresent()) {
-                session.setAttribute(RequestParameters.FACULTIES, faculties.get());
-                session.setAttribute(RequestParameters.SPECIALTIES, specialties.get());
-                session.setAttribute(RequestParameters.SUBJECTS, subjects.get());
+            List<Faculty> faculties = facultyService.findAll();
+            List<Specialty> specialties = specialtyService.findAll();
+            List<Subject> subjects = subjectService.findAll();
+                session.setAttribute(FACULTIES, faculties);
+                session.setAttribute(SPECIALTIES, specialties);
+                session.setAttribute(SUBJECTS, subjects);
                 page = PagePath.REGISTER;
-            } else {
-                page = PagePath.ERROR_404;
-            }
         } catch (ServiceException e) {
-            page = PagePath.ERROR_404;
+            page = PagePath.ERROR_500;
         }
         return page;
     }

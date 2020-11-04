@@ -141,28 +141,30 @@ public class UserDaoImpl implements BaseDao<User> {
     }
 
     @Override
-    public Optional<List<User>> findAll() throws DaoException {
+    public List<User> findAll() throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS)) {
             ResultSet resultSet = statement.executeQuery();
             List<User> foundUsers = createUserListFromResultSet(resultSet);
-            return Optional.of(foundUsers);
+            return foundUsers;
         } catch (SQLException e) {
             throw new DaoException("database issues");
         }
     }
 
-    public List<User> update(User user) throws DaoException {
+    public boolean update(User user) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
-            statement.setString(1, user.getEmail());
-            statement.setString(2, user.getRole().getRole());
-            statement.setString(3, user.getStatus().getStatus());
-            statement.setInt(4, user.getUserId());
-            ResultSet resultSet = statement.executeQuery();
-            List<User> foundBooks = createUserListFromResultSet(resultSet);
-            return foundBooks;
-        } catch (SQLException e) {
+//            statement.setString(1, user.getEmail());
+//            statement.setString(2, user.getRole().getRole());
+//            statement.setString(3, user.getStatus().getStatus());
+//            statement.setInt(4, user.getUserId());
+//            ResultSet resultSet = statement.executeQuery();
+//            List<User> foundBooks = createUserListFromResultSet(resultSet);
+//            if(!foundBooks.isEmpty()){
+//            return Optional.of(foundBooks.get(0));}
+            return false;
+       } catch (SQLException e) {
             throw new DaoException("database issues", e);
         }
     }

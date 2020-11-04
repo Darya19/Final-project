@@ -1,4 +1,7 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<fmt:setLocale value="en"/>
+<fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
 </head>
@@ -6,25 +9,33 @@
 <footer class="page-footer dark">
     <div class="container">
         <div class="row">
-            <div class="col-sm-6">
-                <h5>Get started</h5>
+            <div class="col-sm-4">
+                <h5><fmt:message key="footer.start"/></h5>
                 <ul>
-                    <li><a href="projectServlet?command=to_main_page">Home</a></li>
-                    <li><a href="projectServlet?command=to_register_page">Sign up</a></li>
+                    <li><a href="projectServlet?command=to_main_page"><fmt:message key="footer.home"/></a></li>
+                    <p></p>
+                    <li><a href="projectServlet?command=to_register_page"><fmt:message key="footer.signup"/></a></li>
                 </ul>
             </div>
-            <div class="col-sm-6">
-                <h5>About us</h5>
+            <div class="col-sm-4">
+                <h5><fmt:message key="footer.resources"/></h5>
                 <ul>
-                    <li>
-                        <a href="projectServlet?command=to_faculties_page">Faculties</a></li>
-                    <li><a href="projectServlet?command=to_contacts_page">Contact us</a></li>
+                    <li> <a href="projectServlet?command=to_faculties_page"><fmt:message key="footer.faculties"/></a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <h5><fmt:message key="footer.contact"/></h5>
+                <ul>
+                <li><a><fmt:message key="footer.address"/></a></li>
+                </ul>
+                <ul>
+                    <li><a><fmt:message key="footer.phonenumber"/></a></li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="footer-copyright">
-        <p>© 2020 BNU</p>
+        <p><fmt:message key="footer.end"/></p>
     </div>
 </footer>
 <script src="/bootstrap/js/jquery.min.js"></script>

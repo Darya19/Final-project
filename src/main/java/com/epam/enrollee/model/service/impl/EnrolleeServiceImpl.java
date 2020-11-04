@@ -10,7 +10,6 @@ import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.Passport;
 import com.epam.enrollee.model.entity.Subject;
 import com.epam.enrollee.model.entity.User;
-import com.epam.enrollee.model.type.ApplicationStatus;
 import com.epam.enrollee.model.type.RoleType;
 import com.epam.enrollee.model.type.StatusType;
 import com.epam.enrollee.parser.NumberParser;
@@ -72,20 +71,22 @@ public class EnrolleeServiceImpl {
         NumberParser parser = new NumberParser();
         parameters = validator.validateRegistrationData(parameters);
         try {
-            if (!parameters.get(MapKeys.EMAIL).isEmpty()) {
+            if (parameters.containsKey(MapKeys.EMAIL) && !parameters.get(MapKeys.EMAIL).isEmpty()) {
                 Optional<User> user = userDao.findUserByEmail(parameters.get(MapKeys.EMAIL));
                 if (user.isPresent()) {
                     parameters.put(MapKeys.EMAIL, "");
                 }
             }
-            if (!parameters.get(MapKeys.PASSWORD).isEmpty()
-                    && !parameters.get(MapKeys.REPEATED_PASSWORD).isEmpty()) {
+            if (parameters.containsKey(MapKeys.PASSWORD) && (parameters.containsKey(MapKeys.REPEATED_PASSWORD)
+                    && !parameters.get(MapKeys.PASSWORD).isEmpty()
+                    && !parameters.get(MapKeys.REPEATED_PASSWORD).isEmpty())) {
                 if (!parameters.get(MapKeys.PASSWORD).equals(parameters.get(MapKeys.REPEATED_PASSWORD))) {
                     parameters.put(MapKeys.REPEATED_PASSWORD, "");
                     parameters.put(MapKeys.PASSWORD, "");
                 }
             }
-            if (!parameters.get(MapKeys.SPECIALTY_ID).isEmpty()) {
+            if (parameters.containsKey(MapKeys.SPECIALTY_ID)
+                    && !parameters.get(MapKeys.SPECIALTY_ID).isEmpty()) {
                 int intSpecialtyId = parser.parseToInt(parameters.get(MapKeys.SPECIALTY_ID));
                 int foundFaculty;
                 Optional<Integer> optionalFacultyId = specialtyDao.findFacultyIdBySpecialtyId(intSpecialtyId);
@@ -124,7 +125,7 @@ public class EnrolleeServiceImpl {
         }
     }
 
-    public Boolean registerEnrollee(Map<String, String> parameters) throws ServiceException {
+    public boolean registerEnrollee(Map<String, String> parameters) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         Map<String, Object> createdObjects = new HashMap<>();
@@ -160,7 +161,7 @@ public class EnrolleeServiceImpl {
             createdObjects.put(MapKeys.PERSONAL_NUMBER, parameters.get(MapKeys.PERSONAL_NUMBER));
             createdObjects.put(MapKeys.PASSPORT_SERIES_AND_NUMBER,
                     parameters.get(MapKeys.PASSPORT_SERIES_AND_NUMBER));
-           return enrolleeDao.add(createdObjects);
+            return enrolleeDao.add(createdObjects);
         } catch (DaoException | NoSuchAlgorithmException e) {
             throw new ServiceException(e);
         }
@@ -171,6 +172,56 @@ public class EnrolleeServiceImpl {
         try {
             Optional<Passport> passport = enrolleeDao.findPassportByEnrolleeId(enrolleeId);
             return passport;
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public Optional<Enrollee> updateEnrolleeNameInformation(Enrollee enrollee, Map<String, String> parameters)
+            throws ServiceException {
+        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        enrollee.setFirstName(parameters.get(MapKeys.FIRST_NAME));
+        enrollee.setLastName(parameters.get(MapKeys.LAST_NAME));
+        enrollee.setMiddleName(parameters.get(MapKeys.MIDDLE_NAME));
+        try {
+            if (enrolleeDao.updateEnrollee(enrollee)) {
+                return Optional.of(enrollee);
+            } else {
+                return Optional.empty();
+            }
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public Optional<Passport> updateEnrolleePassportInformation(Passport passport, Map<String, String> parameters)
+            throws ServiceException {
+        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        passport.setPassportSeriesAndNumber(parameters.get(MapKeys.PASSPORT_SERIES_AND_NUMBER));
+        passport.setPersonalNumber(parameters.get(MapKeys.PERSONAL_NUMBER));
+        try {
+            if (enrolleeDao.updatePassport(passport)) {
+                return Optional.of(passport);
+            } else {
+                return Optional.empty();
+            }
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public Optional<Enrollee> updateEnrolleeSpecialty(Enrollee enrollee, String specialtyId)
+            throws ServiceException {
+        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        NumberParser parser = new NumberParser();
+        int intSpecialtyId = parser.parseToInt(specialtyId);
+        enrollee.setChosenSpecialtyId(intSpecialtyId);
+        try {
+            if (enrolleeDao.updateEnrolleeSpecialty(enrollee)) {
+                return Optional.of(enrollee);
+            } else {
+                return Optional.empty();
+            }
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

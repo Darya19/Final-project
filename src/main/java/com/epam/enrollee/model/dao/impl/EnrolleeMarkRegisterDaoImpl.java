@@ -21,6 +21,8 @@ public class EnrolleeMarkRegisterDaoImpl implements BaseDao<EnrolleeMarkRegister
     private static final String FIND_ENROLLEE_REGISTER_BY_ENROLLE_ID =
             "SELECT subject_id, subject_name, mark_value FROM subject JOIN mark on subject.subject_id " +
                     "= mark.subject_id_fk WHERE enrollee_id_fk=?";
+    private static final String UPDATE_ENROLLEE_MARK_REGISTER =
+            "UPDATE mark SET subject_id_fk=?, mark_value=? where enrollee_id_fk=?";
 
     public static EnrolleeMarkRegisterDaoImpl getInstance() {
         if (instance == null) {
@@ -39,14 +41,35 @@ public class EnrolleeMarkRegisterDaoImpl implements BaseDao<EnrolleeMarkRegister
         return false;
     }
 
+    public boolean update(EnrolleeMarkRegister register, int enrolleeId) throws DaoException {
+        Map<Subject, Integer> parameters = register.getTestsSubjectsAndMarks();
+        int countUpdate = 0;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_ENROLLEE_MARK_REGISTER)) {
+            for (Map.Entry<Subject, Integer> pair : parameters.entrySet()) {
+                Subject subject = pair.getKey();
+                int markValue = pair.getValue();
+                statement.setInt(1, subject.getSubjectId());
+                statement.setInt(2, markValue);
+                statement.setInt(3, enrolleeId);
+                countUpdate += statement.executeUpdate();
+            }
+               if(countUpdate == 4){
+                   return true;
+               } else {return false;}
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
+    }
+
     @Override
     public Optional<EnrolleeMarkRegister> findById(int parameter) throws DaoException {
         return Optional.empty();
     }
 
     @Override
-    public Optional<List<EnrolleeMarkRegister>> findAll() throws DaoException {
-        return Optional.empty();
+    public List<EnrolleeMarkRegister> findAll() throws DaoException {
+        return null;
     }
 
     public Optional<EnrolleeMarkRegister> findEnrolleeMarkRegisterByEnrolleeId(int enrolleeId) throws DaoException {

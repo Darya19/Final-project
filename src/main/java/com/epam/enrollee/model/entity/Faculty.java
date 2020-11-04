@@ -1,12 +1,10 @@
 package com.epam.enrollee.model.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Faculty {
 
     private int facultyId;
     private String facultyName;
+    private String facultyDescription;
 
     public int getFacultyId() {
         return facultyId;
@@ -24,4 +22,11 @@ public class Faculty {
         this.facultyName = facultyName;
     }
 
+    public String getFacultyDescription() {
+        return facultyDescription;
+    }
+
+    public void setFacultyDescription(String facultyDescription) {
+        this.facultyDescription = facultyDescription;
+    }
 }

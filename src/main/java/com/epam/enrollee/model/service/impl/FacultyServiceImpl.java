@@ -3,7 +3,6 @@ package com.epam.enrollee.model.service.impl;
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.dao.impl.FacultyDaoImpl;
-import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Faculty;
 import com.epam.enrollee.model.service.BaseService;
 
@@ -28,31 +27,19 @@ public class FacultyServiceImpl implements BaseService<Faculty> {
         return Optional.empty();
     }
 
-    public Optional<Faculty> findFacultyByUserId(int userId) throws ServiceException {
+    @Override
+    public List<Faculty> findAll() throws ServiceException {
         FacultyDaoImpl dao = FacultyDaoImpl.getInstance();
         try {
-            Optional<Faculty> foundFaculty = dao.findFacultyByUserId(userId);
-            return foundFaculty;
+            List<Faculty> faculties = dao.findAll();
+            return faculties;
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public Optional<List<Faculty>> findAll() throws ServiceException {
-        FacultyDaoImpl dao = FacultyDaoImpl.getInstance();
-        try {
-            Optional<List<Faculty>> faculties = dao.findAll();
-            if (faculties.isPresent()) {
-                return faculties;
-            } else return Optional.empty();
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public Optional<List<Faculty>> update(Faculty value) throws ServiceException {
+    public List<Faculty> update(Faculty value) throws ServiceException {
         return null;
     }
 
@@ -65,5 +52,4 @@ public class FacultyServiceImpl implements BaseService<Faculty> {
            throw new ServiceException(e);
         }
     }
-
 }

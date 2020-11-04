@@ -43,22 +43,22 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
         return true;
     }
 
+    public boolean update(Subject subject) throws DaoException {
+        return false;
+    }
+
     @Override
     public Optional<Subject> findById(int parameter) throws DaoException {
         return Optional.empty();
     }
 
     @Override
-    public Optional<List<Subject>> findAll() throws DaoException {
+    public List<Subject> findAll() throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_SUBJECTS)) {
             ResultSet resultSet = statement.executeQuery();
             List<Subject> foundSubjects = createSubjectListFromResultSet(resultSet);
-            if (!foundSubjects.isEmpty()) {
-                return Optional.of(foundSubjects);
-            } else {
-                return Optional.empty();
-            }
+                return foundSubjects;
         } catch (SQLException e) {
             throw new DaoException("database issues", e);
         }

@@ -9,7 +9,6 @@ public class Enrollee extends User {
     private String middleName;
     private int chosenFacultyId;
     private int chosenSpecialtyId;
-
     private ApplicationStatus applicationStatus;
 
     public Enrollee() {

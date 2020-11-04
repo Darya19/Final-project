@@ -28,20 +28,18 @@ public class SubjectServiceImpl implements BaseService<Subject> {
     }
 
     @Override
-    public Optional<List<Subject>> findAll() throws ServiceException {
+    public List<Subject> findAll() throws ServiceException {
         SubjectDaoImpl dao = SubjectDaoImpl.getInstance();
         try {
-            Optional<List<Subject>> subjects = dao.findAll();
-            if (subjects.isPresent()) {
+            List<Subject> subjects = dao.findAll();
                 return subjects;
-            } else return Optional.empty();
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public Optional<List<Subject>> update(Subject value) throws ServiceException {
+    public List<Subject> update(Subject value) throws ServiceException {
         return null;
     }
 }

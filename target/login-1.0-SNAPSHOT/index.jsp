@@ -4,8 +4,6 @@
     <title>Index</title>
 </head>
 <body>
-
-<a href="projectServlet?command=to_register_page">registe</a>
-
+<jsp:forward page="/jsp/main.jsp"/>
 </body>
 </html>

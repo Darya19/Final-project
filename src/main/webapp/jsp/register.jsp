@@ -57,7 +57,7 @@
                 <h6><fmt:message key="register.faculty"/></h6>
                 <div class="input-group mb-3">
                     <select class="custom-select" id="faculty_id" name="faculty_id">
-                        <option selected value="0">choose faculty</option>
+                        <option selected value=""><fmt:message key="register.choosefaculty"/></option>
                         <c:forEach items="${faculties}" var="faculty">
                             <option value="${faculty.facultyId}">${faculty.facultyName}</option>
                         </c:forEach>
@@ -66,7 +66,7 @@
                 <h6><fmt:message key="register.specialty"/></h6>
                 <div class="input-group mb-3">
                     <select class="custom-select" id="specialty_id" name="specialty_id">
-                        <option selected value="0">choose specialty</option>
+                        <option selected value=""><fmt:message key="register.choosespecialty"/></option>
                         <c:forEach var="specialty" items="${specialties}">
                             <option value="${specialty.specialtyId}">${specialty.specialtyName}</option>
                         </c:forEach>
@@ -79,7 +79,7 @@
                 <div class="form-row">
                     <div class="col-7">
                         <select class="custom-select" id="subject_1" name="subject_id_1">
-                            <option selected value="0">choose subject</option>
+                            <option selected value=""><fmt:message key="register.choosesubject"/></option>
                             <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject.subjectId}">${subject.subjectName}</option>
                             </c:forEach>
@@ -93,7 +93,7 @@
                 <div class="form-row">
                     <div class="col-7">
                         <select class="custom-select" id="subject_2" name="subject_id_2">
-                            <option selected value="0">choose subject</option>
+                            <option selected value="0"><fmt:message key="register.choosesubject"/></option>
                             <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject.subjectId}">${subject.subjectName}</option>
                             </c:forEach>
@@ -106,7 +106,7 @@
                 <div class="form-row">
                     <div class="col-7">
                         <select class="custom-select" id="subject_3" name="subject_id_3">
-                            <option selected value="0">choose subject</option>
+                            <option selected value="0"><fmt:message key="register.choosesubject"/></option>
                             <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject.subjectId}">${subject.subjectName}</option>
                             </c:forEach>
@@ -119,7 +119,7 @@
                 <div class="form-row">
                     <div class="col-7">
                         <select class="custom-select" id="subject_4" name="subject_id_4">
-                            <option selected value="0">choose subject</option>
+                            <option selected value="0"><fmt:message key="register.choosesubject"/></option>
                             <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject.subjectId}">${subject.subjectName}</option>
                             </c:forEach>

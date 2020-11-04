@@ -1,16 +1,16 @@
 package com.epam.enrollee.controller.command.impl;
 
 import com.epam.enrollee.controller.command.Command;
+import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.epam.enrollee.controller.command.PagePath.LOGIN;
+public class ToLoginPageCommand implements Command {
 
-public class EmptyCommand implements Command {
     @Override
-    public String execute(HttpServletRequest request) {
-        String page = LOGIN;
+    public String execute(HttpServletRequest request) throws CommandException {
+        String page = PagePath.LOGIN;
         return page;
     }
 }

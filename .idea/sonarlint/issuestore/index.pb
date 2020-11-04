@@ -126,3 +126,13 @@ Nsrc/main/java/com/epam/enrollee/controller/command/impl/ToMainPageCommand.java
 Ssrc/main/java/com/epam/enrollee/controller/command/impl/ToFacultiesPageCommand.java,5\7\5798dbc9a1668aa39fd62ce58e6f440d3fcc1577
 a
 1src/main/java/com/epam/enrollee/util/MapKeys.java,5\3\53d73de7458889b24a969e5a3223324e3adf7b6b
+Q
+!src/main/webapp/jsp/faculties.jsp,2\0\20b54a5fb517444676d3f908a3448feab1efc73d
+…
+Usrc/main/java/com/epam/enrollee/controller/command/impl/ToEditProfilePageCommand.java,5\e\5e59024e76070810a98069b872f1864a0009a42b
+x
+Hsrc/main/java/com/epam/enrollee/controller/command/impl/EditCommand.java,4\a\4aee427151e00d62967819597b55191554a1512f
+S
+#src/main/webapp/jsp/editprofile.jsp,c\f\cf27bbb9072dfd86749b40dcd3575f731a0e5c55
+[
++src/main/webapp/bootstrap/css/bootstrap.css,f\6\f674413a14ce3e060be2e00284a6054090592383

@@ -14,7 +14,7 @@ public interface BaseService<T> {
 
     Optional<T> find(String value) throws ServiceException;
 
-    Optional<List<T>> findAll() throws ServiceException;
+    List<T> findAll() throws ServiceException;
 
-    Optional<List<T>> update(T value) throws ServiceException;
+    List<T> update(T value) throws ServiceException;
 }

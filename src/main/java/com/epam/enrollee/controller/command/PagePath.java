@@ -2,6 +2,7 @@ package com.epam.enrollee.controller.command;
 
 public class PagePath {
     public static final String LOGIN ="/jsp/login.jsp";
+    public static final String LOGOUT ="/jsp/logout.jsp";
     public static final String MAIN ="/jsp/main.jsp";
     public static final String INDEX ="index.jsp";
     public static final String ERROR_404 ="/jsp/error_page/error404.jsp";
@@ -10,10 +11,9 @@ public class PagePath {
     public static final String PROFILE ="/jsp/profile.jsp";
     public static final String STATEMENT ="/jsp/statement.jsp";
     public static final String FACULTIES ="/jsp/faculties.jsp";
-    public static final String CONTACTS ="/jsp/contacts.jsp";
+    public static final String EDIT_PROFILE ="/jsp/editprofile.jsp";
+    public static final String SPECIALTIES ="/jsp/specialties.jsp";
 
-
-//TODO mainstudent mainadmin
     private PagePath() {
     }
 }

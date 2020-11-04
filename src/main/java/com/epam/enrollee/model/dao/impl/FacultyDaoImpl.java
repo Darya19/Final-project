@@ -5,6 +5,7 @@ import com.epam.enrollee.model.connector.ConnectionPool;
 import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
 import com.epam.enrollee.model.entity.Faculty;
+import com.epam.enrollee.model.entity.Specialty;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,12 +21,12 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
     public static FacultyDaoImpl instance;
 
     private static final String FIND_FACULTY_BY_USER_ID =
-            "SELECT faculty_id , faculty_name FROM faculty WHERE faculty_id IN " +
+            "SELECT faculty_id , faculty_name, faculty_description FROM faculty WHERE faculty_id IN " +
                     "(SELECT DISTINCT faculty_id_fk FROM enrollee_faculty WHERE enrollee_id_fk=?)";
     private static final String FIND_FACULTY_BY_FACULTY_ID =
-            "SELECT faculty_id, faculty_name FROM faculty WHERE faculty_id=?";
+            "SELECT faculty_id, faculty_name, faculty_description FROM faculty WHERE faculty_id=?";
     private static final String FIND_ALL_FACULTIES =
-            "SELECT faculty_id, faculty_name FROM faculty";
+            "SELECT faculty_id, faculty_name, faculty_description FROM faculty";
 
     public static FacultyDaoImpl getInstance() {
         if (instance == null) {
@@ -42,6 +43,10 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
     @Override
     public boolean remove(Faculty faculty) throws DaoException {
         return true;
+    }
+
+    public boolean update(Faculty faculty) throws DaoException {
+        return false;
     }
 
     @Override
@@ -64,16 +69,12 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
 
     //check
     @Override
-    public Optional<List<Faculty>> findAll() throws DaoException {
+    public List<Faculty> findAll() throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_FACULTIES)) {
             ResultSet resultSet = statement.executeQuery();
             List<Faculty> faculties = createFacultyListFromResultSet(resultSet);
-            if (!faculties.isEmpty()) {
-                return Optional.of(faculties);
-            } else {
-                return Optional.empty();
-            }
+                return faculties;
         } catch (SQLException e) {
             throw new DaoException("database issues", e);
         }
@@ -85,7 +86,7 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             List<Faculty> foundFaculties = createFacultyListFromResultSet(resultSet);
-            if (foundFaculties.size() > 0) {
+            if (!foundFaculties.isEmpty()) {
                 return Optional.of(foundFaculties.get(0));
             } else {
                 return Optional.empty();
@@ -101,6 +102,7 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
             Faculty faculty = new Faculty();
             faculty.setFacultyId(resultSet.getInt(ColumnName.FACULTY_ID));
             faculty.setFacultyName(resultSet.getString(ColumnName.FACULTY_NAME));
+            faculty.setFacultyDescription(resultSet.getString(ColumnName.FACULTY_DESCRIPTION));
             faculties.add(faculty);
         }
         return faculties;
