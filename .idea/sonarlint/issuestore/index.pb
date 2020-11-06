@@ -44,8 +44,6 @@ y
 Isrc/main/java/com/epam/enrollee/controller/command/impl/LoginCommand.java,8\b\8bf161b7b8d4a7fe97b0278b198e897034af188c
 O
 src/main/webapp/jsp/profile.jsp,8\8\88f74945605bf391410b846b2dbe1ab590185fbc
-{
-Ksrc/main/java/com/epam/enrollee/controller/command/impl/ProfileCommand.java,c\4\c40432fbef3905af4d7081ec85df50268056543f
 W
 'src/main/webapp/jsp/fragment/header.jsp,d\1\d1c6361184ee54b331df9b2772712150e33b1611
 W
@@ -128,8 +126,6 @@ Q
 !src/main/webapp/jsp/faculties.jsp,2\0\20b54a5fb517444676d3f908a3448feab1efc73d
 …
 Usrc/main/java/com/epam/enrollee/controller/command/impl/ToEditProfilePageCommand.java,5\e\5e59024e76070810a98069b872f1864a0009a42b
-x
-Hsrc/main/java/com/epam/enrollee/controller/command/impl/EditCommand.java,4\a\4aee427151e00d62967819597b55191554a1512f
 S
 #src/main/webapp/jsp/editprofile.jsp,c\f\cf27bbb9072dfd86749b40dcd3575f731a0e5c55
 [
@@ -160,3 +156,15 @@ Qsrc/main/java/com/epam/enrollee/controller/command/impl/DeleteFacultyCommand.ja
 Ksrc/main/java/com/epam/enrollee/controller/command/impl/ChangeLanguage.java,1\5\154145fb3205fa926e5788aee6d9440618e1d400
 Y
 )src/main/webapp/jsp/admin_specialties.jsp,5\e\5e384f482a7baa7b7e5594c1cff322a9eecdf8d5
+‰
+Ysrc/main/java/com/epam/enrollee/controller/command/impl/EditEnrolleeSpecialtyCommand.java,8\4\8497579f7c78dd775137a590a1d4c4cbf64c35f3
+}
+Msrc/main/java/com/epam/enrollee/controller/command/impl/EditMarksCommand.java,b\6\b6da56c946f7884cadc65faabc2452be70b32cd0
+‹
+[src/main/java/com/epam/enrollee/controller/command/impl/EditPersonalInformationCommand.java,c\4\c49fc21c0593639fd1003e2213cc0b91891f487a
+u
+Esrc/main/java/com/epam/enrollee/controller/filter/EncodingFilter.java,7\2\7241e635741beb2b3aa5f475a271511f809ad095
+^
+.src/main/resources/prop/pagecontent.properties,0\9\09a1b1bb7ceea0eecb437b079d68e88d898910be
+a
+1src/main/resources/prop/pagecontent_en.properties,8\3\83999c2cbdac22c5ff46f1d1b0716e0ab6e1415c
