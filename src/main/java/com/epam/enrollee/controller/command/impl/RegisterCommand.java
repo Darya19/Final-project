@@ -4,6 +4,7 @@ package com.epam.enrollee.controller.command.impl;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.CommandException;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.*;
@@ -12,6 +13,9 @@ import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 import com.epam.enrollee.model.service.impl.FacultyServiceImpl;
 import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
 import com.epam.enrollee.util.MapKeys;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,15 +25,17 @@ import java.util.Optional;
 
 public class RegisterCommand implements Command {
 
+    private static Logger logger = LogManager.getLogger();
+
     @Override
-    public String execute(HttpServletRequest request) throws CommandException {
+    public Router execute(HttpServletRequest request) {
         EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
         EnrolleeMarkRegisterServiceImpl markRegisterService = new EnrolleeMarkRegisterServiceImpl();
         FacultyServiceImpl facultyService = new FacultyServiceImpl();
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session;
-        String page;
+        Router router;
         int enrolleeId = 0;
         boolean isRegister;
         Enrollee enrollee = null;
@@ -57,7 +63,7 @@ public class RegisterCommand implements Command {
             parameters = enrolleeService.checkEnrolleeParameters(parameters);
             if (parameters.containsValue("")) {
                 request.setAttribute(RequestParameters.PARAMETERS, parameters);
-                page = PagePath.REGISTER;
+                router = new Router(Router.Type.REDIRECT, PagePath.REGISTER);
             } else {
                 session = request.getSession();
                 isRegister = enrolleeService.registerEnrollee(parameters);
@@ -87,14 +93,15 @@ public class RegisterCommand implements Command {
                         request.setAttribute(RequestParameters.FACULTY, optionalFaculty.get());
                         request.setAttribute(RequestParameters.SPECIALTY, optionalSpecialty.get());
                     }
-                    page = PagePath.PROFILE;
+                    router = new Router(Router.Type.REDIRECT, PagePath.PROFILE);
                 } else {
-                    page = PagePath.ERROR_500;
+                   router = new Router(Router.Type.REDIRECT, PagePath.ERROR_500);
                 }
             }
         } catch (ServiceException e) {
-            page = PagePath.ERROR_500;
+            router = new Router(PagePath.ERROR_500);
+            logger.log(Level.ERROR, "Application error:", e);
         }
-        return page;
+        return router;
     }
 }

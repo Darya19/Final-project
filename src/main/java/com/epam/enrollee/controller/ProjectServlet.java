@@ -2,7 +2,7 @@ package com.epam.enrollee.controller;
 
 import com.epam.enrollee.controller.command.ActionFactory;
 import com.epam.enrollee.controller.command.Command;
-import com.epam.enrollee.exception.CommandException;
+import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.model.connector.ConnectionPool;
 
 import javax.servlet.RequestDispatcher;
@@ -13,10 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.epam.enrollee.controller.command.PagePath.ERROR_404;
 
-
-@WebServlet(urlPatterns = "/projectServlet")
+@WebServlet("/projectServlet")
 public class ProjectServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,27 +22,22 @@ public class ProjectServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-processRequest(request, response);
+        processRequest(request, response);
     }
-
 
 
     private void processRequest(HttpServletRequest request,
                                 HttpServletResponse response)
             throws ServletException, IOException {
-        String page = null;
+        Router router = null;
         RequestDispatcher dispatcher;
-        try {
-            Command command = ActionFactory.defineCommand(request);
-            page = command.execute(request);
-            if (page != null) {
-                dispatcher = getServletContext().getRequestDispatcher(page);
-            } else {
-                dispatcher = getServletContext().getRequestDispatcher(ERROR_404);
-            }
+        Command command = ActionFactory.defineCommand(request);
+        router = command.execute(request);
+        if (router.getType().equals(Router.Type.FORWARD)) {
+            dispatcher = getServletContext().getRequestDispatcher(router.getPage());
             dispatcher.forward(request, response);
-        }catch (CommandException e){
-            //TODO log можно не ловить
+        } else {
+            response.sendRedirect(router.getPage());
         }
     }
 

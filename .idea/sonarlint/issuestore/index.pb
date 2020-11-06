@@ -32,8 +32,6 @@ p
 @src/main/java/com/epam/enrollee/controller/command/PagePath.java,1\3\13904a3294ab915758ee7d7f9f4a93c5d7459ae7
 y
 Isrc/main/java/com/epam/enrollee/controller/command/RequestParameters.java,7\7\77797e90bff9a4837f8fe2a33431f13f9f3805c8
-n
->src/main/java/com/epam/enrollee/controller/ProjectServlet.java,e\2\e22a068d154c65122f3192cb7c929aeae2344ea3
 o
 ?src/main/java/com/epam/enrollee/controller/command/Command.java,1\9\19d93ff26badffefa4662f95c96ce69e52d46452
 u
@@ -100,8 +98,6 @@ V
 +src/main/webapp/jsp/error_page/error500.jsp,1\3\13b370aafe3ba1b3154f5b572ede1f39f6ee49f2
 W
 'target/login-1.0-SNAPSHOT/jsp/login.jsp,4\9\491e7ce292e259f42470673f7565b90746e79a3c
-S
-#target/login-1.0-SNAPSHOT/index.jsp,f\c\fc0db96fc330a5c6ce8077b7fd389d1853613d60
 ‚
 Rsrc/main/java/com/epam/enrollee/controller/command/impl/ToRegisterPageCommand.java,f\b\fb9591eac6107eb6b396d89f484943b7967d5b70
 |
@@ -168,3 +164,7 @@ Esrc/main/java/com/epam/enrollee/controller/filter/EncodingFilter.java,7\2\7241
 .src/main/resources/prop/pagecontent.properties,0\9\09a1b1bb7ceea0eecb437b079d68e88d898910be
 a
 1src/main/resources/prop/pagecontent_en.properties,8\3\83999c2cbdac22c5ff46f1d1b0716e0ab6e1415c
+m
+=src/main/java/com/epam/enrollee/controller/router/Router.java,d\0\d0d9278629d1e15ad164083aa97b5ed43528eb63
+n
+>src/main/java/com/epam/enrollee/controller/ProjectServlet.java,e\2\e22a068d154c65122f3192cb7c929aeae2344ea3

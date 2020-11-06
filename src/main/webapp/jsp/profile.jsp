@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setLocale value="en"/>
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<c:import url="//jsp//fragment//header.jsp"/>
+<c:import url="/jsp/fragment/header.jsp"/>
 <main class="page">
     <section class="main-block profile">
         <div class="container">
@@ -100,7 +100,7 @@
         </div>
     </section>
 </main>
-<c:import url="//jsp//fragment//footer.jsp"/>
+<c:import url="/jsp/fragment/footer.jsp"/>
 </body>
 
 </html>

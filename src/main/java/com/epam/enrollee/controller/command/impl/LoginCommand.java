@@ -3,6 +3,7 @@ package com.epam.enrollee.controller.command.impl;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.*;
 import com.epam.enrollee.model.service.impl.EnrolleeMarkRegisterServiceImpl;
@@ -11,6 +12,9 @@ import com.epam.enrollee.model.service.impl.FacultyServiceImpl;
 import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
 import com.epam.enrollee.model.type.RoleType;
 import com.epam.enrollee.util.MapKeys;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,8 +28,10 @@ import static com.epam.enrollee.controller.command.PagePath.*;
 
 public class LoginCommand implements Command {
 
+    private static Logger logger = LogManager.getLogger();
+
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
         EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
         EnrolleeMarkRegisterServiceImpl markRegisterService = new EnrolleeMarkRegisterServiceImpl();
         FacultyServiceImpl facultyService = new FacultyServiceImpl();
@@ -33,7 +39,7 @@ public class LoginCommand implements Command {
         HttpSession session;
         Map<String, String> parameters = new HashMap<>();
         Enrollee enrollee = null;
-        String page = null;
+        Router router = null;
         int enrolleeId = 0;
         String email = request.getParameter(RequestParameters.EMAIL);
         String password = request.getParameter(RequestParameters.PASSWORD);
@@ -64,25 +70,26 @@ public class LoginCommand implements Command {
                                 session.setAttribute(RequestParameters.FACULTY, optionalFaculty.get());
                                 session.setAttribute(RequestParameters.SPECIALTY, optionalSpecialty.get());
                             }
-                            page = PROFILE;
+                            router = new Router(Router.Type.REDIRECT, PagePath.PROFILE);
                     }
                     if (optionalUser.get().getRole().equals(RoleType.ADMIN)) {
                         User user = optionalUser.get();
                         session.setAttribute(RequestParameters.ENROLLEE, user);
                         List<Faculty> faculties = facultyService.findAll();
                         request.setAttribute(FACULTIES, faculties);
-                        page = ADMIN_FACULTIES;
+                        router = new Router(PagePath.ADMIN_FACULTIES);
                     }
                 }
             } else {
                 parameters.put(MapKeys.EMAIL, email);
                 parameters.put(MapKeys.PASSWORD, password);
                 request.setAttribute(RequestParameters.PARAMETERS, parameters);
-                page = PagePath.LOGIN;
+                router = new Router(Router.Type.REDIRECT, PagePath.LOGIN);
             }
         } catch (ServiceException e) {
-            page = ERROR_500;
+            router = new Router(ERROR_500);
+            logger.log(Level.ERROR, "Application error:", e);
         }
-        return page;
+        return router;
     }
 }

@@ -1,11 +1,11 @@
 package com.epam.enrollee.controller.command;
 
-import com.epam.enrollee.exception.CommandException;
+import com.epam.enrollee.controller.router.Router;
 
 import javax.servlet.http.HttpServletRequest;
 
 public interface Command {
 
-    String execute(HttpServletRequest request) throws CommandException;
+    Router execute(HttpServletRequest request);
 
 }

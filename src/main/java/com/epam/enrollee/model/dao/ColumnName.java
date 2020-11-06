@@ -32,6 +32,6 @@ public class ColumnName {
     public static final String MARK_ID = "mark_id";
     public static final String MARK_VALUE = "mark_value";
 
-    public ColumnName() {
+    private ColumnName() {
     }
 }
