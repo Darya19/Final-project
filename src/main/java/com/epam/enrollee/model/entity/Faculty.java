@@ -1,10 +1,13 @@
 package com.epam.enrollee.model.entity;
 
+import com.epam.enrollee.model.type.StatusType;
+
 public class Faculty {
 
     private int facultyId;
     private String facultyName;
     private String facultyDescription;
+    private StatusType facultyStatus;
 
     public int getFacultyId() {
         return facultyId;
@@ -28,5 +31,13 @@ public class Faculty {
 
     public void setFacultyDescription(String facultyDescription) {
         this.facultyDescription = facultyDescription;
+    }
+
+    public StatusType getFacultyStatus() {
+        return facultyStatus;
+    }
+
+    public void setFacultyStatus(StatusType facultyStatus) {
+        this.facultyStatus = facultyStatus;
     }
 }

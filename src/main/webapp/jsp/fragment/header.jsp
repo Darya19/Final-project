@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<fmt:setLocale value="en"/>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
@@ -21,14 +21,22 @@
         </span></button>
         <div class="collapse navbar-collapse" id="navcol-1">
 <c:choose>
-    <c:when test="${enrollee.role eq 'USER'  or user.role eq 'ADMIN'}" >
+    <c:when test="${enrollee.role eq 'USER'}" >
             <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=to_logout_page"> <fmt:message key="header.logoutbutton"/></a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=to_faculties_page"> <fmt:message key="header.facultiesbutton"/></a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=logout"> <fmt:message key="header.logoutbutton"/></a></li>
             </ul>
+    </c:when>
+    <c:when test="${enrollee.role eq 'ADMIN'}" >
+        <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=to_admin_faculties_page"> <fmt:message key="header.facultiesbutton"/></a></li>
+            <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=logout"> <fmt:message key="header.logoutbutton"/></a></li>
+        </ul>
     </c:when>
             <c:otherwise>
                 </ul>
     <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=to_faculties_page"> <fmt:message key="header.facultiesbutton"/></a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=to_login_page"> <fmt:message key="header.loginbutton"/></a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link" href="projectServlet?command=to_register_page"> <fmt:message key="header.registerbutton"/></a></li>
     </ul>

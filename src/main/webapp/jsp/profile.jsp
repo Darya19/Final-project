@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<fmt:setLocale value="en"/>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
@@ -20,10 +20,15 @@
                     <h1 class="text-center">${enrollee.firstName} ${enrollee.middleName} ${enrollee.lastName}</h1>
                 </div>
                 <div class="text-center">
-                    <h6 class="text-muted"><fmt:message key="profile.applicationstatus"/></h6><h4>${enrollee.applicationStatus}</h4>
-                    <h6 class="text-muted"><fmt:message key="profile.personalnumber"/></h6><h5>${passport.personalNumber}</h5>
-                    <h6 class="text-muted"><fmt:message key="profile.passportseriesandnumber"/></h6><h5>${passport.passportSeriesAndNumber}</h5>
-                    <button class="btn btn-primary btn-sm" type="button" onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_personal_information"'><fmt:message key="profile.edit"/></button>
+                    <h6 class="text-muted"><fmt:message key="profile.applicationstatus"/></h6>
+                    <h4>${enrollee.applicationStatus}</h4>
+                    <h6 class="text-muted"><fmt:message key="profile.personalnumber"/></h6>
+                    <h5>${passport.personalNumber}</h5>
+                    <h6 class="text-muted"><fmt:message key="profile.passportseriesandnumber"/></h6>
+                    <h5>${passport.passportSeriesAndNumber}</h5>
+                    <button class="btn btn-outline-primary btn-sm" type="button"
+                            onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_personal_information"'>
+                        <fmt:message key="profile.edit"/></button>
                 </div>
             </div>
         </div>
@@ -55,34 +60,44 @@
                             <div class="col-2">
                             </div>
                         </div>
-    <button class="btn btn-primary btn-sm" type="button" onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_specialty"'><fmt:message key="profile.edit"/></button>
+                        <button class="btn btn-outline-primary btn-sm" type="button"
+                                onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_specialty"'>
+                            <fmt:message key="profile.edit"/></button>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="shadow p-3 mb-5 bg-white rounded">
                         <div class="subjects marks-info-card">
                             <h4 class="text-muted"><fmt:message key="profile.results"/></h4>
-                             <c:forEach items="${register}" var="register">
-                            <h7>${register.key.subjectName}</h7>
-                            <div class="progress">
-                                <div class="progress-bar" aria-valuenow="${register.value}" aria-valuemin="0" aria-valuemax="100"
-                                     style="width: ${register.value}%;"><span class="sr-only"></span>${register.value}
+                            <c:forEach items="${register.testsSubjectsAndMarks}" var="register">
+                                <h7>${register.key.subjectName}</h7>
+                                <div class="progress">
+                                    <div class="progress-bar" aria-valuenow="${register.value}" aria-valuemin="0"
+                                         aria-valuemax="100"
+                                         style="width: ${register.value}%;"><span
+                                            class="sr-only"></span>${register.value}
+                                    </div>
                                 </div>
-                            </div>
-                             </c:forEach>
+                            </c:forEach>
                             <h7><fmt:message key="profile.total"/></h7>
                             <div class="progress">
-                                <div class="progress-bar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
-                                     style="width: 50%;"><span class="sr-only">80%</span></div>
+                                <div class="progress-bar" aria-valuenow="${register.averageMark}" aria-valuemin="0"
+                                     aria-valuemax="100"
+                                     style="width: 50%;"><span class="sr-only"></span>${register.averageMark}
+                                </div>
                             </div>
                         </div>
                         <p></p>
-                        <button class="btn btn-primary btn-sm" type="button" onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_marks"'><fmt:message key="profile.edit"/></button>
+                        <button class="btn btn-outline-primary btn-sm" type="button"
+                                onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_marks"'>
+                            <fmt:message key="profile.edit"/></button>
                     </div>
                 </div>
             </div>
+        <ul>
+            <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=delete_profile"> <fmt:message key="profile.deleteprofile"/></a></li>
+        </ul>
         </div>
-
     </section>
 </main>
 <c:import url="//jsp//fragment//footer.jsp"/>

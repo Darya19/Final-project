@@ -6,39 +6,41 @@ import com.epam.enrollee.controller.command.RequestParameters;
 import com.epam.enrollee.exception.CommandException;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
+import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Specialty;
-import com.epam.enrollee.model.service.impl.FacultyServiceImpl;
+import com.epam.enrollee.model.service.impl.EnrolleeMarkRegisterServiceImpl;
+import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.util.List;
 import java.util.Optional;
 
-public class ToEditProfilePageCommand implements Command {
-
-    private static final String EDIT_SPECIALTY = "edit_specialty";
-
+public class EditEnrolleeSpecialtyCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
+        EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
-        HttpSession session;
-        String page;
-        String editPart = request.getParameter(RequestParameters.EDIT_PART);
-        request.setAttribute(RequestParameters.EDIT, editPart);
+        HttpSession session = request.getSession();
+        String page = null;
+        Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameters.ENROLLEE);
+        Optional<Enrollee> newEnrollee;
+        String specialtyId = request.getParameter(RequestParameters.SPECIALTY_ID);
         try {
-            if (editPart.equals(EDIT_SPECIALTY)) {
-                session = request.getSession();
-                Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameters.ENROLLEE);
+            newEnrollee = enrolleeService.updateEnrolleeSpecialty
+                    (enrollee, specialtyId);
+        if (newEnrollee.isPresent()) {
+                session.setAttribute(RequestParameters.ENROLLEE, newEnrollee.get());
                 int facultyId = enrollee.getChosenFacultyId();
                 List<Specialty> specialties = specialtyService.findSpecialtiesOfFaculty(facultyId);
                 request.setAttribute(RequestParameters.SPECIALTIES, specialties);
+                page = PagePath.PROFILE;
             }
-            page = PagePath.EDIT_PROFILE;
-        }catch (ServiceException e) {
-               page = PagePath.ERROR_500;
-            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
         return page;
     }
-    //TODO for marks
 }

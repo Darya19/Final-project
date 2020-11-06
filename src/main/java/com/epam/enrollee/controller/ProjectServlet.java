@@ -3,6 +3,7 @@ package com.epam.enrollee.controller;
 import com.epam.enrollee.controller.command.ActionFactory;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.exception.CommandException;
+import com.epam.enrollee.model.connector.ConnectionPool;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,8 +16,9 @@ import java.io.IOException;
 import static com.epam.enrollee.controller.command.PagePath.ERROR_404;
 
 
-@WebServlet("/projectServlet")
+@WebServlet(urlPatterns = "/projectServlet")
 public class ProjectServlet extends HttpServlet {
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -24,6 +26,8 @@ public class ProjectServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 processRequest(request, response);
     }
+
+
 
     private void processRequest(HttpServletRequest request,
                                 HttpServletResponse response)
@@ -42,5 +46,11 @@ processRequest(request, response);
         }catch (CommandException e){
             //TODO log можно не ловить
         }
+    }
+
+    @Override
+    public void destroy() {
+        ConnectionPool.INSTANCE.destroyPool();
+        super.destroy();
     }
 }

@@ -21,8 +21,6 @@ import java.util.Optional;
 
 public class RegisterCommand implements Command {
 
-    private static final String PARAMETERS = "parameters";
-
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
         EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
@@ -31,10 +29,11 @@ public class RegisterCommand implements Command {
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session;
-        String page = null;
+        String page;
         int enrolleeId = 0;
         boolean isRegister;
         Enrollee enrollee = null;
+        EnrolleeMarkRegister register = null;
         parameters.put(MapKeys.FIRST_NAME, request.getParameter(RequestParameters.FIRST_NAME));
         parameters.put(MapKeys.LAST_NAME, request.getParameter(RequestParameters.LAST_NAME));
         parameters.put(MapKeys.MIDDLE_NAME, request.getParameter(RequestParameters.MIDDLE_NAME));
@@ -57,7 +56,7 @@ public class RegisterCommand implements Command {
         try {
             parameters = enrolleeService.checkEnrolleeParameters(parameters);
             if (parameters.containsValue("")) {
-                request.setAttribute(PARAMETERS, parameters);
+                request.setAttribute(RequestParameters.PARAMETERS, parameters);
                 page = PagePath.REGISTER;
             } else {
                 session = request.getSession();
@@ -71,22 +70,25 @@ public class RegisterCommand implements Command {
                     }
                     Optional<EnrolleeMarkRegister> optionalEnrolleeRegister = markRegisterService
                             .findEnrolleeMarkRegister(enrolleeId);
+                    if (optionalEnrolleeRegister.isPresent()) {
+                        register = optionalEnrolleeRegister.get();
+                        register = markRegisterService.calculateEnrolleeAverageMark(register);
+                    }
                     Optional<Passport> optionalPassport = enrolleeService.findEnrolleePassport(enrolleeId);
-                    Optional<Faculty> optionalFaculty = facultyService.findEnrolleeFaculty
+                    Optional<Faculty> optionalFaculty = facultyService.findFacultyById
                             (enrollee.getChosenFacultyId());
                     Optional<Specialty> optionalSpecialty = specialtyService.findEnrolleeSpecialty
                             (enrollee.getChosenSpecialtyId());
-                    if (optionalEnrolleeRegister.isPresent() && optionalPassport.isPresent()
-                    && optionalFaculty.isPresent() && optionalSpecialty.isPresent()) {
-                        session.setAttribute(MapKeys.ENROLLEE, enrollee);
-                        session.setAttribute(MapKeys.REGISTER, optionalEnrolleeRegister.get()
-                                .getTestsSubjectsAndMarks());
-                        session.setAttribute(MapKeys.PASSPORT, optionalPassport.get());
-                            request.setAttribute(MapKeys.FACULTY, optionalFaculty.get());
-                            request.setAttribute(MapKeys.SPECIALTY, optionalSpecialty.get());
-                        }
-                        page = PagePath.PROFILE;
-                    } else {
+                    if (optionalPassport.isPresent() && optionalFaculty.isPresent()
+                            && optionalSpecialty.isPresent()) {
+                        session.setAttribute(RequestParameters.ENROLLEE, enrollee);
+                        session.setAttribute(RequestParameters.REGISTER, register);
+                        session.setAttribute(RequestParameters.PASSPORT, optionalPassport.get());
+                        request.setAttribute(RequestParameters.FACULTY, optionalFaculty.get());
+                        request.setAttribute(RequestParameters.SPECIALTY, optionalSpecialty.get());
+                    }
+                    page = PagePath.PROFILE;
+                } else {
                     page = PagePath.ERROR_500;
                 }
             }

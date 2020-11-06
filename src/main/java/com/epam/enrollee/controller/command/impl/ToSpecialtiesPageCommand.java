@@ -16,9 +16,6 @@ import java.util.Optional;
 
 public class ToSpecialtiesPageCommand implements Command {
 
-    private static final String SPECIALTIES = "specialties";
-    private static final String FACULTY = "faculty";
-
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
@@ -26,12 +23,12 @@ public class ToSpecialtiesPageCommand implements Command {
         String page;
         String facultyId = request.getParameter(RequestParameters.FACULTY_ID);
         try {
-                Optional<Faculty> faculty = facultyService.findEnrolleeFaculty
+                Optional<Faculty> faculty = facultyService.findFacultyById
                         (Integer.parseInt(facultyId));
                 List<Specialty> specialties = specialtyService.findSpecialtiesOfFaculty
                         (Integer.parseInt(facultyId));
-                request.setAttribute(SPECIALTIES, specialties);
-                request.setAttribute(FACULTY, faculty.get());
+                request.setAttribute(RequestParameters.SPECIALTIES, specialties);
+                request.setAttribute(RequestParameters.FACULTY, faculty.get());
                 page = PagePath.SPECIALTIES;
         } catch (ServiceException e) {
            page = PagePath.ERROR_500;

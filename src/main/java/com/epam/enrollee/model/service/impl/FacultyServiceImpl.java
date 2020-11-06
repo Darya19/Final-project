@@ -18,8 +18,27 @@ public class FacultyServiceImpl implements BaseService<Faculty> {
     }
 
     @Override
-    public int remove(Faculty user) throws ServiceException {
+    public int remove(Faculty faculty) throws ServiceException {
         return 0;
+    }
+
+    public boolean remove(int facultyId) throws ServiceException {
+        FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
+        try {
+            return facultyDao.UpdateStatusById(facultyId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public boolean checkFacultyAplications(int facultyId) throws ServiceException {
+        FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
+        try {
+            List<Integer> foundEnrolleId = facultyDao.findEnrolleeIdByFacultyId(facultyId);
+            return foundEnrolleId.size() > 0;
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override
@@ -43,13 +62,13 @@ public class FacultyServiceImpl implements BaseService<Faculty> {
         return null;
     }
 
-    public Optional<Faculty> findEnrolleeFaculty(int faultyId) throws ServiceException {
+    public Optional<Faculty> findFacultyById(int faultyId) throws ServiceException {
         FacultyDaoImpl dao = FacultyDaoImpl.getInstance();
         try {
             Optional<Faculty> faculty = dao.findById(faultyId);
             return faculty;
         } catch (DaoException e) {
-           throw new ServiceException(e);
+            throw new ServiceException(e);
         }
     }
 }

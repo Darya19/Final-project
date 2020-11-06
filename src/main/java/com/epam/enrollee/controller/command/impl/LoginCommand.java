@@ -1,6 +1,5 @@
 package com.epam.enrollee.controller.command.impl;
 
-
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameters;
@@ -16,6 +15,7 @@ import com.epam.enrollee.util.MapKeys;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,14 +23,6 @@ import static com.epam.enrollee.controller.command.PagePath.*;
 
 
 public class LoginCommand implements Command {
-
-    private static final String ENROLLEE = "enrollee";
-    private static final String USER = "user";
-    private static final String REGISTER = "register";
-    private static final String PASSPORT = "passport";
-    private static final String FACULTY = "faculty";
-    private static final String SPECIALTY = "specialty";
-    private static final String PARAMETERS = "parameters";
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -55,12 +47,12 @@ public class LoginCommand implements Command {
                         if (optionalEnrollee.isPresent()) {
                             enrollee = optionalEnrollee.get();
                             enrolleeId = enrollee.getUserId();
-                            session.setAttribute(ENROLLEE, enrollee);}
+                            session.setAttribute(RequestParameters.ENROLLEE, enrollee);}
                             Optional<EnrolleeMarkRegister> optionalEnrolleeRegister = markRegisterService
                                     .findEnrolleeMarkRegister(enrolleeId);
                             Optional<Passport> optionalPassport = enrolleeService.findEnrolleePassport
                                     (enrolleeId);
-                            Optional<Faculty> optionalFaculty = facultyService.findEnrolleeFaculty
+                            Optional<Faculty> optionalFaculty = facultyService.findFacultyById
                                     (enrollee.getChosenFacultyId());
                             Optional<Specialty> optionalSpecialty = specialtyService.findEnrolleeSpecialty
                                     (enrollee.getChosenSpecialtyId());
@@ -68,30 +60,29 @@ public class LoginCommand implements Command {
                                     && optionalFaculty.isPresent() && optionalSpecialty.isPresent()) {
                                 session.setAttribute(REGISTER,
                                         optionalEnrolleeRegister.get().getTestsSubjectsAndMarks());
-                                session.setAttribute(PASSPORT, optionalPassport.get());
-                                session.setAttribute(FACULTY, optionalFaculty.get());
-                                session.setAttribute(SPECIALTY, optionalSpecialty.get());
+                                session.setAttribute(RequestParameters.PASSPORT, optionalPassport.get());
+                                session.setAttribute(RequestParameters.FACULTY, optionalFaculty.get());
+                                session.setAttribute(RequestParameters.SPECIALTY, optionalSpecialty.get());
                             }
                             page = PROFILE;
                     }
                     if (optionalUser.get().getRole().equals(RoleType.ADMIN)) {
                         User user = optionalUser.get();
-                        session.setAttribute(USER, user);
-                        // session.setAttribute("previous page", LOGIN);
-                        // session.setAttribute("locale", );
-                        page = STATEMENT;
+                        session.setAttribute(RequestParameters.ENROLLEE, user);
+                        List<Faculty> faculties = facultyService.findAll();
+                        request.setAttribute(FACULTIES, faculties);
+                        page = ADMIN_FACULTIES;
                     }
                 }
             } else {
                 parameters.put(MapKeys.EMAIL, email);
                 parameters.put(MapKeys.PASSWORD, password);
-                request.setAttribute(PARAMETERS, parameters);
+                request.setAttribute(RequestParameters.PARAMETERS, parameters);
                 page = PagePath.LOGIN;
             }
         } catch (ServiceException e) {
             page = ERROR_500;
         }
         return page;
-        /*TODO if status*/
     }
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 public class EnrolleeMarkRegister {
 
     private Map<Subject, Integer> testsSubjectsAndMarks;
+    private int averageMark;
 
     public EnrolleeMarkRegister() {
         testsSubjectsAndMarks = new HashMap<>();
@@ -17,6 +18,14 @@ public class EnrolleeMarkRegister {
 
     public void setTestsSubjectsAndMarks(Map<Subject, Integer> testsSubjectsAndMarks) {
         this.testsSubjectsAndMarks = testsSubjectsAndMarks;
+    }
+
+    public int getAverageMark() {
+        return averageMark;
+    }
+
+    public void setAverageMark(int averageMark) {
+        this.averageMark = averageMark;
     }
 
     public Integer get(Subject key) {

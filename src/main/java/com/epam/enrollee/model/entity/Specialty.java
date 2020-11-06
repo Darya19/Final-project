@@ -1,16 +1,15 @@
 package com.epam.enrollee.model.entity;
 
 import com.epam.enrollee.model.type.RecruitmentType;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.epam.enrollee.model.type.StatusType;
 
 public class Specialty {
 
     private int specialtyId;
     private String specialtyName;
     private RecruitmentType recruitment;
-private int NumberOfSeats;
+    private int numberOfSeats;
+    private StatusType specialtyStatus;
 
     public Specialty() {
     }
@@ -40,10 +39,18 @@ private int NumberOfSeats;
     }
 
     public int getNumberOfSeats() {
-        return NumberOfSeats;
+        return numberOfSeats;
     }
 
     public void setNumberOfSeats(int numberOfSeats) {
-        NumberOfSeats = numberOfSeats;
+        this.numberOfSeats = numberOfSeats;
+    }
+
+    public StatusType getSpecialtyStatus() {
+        return specialtyStatus;
+    }
+
+    public void setSpecialtyStatus(StatusType specialtyStatus) {
+        this.specialtyStatus = specialtyStatus;
     }
 }

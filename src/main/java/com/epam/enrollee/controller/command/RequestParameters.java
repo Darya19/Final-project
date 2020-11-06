@@ -21,6 +21,18 @@ public class RequestParameters {
     public static final String MARK_4 = "mark_4";
     public static final String REPEATED_PASSWORD = "repeated_password";
     public static final String EDIT_PART = "edit_part";
+    public static final String LOCALE = "locale";
+    public static final String FACULTIES = "faculties";
+    public static final String HAS_APPLICATION = "has_application";
+   public static final String ENROLLEE = "enrollee";
+    public static final String PASSPORT = "passport";
+    public static final String SPECIALTIES = "specialties";
+    public static final String REGISTER = "register";
+    public static final String PARAMETERS = "parameters";
+    public static final String EDIT = "edit_part";
+    public static final String FACULTY = "faculty";
+    public static final String SPECIALTY = "specialty";
+    public static final String SUBJECTS = "subjects";
 
     private RequestParameters() {
     }

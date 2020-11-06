@@ -10,6 +10,7 @@ import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.Passport;
 import com.epam.enrollee.model.entity.Subject;
 import com.epam.enrollee.model.entity.User;
+import com.epam.enrollee.model.type.ApplicationStatus;
 import com.epam.enrollee.model.type.RoleType;
 import com.epam.enrollee.model.type.StatusType;
 import com.epam.enrollee.parser.NumberParser;
@@ -24,7 +25,7 @@ import java.util.*;
 
 public class EnrolleeServiceImpl {
 
-    private Logger logger = LogManager.getLogger();
+    private static Logger logger = LogManager.getLogger();
 
     public Optional<Enrollee> createEnrolleeByEmail(String email) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
@@ -143,11 +144,12 @@ public class EnrolleeServiceImpl {
             String password = PasswordEncryptor.encryptPassword(parameters.get(MapKeys.PASSWORD));
             createdObjects.put(MapKeys.EMAIL, parameters.get(MapKeys.EMAIL));
             createdObjects.put(MapKeys.PASSWORD, password);
-            createdObjects.put(MapKeys.ROLE, RoleType.USER);
-            createdObjects.put(MapKeys.STATUS, StatusType.ACTIVE);
+            createdObjects.put(MapKeys.ROLE, RoleType.USER.getRole());
+            createdObjects.put(MapKeys.ENROLLEE_STATUS, StatusType.ACTIVE.getStatus());
             createdObjects.put(MapKeys.FIRST_NAME, parameters.get(MapKeys.FIRST_NAME));
             createdObjects.put(MapKeys.LAST_NAME, parameters.get(MapKeys.LAST_NAME));
             createdObjects.put(MapKeys.MIDDLE_NAME, parameters.get(MapKeys.MIDDLE_NAME));
+            createdObjects.put(MapKeys.APPLICATION_STATUS, ApplicationStatus.CONSIDERED.getApplicationStatus());
             createdObjects.put(MapKeys.FACULTY_ID, facultyId);
             createdObjects.put(MapKeys.SPECIALTY_ID, specialtyId);
             createdObjects.put(MapKeys.SUBJECT_ID_1, subjectId1);

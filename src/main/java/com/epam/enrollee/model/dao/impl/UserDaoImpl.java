@@ -20,20 +20,25 @@ import java.util.Optional;
 public class UserDaoImpl implements BaseDao<User> {
 
     public static UserDaoImpl instance;
-    private static final String CREATE_USER = "INSERT INTO enrollee (enrollee_id, email, role, status) " +
+    private static final String CREATE_USER = "INSERT INTO enrollee (enrollee_id, email, " +
+            "role, enrolle_status) " +
             "VALUES (?,?,?,?)";
     private static final String REMOVE_USER = "DELETE FROM enrollee WHERE email=?";
     private static final String FIND_USER_BY_ID =
             "SELECT enrollee_id, email, role, status FROM enrollee WHERE id=?";
     private static final String FIND_USER_BY_EMAIL =
-            "SELECT enrollee_id, email, role, status FROM enrollee WHERE email=?";
+            "SELECT enrollee_id, email, role, enrollee_status FROM enrollee WHERE email=?";
     private static final String FIND_USERS_BY_STATUS =
-            "SELECT enrollee_id, email, role, status FROM enrollee WHERE status=?";
-    private static final String FIND_ALL_USERS = "SELECT enrollee_id, email, role, status FROM user";
+            "SELECT enrollee_id, email, role, enrollee_status FROM enrollee WHERE status=?";
+    private static final String FIND_ALL_USERS = "SELECT enrollee_id, email, role, " +
+            "enrollee_status FROM user";
     private static final String FIND_USERS_BY_ROLE =
-            "SELECT enrollee_id, email, role, status FROM enrollee WHERE role=? ORDER BY enrollee_id";
-    private static final String FIND_PASSWORD_BY_EMAIL = "SELECT password from enrollee where email=?";
-    private static final String UPDATE_USER = "UPDATE enrollee SET email=?, password=?, role=? where enrollee_id=?";
+            "SELECT enrollee_id, email, role, enrollee_status FROM enrollee WHERE role=? " +
+                    "ORDER BY enrollee_id";
+    private static final String FIND_PASSWORD_BY_EMAIL = "SELECT password from enrollee " +
+            "where email=?";
+    private static final String UPDATE_USER = "UPDATE enrollee SET email=?, password=?, " +
+            "role=? where enrollee_id=?";
 
     public static UserDaoImpl getInstance() {
         if (instance == null) {
@@ -176,7 +181,8 @@ public class UserDaoImpl implements BaseDao<User> {
             user.setUserId(resultSet.getInt(ColumnName.ENROLLE_ID));
             user.setEmail(resultSet.getString(ColumnName.EMAIL));
             user.setRole(RoleType.valueOf(resultSet.getString(ColumnName.ROLE).toUpperCase()));
-            user.setStatus(StatusType.valueOf(resultSet.getString(ColumnName.STATUS).toUpperCase()));
+            user.setStatus(StatusType.valueOf(resultSet.getString(ColumnName.ENROLLEE_STATUS)
+                    .toUpperCase()));
             users.add(user);
         }
         return users;

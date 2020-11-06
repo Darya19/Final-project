@@ -26,9 +26,11 @@ public class MapKeys {
     public static final String REGISTER = "register";
     public static final String PARAMETERS = "parameters";
     public static final String ROLE = "role";
-    public static final String STATUS = "status";
+    public static final String ENROLLEE_STATUS = "status";
     public static final String FACULTY = "faculty";
     public static final String SPECIALTY = "specialty";
+    public static final String APPLICATION_STATUS = "specialty";
+    public static final String AVERAGE_MARK = "average_mark";
 
     private MapKeys() {
     }

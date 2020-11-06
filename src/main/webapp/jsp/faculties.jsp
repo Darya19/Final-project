@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<fmt:setLocale value="en"/>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
@@ -13,7 +13,7 @@
     <section class="clean-block clean-testimonials dark">
         <div class="container">
             <div class="block-heading">
-                <h2 class="text-info"><fmt:message key="faculties.listname"/> </h2>
+                <h2 class="text-info"><fmt:message key="faculties.title"/> </h2>
             </div>
             <div class="row">
                 <c:forEach var="faculty" items="${faculties}">

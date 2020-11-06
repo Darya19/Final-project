@@ -25,16 +25,17 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
     public static EnrolleeDaoImpl instance;
 
     private static Logger logger = LogManager.getLogger();
+
     private static final String FIND_ENROLLEE_BY_EMAIL =
-            "SELECT enrollee_id,email,role,status,enrollee_first_name,enrollee_last_name," +
+            "SELECT enrollee_id,email,role,enrollee_status,enrollee_first_name,enrollee_last_name," +
                     "enrollee_middle_name, faculty_id_fk as faculty_id,specialty_id_fk as " +
-                    "specialty_id FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id " +
+                    "specialty_id, application_status FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id " +
                     "= enrollee_faculty.enrollee_id_fk JOIN enrollee_specialty on enrollee.enrollee_id " +
                     "= enrollee_specialty.enrollee_id_fk WHERE email=?";
     private static final String ADD_ENROLLEE =
-            "INSERT INTO enrollee (email, password, status, role, enrollee_first_name, " +
-                    "enrollee_last_name, enrollee_middle_name, passport_id_fk) " +
-                    "VALUES (?,?,?,?,?,?,?,?)";
+            "INSERT INTO enrollee (email, password, enrollee_status, role, enrollee_first_name, " +
+                    "enrollee_last_name, enrollee_middle_name, passport_id_fk, application_status) " +
+                    "VALUES (?,?,?,?,?,?,?,?,?)";
     private static final String ADD_PASSPORT =
             "INSERT INTO passport (personal_number, passport_series_and_number) VALUES (?,?)";
     private static final String ADD_MARKS =
@@ -53,7 +54,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             "UPDATE enrollee SET enrollee_first_name=?, enrollee_last_name=?, enrollee_last_name=? where enrollee_id=?";
     private static final String UPDATE_PASSPORT =
             "UPDATE passport SET passport_series_and_number=?, personal_number=? where passport_id=?";
-    private static final String UPDATE_SPECIALTY =
+    private static final String UPDATE_ENROLLEE_SPECIALTY =
             "UPDATE enrollee_specialty SET specialty_id_fk=? where enrollee_id_fk=?";
 
     public static EnrolleeDaoImpl getInstance() {
@@ -92,12 +93,13 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             if (isPassportAdded) {
                 enrolleeStatement.setString(1, (String) objectMap.get(MapKeys.EMAIL));
                 enrolleeStatement.setString(2, (String) objectMap.get(MapKeys.PASSWORD));
-                enrolleeStatement.setString(3, String.valueOf(objectMap.get(MapKeys.STATUS)));
+                enrolleeStatement.setString(3, String.valueOf(objectMap.get(MapKeys.ENROLLEE_STATUS)));
                 enrolleeStatement.setString(4, String.valueOf(objectMap.get(MapKeys.ROLE)));
                 enrolleeStatement.setString(5, (String) objectMap.get(MapKeys.FIRST_NAME));
                 enrolleeStatement.setString(6, (String) objectMap.get(MapKeys.LAST_NAME));
                 enrolleeStatement.setString(7, (String) objectMap.get(MapKeys.MIDDLE_NAME));
                 enrolleeStatement.setInt(8, passportId);
+                enrolleeStatement.setString(9, String.valueOf(objectMap.get(MapKeys.APPLICATION_STATUS)));
                 isEnrolleeAdded = enrolleeStatement.executeUpdate() > 0;
                 ResultSet enrolleeResultSet = enrolleeStatement.getGeneratedKeys();
                 if (enrolleeResultSet.next()) {
@@ -159,7 +161,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
 
 
     public boolean updateEnrollee(Enrollee enrollee) throws DaoException {
-boolean isUpdated;
+        boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ENROLLEE)) {
             statement.setString(1, enrollee.getFirstName());
@@ -190,7 +192,7 @@ boolean isUpdated;
     public boolean updateEnrolleeSpecialty(Enrollee enrollee) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_SPECIALTY)) {
+             PreparedStatement statement = connection.prepareStatement(UPDATE_ENROLLEE_SPECIALTY)) {
             statement.setInt(1, enrollee.getChosenSpecialtyId());
             statement.setInt(2, enrollee.getUserId());
             isUpdated = statement.executeUpdate() > 0;
@@ -232,7 +234,7 @@ boolean isUpdated;
              PreparedStatement statement = connection.prepareStatement(FIND_PASSPORT_BY_ENROLLE_ID)) {
             statement.setInt(1, enrolleeId);
             ResultSet resultSet = statement.executeQuery();
-           Passport passport = createPassportFromResultSet(resultSet);
+            Passport passport = createPassportFromResultSet(resultSet);
             if (passport != null) {
                 return Optional.of(passport);
             } else {
@@ -250,7 +252,8 @@ boolean isUpdated;
             enrollee.setUserId(resultSet.getInt(ColumnName.ENROLLE_ID));
             enrollee.setEmail(resultSet.getString(ColumnName.EMAIL));
             enrollee.setRole(RoleType.valueOf(resultSet.getString(ColumnName.ROLE).toUpperCase()));
-            enrollee.setStatus(StatusType.valueOf(resultSet.getString(ColumnName.STATUS).toUpperCase()));
+            enrollee.setStatus(StatusType.valueOf(resultSet.getString(ColumnName.ENROLLEE_STATUS)
+                    .toUpperCase()));
             enrollee.setApplicationStatus(ApplicationStatus
                     .valueOf(resultSet.getString(ColumnName.APPLICATION_STATUS).toUpperCase()));
             enrollee.setFirstName(resultSet.getString(ColumnName.ENROLLEE_FIRST_NAME));
@@ -265,7 +268,7 @@ boolean isUpdated;
 
     private Passport createPassportFromResultSet(ResultSet resultSet) throws SQLException {
         Passport passport = new Passport();
-        while (resultSet.next()){
+        while (resultSet.next()) {
             passport.setPassportId(resultSet.getInt(ColumnName.PASSPORT_ID));
             passport.setPersonalNumber(resultSet.getString(ColumnName.PERSONAL_NUMBER));
             passport.setPassportSeriesAndNumber(resultSet.getString(ColumnName.PASSPORT_SERIES_AND_NUMBER));

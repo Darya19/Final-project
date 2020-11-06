@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-<fmt:setLocale value="en"/>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
@@ -13,35 +13,43 @@
     <section class="clean-block clean-form dark">
         <div class="container">
             <div class="block-heading">
-                <h2 class="text-info"><fmt:message key="register.formname"/></h2>
+                <h2 class="text-info"><fmt:message key="register.title"/></h2>
             </div>
             <form name="RegistrationForm" method="POST" action="projectServlet">
                 <input type="hidden" name="command" value="register"/>
-                <div class="form-group"><label for="first_name"><fmt:message key="register.firstname"/> </label>
+                <div class="form-group">
+                    <label for="first_name"><fmt:message key="register.firstname"/></label>
                     <input class="form-control item" type="text" id="first_name" name="first_name"
-                           autofocus required value="${parameters.get("first_name")}">
+                           autofocus value="${parameters.get("first_name")}"
+                           required pattern="[a-zA-ZаА-Яя-я]{2,40}">
                     <c:if test="${not empty parameters and empty parameters['first_name'] }">
-                        <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
+                        <small>
+                            <label class="alert-danger"> <fmt:message key="register.registererror"/>
+                            </label>
+                        </small>
                     </c:if>
                 </div>
 
-                <div class="form-group"><label for="last_name"><fmt:message key="register.lastname"/> </label>
+                <div class="form-group"><label for="last_name"><fmt:message key="register.lastname"/>
+                </label>
                     <input class="form-control item" type="text" id="last_name" name="last_name"
-                           required value="${parameters.get("last_name")}">
+                           value="${parameters.get("last_name")}" required pattern="[a-zA-ZаА-Яя-я]{2,40}">
                     <c:if test="${not empty parameters and empty parameters['last_name'] }">
                         <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
                     </c:if>
                 </div>
                 <div class="form-group"><label for="middle_name"><fmt:message key="register.middlename"/> </label>
                     <input class="form-control item" type="text" id="middle_name" name="middle_name"
-                           required value="${parameters.get("middle_name")}">
+                           value="${parameters.get("middle_name")}" required pattern="[a-zA-ZаА-Яя-я]{2,40}">
                     <c:if test="${not empty parameters and empty parameters['middle_name'] }">
                         <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
                     </c:if>
                 </div>
-                <div class="form-group"><label for="passport_series_and_number"><fmt:message key="register.passport"/> </label>
-                    <input class="form-control item" type="text" id="passport_series_and_number" name="passport_series_and_number"
-                           required value="${parameters.get("passport_series_and_number")}">
+                <div class="form-group"><label for="passport_series_and_number"><fmt:message
+                        key="register.passport"/> </label>
+                    <input class="form-control item" type="text" id="passport_series_and_number"
+                           name="passport_series_and_number"
+                           required pattern="[A-Z]{2}[0-9]{7}" value="${parameters.get("passport_series_and_number")}">
                     <c:if test="${not empty parameters and empty parameters['passport_series_and_number'] }">
                         <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
                     </c:if>
@@ -49,11 +57,11 @@
                 <div class="form-group"><label for="personal_number"><fmt:message
                         key="register.personalnumber"/> </label>
                     <input class="form-control item" type="text" id="personal_number" name="personal_number"
-                           required value="${parameters.get("personal_number")}">
+                           required pattern="[0-9A-Z]{14}" value="${parameters.get("personal_number")}">
                     <c:if test="${not empty parameters and empty parameters['personal_number'] }">
                         <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
-                    </c:if></div>
-
+                    </c:if>
+                </div>
                 <h6><fmt:message key="register.faculty"/></h6>
                 <div class="input-group mb-3">
                     <select class="custom-select" id="faculty_id" name="faculty_id">
@@ -87,7 +95,8 @@
 
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="mark" id="mark_1" name="mark_1">
+                        <input type="text" class="form-control" placeholder="mark" id="mark_1" name="mark_1"
+                               required pattern="[0-9]{1,3}" max="100" min="0">
                     </div>
                 </div>
                 <div class="form-row">
@@ -100,7 +109,8 @@
                         </select>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="mark" id="mark_2" name="mark_2">
+                        <input type="text" class="form-control" placeholder="mark" id="mark_2" name="mark_2"
+                               required pattern="[0-9]{1,3}" max="100" min="0">
                     </div>
                 </div>
                 <div class="form-row">
@@ -113,7 +123,8 @@
                         </select>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="mark" id="mark_3" name="mark_3">
+                        <input type="text" class="form-control" placeholder="mark" id="mark_3" name="mark_3"
+                               required pattern="[0-9]{1,3}" max="100" min="0">
                     </div>
                 </div>
                 <div class="form-row">
@@ -125,20 +136,21 @@
                             </c:forEach>
                         </select>
                         <c:if test="${not empty parameters and empty parameters['subject_id_4'] }">
-                            <small><label class="alert-danger"> <fmt:message key="register.wrongsubject"/></label></small>
+                            <small><label class="alert-danger"> <fmt:message
+                                    key="register.wrongsubject"/></label></small>
                         </c:if>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="mark" id="mark_4"
-                               name="mark_4">
+                        <input type="text" class="form-control" placeholder="mark" id="mark_4" name="mark_4"
+                               required pattern="[0-9]{1,3}" max="100" min="0">
                     </div>
                 </div>
                 <div class="form-group"><label for="password"><fmt:message key="register.password"/> </label>
                     <input class="form-control item" type="password" id="password" name="password"
-                           required value="${parameters.get("password")}"></div>
+                           required pattern="[a-zA-Z0-9@#$%!]{8,40}" value="${parameters.get("password")}"></div>
                 <div class="form-group"><label for="password"><fmt:message key="register.repeatedpassword"/></label>
                     <input class="form-control item" type="password" id="repeated_password" name="repeated_password"
-                           required value="${parameters.get("repeated_password")}">
+                           required pattern="[a-zA-Z0-9@#$%!]{8,40}" value="${parameters.get("repeated_password")}">
                     <c:if test="${not empty parameters and empty parameters['repeated_password'] }">
                         <small><label class="alert-danger"> <fmt:message key="register.wrongpassword"/></label></small>
                     </c:if>
@@ -150,7 +162,8 @@
                         <small><label class="alert-danger"> <fmt:message key="register.wrongemail"/></label></small>
                     </c:if>
                 </div>
-                <button class="btn btn-primary btn-block" type="submit"><fmt:message key="register.submitbutton"/></button>
+                <button class="btn btn-primary btn-block" type="submit"><fmt:message
+                        key="register.submitbutton"/></button>
             </form>
         </div>
     </section>

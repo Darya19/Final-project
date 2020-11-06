@@ -16,7 +16,7 @@ public class EnrolleeValidator {
     private static final String PASSWORD_PATTERN =
             "[a-zA-Z0-9@#$%!]{8,40}";
     private static final String STRING_PARAMETER_PATTERN =
-            "([a-zA-Z]{2,30})";
+            "([a-zA-ZА-Яя-я]{2,40})";
     private static final String INT_PARAMETER_PATTERN =
             "[0-9]";
     private final String PASSPORT_PATTERN =
@@ -36,7 +36,8 @@ public class EnrolleeValidator {
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            if (key.equals(MapKeys.LAST_NAME) || key.equals(MapKeys.FIRST_NAME) || key.equals(MapKeys.MIDDLE_NAME)) {
+            if (key.equals(MapKeys.LAST_NAME) || key.equals(MapKeys.FIRST_NAME)
+                    || key.equals(MapKeys.MIDDLE_NAME)) {
                 if (!isStringParameterValid(value)) {
                     parameters.put(key, "");
                 }

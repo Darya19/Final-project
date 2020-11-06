@@ -1,5 +1,7 @@
 package com.epam.enrollee.util;
 
+import com.epam.enrollee.model.type.ApplicationStatus;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -22,5 +24,9 @@ public class PasswordEncryptor {
             md5Hex = "0" + md5Hex;
         }
         return md5Hex;
+    }
+
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        System.out.println(ApplicationStatus.valueOf("accepted".toUpperCase()));
     }
 }

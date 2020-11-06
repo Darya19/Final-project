@@ -1,13 +1,12 @@
 package com.epam.enrollee.model.dao.impl;
 
-import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.model.connector.ConnectionPool;
 import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
-import com.epam.enrollee.model.entity.Faculty;
 import com.epam.enrollee.model.entity.Specialty;
 import com.epam.enrollee.model.type.RecruitmentType;
+import com.epam.enrollee.model.type.StatusType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,21 +18,21 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.epam.enrollee.model.dao.ColumnName.FACULTY_ID;
-import static com.epam.enrollee.model.dao.ColumnName.SPECIALTY_NAME;
 
 public class SpecialtyDaoImpl implements BaseDao<Specialty> {
 
     public static SpecialtyDaoImpl instance;
 
     private static final String FIND_ALL_SPECIALTIES =
-            "SELECT specialty_id, specialty_name, recruitment, number_of_seats FROM specialty ";
+            "SELECT specialty_id, specialty_name, recruitment, number_of_seats, specialty_status" +
+                    " FROM specialty ";
     private static final String FIND_FACULTY_ID_BY_SPECIALTY_ID =
             "SELECT faculty_id_fk as faculty_id FROM  specialty WHERE specialty_id=?";
     private static final String FIND_SPECIALTY_BY_SPECIALTY_ID =
-            "SELECT specialty_id, specialty_name, recruitment, number_of_seats" +
+            "SELECT specialty_id, specialty_name, recruitment, number_of_seats, specialty_status" +
                     " FROM specialty WHERE specialty_id=?";
     private static final String FIND_SPECIALTIES_BY_FACULTY_ID =
-            "SELECT specialty_id, specialty_name, recruitment, number_of_seats" +
+            "SELECT specialty_id, specialty_name, recruitment, number_of_seats, specialty_status" +
                     " FROM specialty WHERE faculty_id_fk=?";
 
     public static SpecialtyDaoImpl getInstance() {
@@ -126,6 +125,8 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
             specialty.setRecruitment(RecruitmentType.valueOf
                     (resultSet.getString(ColumnName.RECRUITMENT).toUpperCase()));
             specialty.setNumberOfSeats(resultSet.getInt(ColumnName.NUMBER_OF_SEATS));
+            specialty.setSpecialtyStatus(StatusType
+                    .valueOf(resultSet.getString(ColumnName.SPECIALTY_STATUS).toUpperCase()));
             specialties.add(specialty);
         }
         return specialties;

@@ -19,9 +19,7 @@ import java.util.Optional;
 
 
 public class ToRegisterPageCommand implements Command {
-    private static final String FACULTIES = "faculties";
-    private static final String SPECIALTIES = "specialties";
-    private static final String SUBJECTS = "subjects";
+
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
         String page = null;
@@ -33,9 +31,9 @@ public class ToRegisterPageCommand implements Command {
             List<Faculty> faculties = facultyService.findAll();
             List<Specialty> specialties = specialtyService.findAll();
             List<Subject> subjects = subjectService.findAll();
-                session.setAttribute(FACULTIES, faculties);
-                session.setAttribute(SPECIALTIES, specialties);
-                session.setAttribute(SUBJECTS, subjects);
+                session.setAttribute(RequestParameters.FACULTIES, faculties);
+                session.setAttribute(RequestParameters.SPECIALTIES, specialties);
+                session.setAttribute(RequestParameters.SUBJECTS, subjects);
                 page = PagePath.REGISTER;
         } catch (ServiceException e) {
             page = PagePath.ERROR_500;

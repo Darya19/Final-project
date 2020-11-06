@@ -18,11 +18,6 @@ public enum CommandType {
             this.command = new RegisterCommand();
         }
     },
-    PROFILE {
-        {
-            this.command = new ProfileCommand();
-        }
-    },
     TO_FACULTIES_PAGE {
         {
             this.command = new ToFacultiesPageCommand();
@@ -38,11 +33,6 @@ public enum CommandType {
             this.command = new ToRegisterPageCommand();
         }
     },
-    TO_LOGOUT_PAGE {
-        {
-            this.command = new ToLogoutPageCommand();
-        }
-    },
     TO_LOGIN_PAGE {
         {
             this.command = new ToLoginPageCommand();
@@ -53,14 +43,29 @@ public enum CommandType {
             this.command = new ToEditProfilePageCommand();
         }
     },
-    EDIT {
+    EDIT_PERSONAL_INFORMATION {
         {
-            this.command = new EditCommand();
+            this.command = new EditPersonalInformationCommand();
+        }
+    },
+    EDIT_ENROLLEE_SPECIALTY {
+        {
+            this.command = new EditEnrolleeSpecialtyCommand();
+        }
+    },
+    EDIT_MARKS {
+        {
+            this.command = new EditMarksCommand();
         }
     },
     TO_SPECIALTIES_PAGE {
         {
             this.command = new ToSpecialtiesPageCommand();
+        }
+    },
+    DELETE_FACULTY {
+        {
+            this.command = new DeleteFacultyCommand();
         }
     };
 

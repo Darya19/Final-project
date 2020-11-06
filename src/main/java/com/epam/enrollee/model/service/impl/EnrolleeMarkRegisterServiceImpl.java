@@ -48,8 +48,7 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
     public Optional<EnrolleeMarkRegister> findEnrolleeMarkRegister(int enrolleeId) throws ServiceException {
         EnrolleeMarkRegisterDaoImpl dao = EnrolleeMarkRegisterDaoImpl.getInstance();
         try {
-            Optional<EnrolleeMarkRegister> enrolleeRegister = dao.findEnrolleeMarkRegisterByEnrolleeId(enrolleeId);
-            return enrolleeRegister;
+            return dao.findEnrolleeMarkRegisterByEnrolleeId(enrolleeId);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
@@ -68,9 +67,7 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
                 int subjectId = parser.parseToInt(key);
                 int markValue = parser.parseToInt(value);
                 Optional<Subject> subject = subjectDao.findById(subjectId);
-                if (subject.isPresent()) {
-                    register.put(subject.get(), markValue);
-                }
+                subject.ifPresent(subject1 -> register.put(subject1, markValue));
             }
             if(registerDao.update(register, enrolleeId)) {
                 return Optional.of(register);
@@ -92,5 +89,15 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
             }
         }
         return parameters;
+    }
+
+    public EnrolleeMarkRegister calculateEnrolleeAverageMark(EnrolleeMarkRegister register){
+     Map<Subject, Integer> testsResults = register.getTestsSubjectsAndMarks();
+     int averageMark = 0;
+     for(Integer mark : testsResults.values()){
+         averageMark += mark;
+     }
+     register.setAverageMark(averageMark);
+     return register;
     }
 }
