@@ -2,8 +2,8 @@ package com.epam.enrollee.model.type;
 
 public enum RecruitmentType {
 
-    OPEN("open"),
-    CLOSE("close");
+    OPENED("opened"),
+    CLOSED("closed");
 
     String type;
 

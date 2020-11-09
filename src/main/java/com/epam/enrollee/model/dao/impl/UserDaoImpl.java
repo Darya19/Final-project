@@ -62,10 +62,10 @@ public class UserDaoImpl implements BaseDao<User> {
     }
 
     @Override
-    public boolean remove(User user) throws DaoException {
+    public boolean remove(Map<String, Object> parameters) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(REMOVE_USER)) {
-            statement.setString(1, user.getEmail());
+           // statement.setString(1, user.getEmail());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException("database issues", e);
@@ -89,7 +89,7 @@ public class UserDaoImpl implements BaseDao<User> {
             throw new DaoException("database issues");
         }
     }
-
+//login register
     public Optional<User> findUserByEmail(String email) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL)) {
@@ -129,7 +129,7 @@ public class UserDaoImpl implements BaseDao<User> {
             throw new DaoException("database issues", e);
         }
     }
-
+//login
     public Optional<String> findPasswordByEmail(String email) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_PASSWORD_BY_EMAIL)) {

@@ -12,7 +12,7 @@ public interface BaseDao<T> {
 
     boolean add(Map<String, Object> parameters) throws DaoException;
 
-    boolean remove(T t) throws DaoException;
+    boolean remove(Map<String, Object> parameters) throws DaoException;
 
     Optional<T> findById(int parameter) throws DaoException;
 

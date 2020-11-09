@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface BaseService<T> {
-    Optional<T> create(Map<String, String> parameters) throws ServiceException;
+    boolean create(Map<String, String> parameters) throws ServiceException;
 
     int remove(T value) throws ServiceException;
 
@@ -16,5 +16,5 @@ public interface BaseService<T> {
 
     List<T> findAll() throws ServiceException;
 
-    List<T> update(T value) throws ServiceException;
+    boolean update(int value, Map<String, String> parameters) throws ServiceException;
 }

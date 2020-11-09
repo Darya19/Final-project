@@ -10,8 +10,10 @@ public class PagePath {
     public static final String PROFILE ="/jsp/profile.jsp";
     public static final String ADMIN_FACULTIES ="/jsp/admin_faculties.jsp";
     public static final String FACULTIES ="/jsp/faculties.jsp";
-    public static final String EDIT_PROFILE ="/jsp/editprofile.jsp";
+    public static final String EDIT_PROFILE ="/jsp/edit_profile.jsp";
     public static final String SPECIALTIES ="/jsp/specialties.jsp";
+    public static final String EDIT_FACULTY ="/jsp/edit_faculty.jsp";
+    public static final String ADMIN_SPECIALTIES ="/jsp/admin_specialties.jsp";
 
     private PagePath() {
     }

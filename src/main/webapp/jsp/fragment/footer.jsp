@@ -21,6 +21,8 @@
                 <h5><fmt:message key="footer.resources"/></h5>
                 <ul>
                     <li> <a href="projectServlet?command=to_faculties_page"><fmt:message key="footer.faculties"/></a></li>
+                    <p></p>
+                    <li> <a href="projectServlet?command=to_profile_page"><fmt:message key="footer.profile"/></a></li>
                 </ul>
             </div>
             <div class="col-sm-4">

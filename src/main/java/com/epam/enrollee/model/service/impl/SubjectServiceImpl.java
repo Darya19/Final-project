@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public class SubjectServiceImpl implements BaseService<Subject> {
     @Override
-    public Optional<Subject> create(Map<String, String> parameters) throws ServiceException {
-        return null;
+    public boolean create(Map<String, String> parameters) throws ServiceException {
+        return false;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class SubjectServiceImpl implements BaseService<Subject> {
     }
 
     @Override
-    public List<Subject> update(Subject value) throws ServiceException {
-        return null;
+    public boolean update(int value, Map<String, String> parameters) throws ServiceException {
+        return false;
     }
 }

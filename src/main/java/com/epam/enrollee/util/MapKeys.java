@@ -31,6 +31,8 @@ public class MapKeys {
     public static final String SPECIALTY = "specialty";
     public static final String APPLICATION_STATUS = "specialty";
     public static final String AVERAGE_MARK = "average_mark";
+    public static final String FACULTY_NAME = "faculty_name";
+    public static final String FACULTY_DESCRIPTION = "faculty_description";
 
     private MapKeys() {
     }

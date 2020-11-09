@@ -67,6 +67,61 @@ public enum CommandType {
         {
             this.command = new DeleteFacultyCommand();
         }
+    },
+    TO_PROFILE_PAGE {
+        {
+            this.command = new ToProfilePageCommand();
+        }
+    },
+    DELETE_PROFILE {
+        {
+            this.command = new DeleteProfileCommand();
+        }
+    },
+    ADD_FACULTY {
+        {
+            this.command = new AddFacultyCommand();
+        }
+    },
+    TO_EDIT_FACULTY_PAGE {
+        {
+            this.command = new ToEditFacultyPageCommand();
+        }
+    },
+    EDIT_FACULTY {
+        {
+            this.command = new EditFacultyCommand();
+        }
+    },
+    TO_ADMIN_FACULTIES_PAGE{
+        {
+            this.command = new ToAdminFacultiesPageCommand();
+        }
+    },
+    TO_ADMIN_SPECIALTIES_PAGE{
+        {
+            this.command = new ToAdminSpecialtiesPageCommand();
+        }
+    },
+    TO_EDIT_SPECIALTY_PAGE {
+        {
+            this.command = new ToEditSpecialtyPageCommand();
+        }
+    },
+    CHANGE_RECRUITMENT {
+        {
+            this.command = new ChangeRecruitmentCommand();
+        }
+    },
+    TO_APPLICATIONS_PAGE {
+        {
+            this.command = new ToApplicationsPageCommand();
+        }
+    },
+    DELETE_SPECIALTY {
+        {
+            this.command = new DeleteSpecialtyCommand();
+        }
     };
 
     Command command;

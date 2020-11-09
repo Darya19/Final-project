@@ -20,11 +20,16 @@
                     <label class="alert-danger"> <fmt:message key="adminfaculties.deletederror"/></label>
                 </small>
             </c:if>
+            <div class="col-md-10">
+                <button class="btn btn-outline-primary btn-sm"
+                        type="button"
+                        onclick='location.href = "projectServlet?command=to_edit_faculty_page"'>
+                    <fmt:message key="adminfaculties.addbutton"/>
+                </button></div>
             <table class="table">
                 <caption><fmt:message key="adminfaculties.note"/></caption>
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -33,14 +38,21 @@
                 <tbody>
                 <c:forEach items="${faculties}" var="faculty">
                     <tr>
-                        <th scope="row">${faculty.facultyId}</th>
                         <td>${faculty.facultyName}</td>
                         <td>
                             <button class="btn btn-outline-primary btn-sm"
                                     type="button"
-                                    onclick='location.href = "projectServlet?command=to_specialties_page&faculty_id=${faculty.facultyId}"'>
+                                    onclick='location.href = "projectServlet?command=to_admin_specialties_page&faculty_id=${faculty.facultyId}"'>
                                 <fmt:message key="adminfaculties.showbutton"/>
                             </button>
+                        </td>
+                        <td>
+                            <div>
+                                <button class="btn btn-outline-primary btn-sm"
+                                        type="button"
+                                        onclick='location.href = "projectServlet?command=to_edit_faculty_page&faculty_id=${faculty.facultyId}"'>
+                                    <fmt:message key="adminfaculties.editbutton"/></button>
+                            </div>
                         </td>
                         <td>
                             <div>
@@ -54,19 +66,6 @@
                 </c:forEach>
                 </tbody>
             </table>
-            <div class="row align-items-center">
-                <div class="col-md-10">
-            <button class="btn btn-outline-primary btn-sm"
-                    type="button"
-                    onclick='location.href = "projectServlet?command=to_specialties_page&faculty_id=${faculty.facultyId}"'>
-                <fmt:message key="adminfaculties.showbutton"/>
-            </button></div>
-                <div class="col-md-10">
-            <button class="btn btn-outline-primary btn-sm"
-                    type="button"
-                    onclick='location.href = "projectServlet?command=to_specialties_page&faculty_id=${faculty.facultyId}"'>
-                <fmt:message key="adminfaculties.showbutton"/>
-            </button></div>
         </div>
     </section>
 </main>

@@ -92,8 +92,6 @@ z
 Jsrc/main/java/com/epam/enrollee/model/service/impl/SubjectServiceImpl.java,7\e\7e02f6beb5c1aea64cadca3fca7e59658f734df3
 h
 8src/main/java/com/epam/enrollee/parser/NumberParser.java,1\d\1d2cc861031e7d90811b9b2fbf0522e2a082c6df
-V
-&src/main/resources/database.properties,a\c\ac67e146dfc808d2c20a560fc45d091524658f02
 [
 +src/main/webapp/jsp/error_page/error500.jsp,1\3\13b370aafe3ba1b3154f5b572ede1f39f6ee49f2
 W
@@ -122,8 +120,6 @@ Q
 !src/main/webapp/jsp/faculties.jsp,2\0\20b54a5fb517444676d3f908a3448feab1efc73d
 …
 Usrc/main/java/com/epam/enrollee/controller/command/impl/ToEditProfilePageCommand.java,5\e\5e59024e76070810a98069b872f1864a0009a42b
-S
-#src/main/webapp/jsp/editprofile.jsp,c\f\cf27bbb9072dfd86749b40dcd3575f731a0e5c55
 [
 +src/main/webapp/bootstrap/css/bootstrap.css,f\6\f674413a14ce3e060be2e00284a6054090592383
 y
@@ -160,10 +156,6 @@ Msrc/main/java/com/epam/enrollee/controller/command/impl/EditMarksCommand.java,
 [src/main/java/com/epam/enrollee/controller/command/impl/EditPersonalInformationCommand.java,c\4\c49fc21c0593639fd1003e2213cc0b91891f487a
 u
 Esrc/main/java/com/epam/enrollee/controller/filter/EncodingFilter.java,7\2\7241e635741beb2b3aa5f475a271511f809ad095
-^
-.src/main/resources/prop/pagecontent.properties,0\9\09a1b1bb7ceea0eecb437b079d68e88d898910be
-a
-1src/main/resources/prop/pagecontent_en.properties,8\3\83999c2cbdac22c5ff46f1d1b0716e0ab6e1415c
 m
 =src/main/java/com/epam/enrollee/controller/router/Router.java,d\0\d0d9278629d1e15ad164083aa97b5ed43528eb63
 n

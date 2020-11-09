@@ -7,7 +7,7 @@ import com.epam.enrollee.controller.router.Router;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-public class ChangeLanguage implements Command {
+public class ChangeLanguageCommand implements Command {
 
     private static final String ENGLISH = "en";
     private static final String RUSSIAN = "";

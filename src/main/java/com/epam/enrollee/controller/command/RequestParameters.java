@@ -33,6 +33,9 @@ public class RequestParameters {
     public static final String FACULTY = "faculty";
     public static final String SPECIALTY = "specialty";
     public static final String SUBJECTS = "subjects";
+    public static final String ROLE = "role";
+    public static final String FACULTY_NAME = "faculty_name";
+    public static final String FACULTY_DESCRIPTION = "faculty_description";
 
     private RequestParameters() {
     }

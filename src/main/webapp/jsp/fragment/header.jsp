@@ -21,13 +21,13 @@
         </span></button>
         <div class="collapse navbar-collapse" id="navcol-1">
 <c:choose>
-    <c:when test="${enrollee.role eq 'USER'}" >
+    <c:when test="${role eq 'USER'}" >
             <ul class="nav navbar-nav ml-auto">
                 <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=to_faculties_page"> <fmt:message key="header.facultiesbutton"/></a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=logout"> <fmt:message key="header.logoutbutton"/></a></li>
             </ul>
     </c:when>
-    <c:when test="${enrollee.role eq 'ADMIN'}" >
+    <c:when test="${role eq 'ADMIN'}" >
         <ul class="nav navbar-nav ml-auto">
             <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=to_admin_faculties_page"> <fmt:message key="header.facultiesbutton"/></a></li>
             <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=logout"> <fmt:message key="header.logoutbutton"/></a></li>

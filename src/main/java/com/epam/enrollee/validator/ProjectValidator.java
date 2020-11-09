@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EnrolleeValidator {
+public class ProjectValidator {
     private Pattern pattern;
     private Matcher matcher;
     private static final String EMAIL_PATTERN =
@@ -16,7 +16,7 @@ public class EnrolleeValidator {
     private static final String PASSWORD_PATTERN =
             "[a-zA-Z0-9@#$%!]{8,40}";
     private static final String STRING_PARAMETER_PATTERN =
-            "([a-zA-ZА-Яя-я]{2,40})";
+            "([a-zA-ZА-Яа-я]{2,40})";
     private static final String INT_PARAMETER_PATTERN =
             "[0-9]";
     private final String PASSPORT_PATTERN =
@@ -84,11 +84,11 @@ public class EnrolleeValidator {
         return password.matches(PASSWORD_PATTERN);
     }
 
-    private boolean isStringParameterValid(String stringParameter) {
+    public boolean isStringParameterValid(String stringParameter) {
         return stringParameter.matches(STRING_PARAMETER_PATTERN);
     }
 
-    private boolean isIntParameterValid(String intParameter) {
+    public boolean isIntParameterValid(String intParameter) {
         return intParameter.matches(INT_PARAMETER_PATTERN);
     }
 
@@ -104,9 +104,14 @@ public class EnrolleeValidator {
         NumberParser parser = new NumberParser();
         if (mark.matches(MARK_PATTERN)) {
             int intMark = parser.parseToInt(mark);
-            return intMark > MARK_MIN_VALUE && intMark < MARK_MAX_VALUE;
+            return intMark >= MARK_MIN_VALUE && intMark <= MARK_MAX_VALUE;
         } else {
             return false;
         }
+    }
+
+    public String validateDescription(String description){
+        description.replaceAll("<", "&lt").replaceAll(">", "&gt");
+        return description;
     }
 }

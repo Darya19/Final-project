@@ -56,6 +56,11 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             "UPDATE passport SET passport_series_and_number=?, personal_number=? where passport_id=?";
     private static final String UPDATE_ENROLLEE_SPECIALTY =
             "UPDATE enrollee_specialty SET specialty_id_fk=? where enrollee_id_fk=?";
+    private static final String REMOVE_ENROLLEE = "DELETE FROM enrollee WHERE enrollee_id=?";
+    private static final String REMOVE_PASSPORT = "DELETE FROM passport WHERE passport_id=?";
+    private static final String REMOVE_MARKS = "DELETE FROM mark WHERE enrollee_id_fk=?";
+    private static final String REMOVE_ENROLLEE_IN_SPECIALTY = "DELETE FROM enrollee_specialty WHERE enrollee_id_fk=?";
+    private static final String REMOVE_ENROLLEE_IN_FACULTY = "DELETE FROM enrollee_faculty WHERE enrollee_id_fk=?";
 
     public static EnrolleeDaoImpl getInstance() {
         if (instance == null) {
@@ -64,6 +69,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         return instance;
     }
 
+    //register
     @Override
     public boolean add(Map<String, Object> objectMap) throws DaoException {
         boolean isEnrolleeAdded = false;
@@ -155,11 +161,65 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
     }
 
     @Override
-    public boolean remove(Enrollee enrollee) throws DaoException {
-        return true;
+    public boolean remove(Map<String, Object> parameters) throws DaoException {
+        boolean isFacultyRemoved = false;
+        boolean isSpecialtyRemoved = false;
+        boolean isMarksRemoved = false;
+        boolean isEnrolleeRemoved = false;
+        Connection connection = ConnectionPool.INSTANCE.getConnection();
+        PreparedStatement enrolleeStatement = null;
+        PreparedStatement passportStatement = null;
+        PreparedStatement markStatement = null;
+        PreparedStatement specialtyStatement = null;
+        PreparedStatement facultyStatement = null;
+        Enrollee enrollee = (Enrollee) parameters.get(MapKeys.ENROLLEE);
+        Passport passport = (Passport) parameters.get(MapKeys.PASSPORT);
+        try {
+            connection.setAutoCommit(false);
+            enrolleeStatement = connection.prepareStatement(REMOVE_ENROLLEE, Statement.RETURN_GENERATED_KEYS);
+            passportStatement = connection.prepareStatement(REMOVE_PASSPORT, Statement.RETURN_GENERATED_KEYS);
+            markStatement = connection.prepareStatement(REMOVE_MARKS);
+            specialtyStatement = connection.prepareStatement(REMOVE_ENROLLEE_IN_SPECIALTY);
+            facultyStatement = connection.prepareStatement(REMOVE_ENROLLEE_IN_FACULTY);
+            facultyStatement.setInt(1, enrollee.getUserId());
+            isFacultyRemoved = facultyStatement.executeUpdate() > 0;
+            specialtyStatement.setInt(1, enrollee.getUserId());
+            isSpecialtyRemoved = specialtyStatement.executeUpdate() > 0;
+            markStatement.setInt(1, enrollee.getUserId());
+            isMarksRemoved = markStatement.executeUpdate() > 0;
+            if (isFacultyRemoved && isSpecialtyRemoved && isMarksRemoved) {
+                enrolleeStatement.setInt(1, enrollee.getUserId());
+                isEnrolleeRemoved = enrolleeStatement.executeUpdate() > 0;
+                if (isEnrolleeRemoved) {
+                    passportStatement.setInt(1, passport.getPassportId());
+                    passportStatement.executeUpdate();
+                }
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                logger.log(Level.ERROR, "impossible rollback committing", ex);
+            }
+            throw new DaoException("impossible remove new enrollee", e);
+        } finally {
+            closeStatement(enrolleeStatement);
+            closeStatement(passportStatement);
+            closeStatement(facultyStatement);
+            closeStatement(specialtyStatement);
+            closeStatement(markStatement);
+            try {
+                connection.setAutoCommit(true);
+                connection.close();
+            } catch (SQLException throwables) {
+                logger.log(Level.ERROR, "impossible return connection to pool");
+            }
+        }
+        return isEnrolleeRemoved;
     }
 
-
+    //update per
     public boolean updateEnrollee(Enrollee enrollee) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -175,6 +235,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         }
     }
 
+    //update pas
     public boolean updatePassport(Passport passport) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -189,6 +250,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         }
     }
 
+    //update sp
     public boolean updateEnrolleeSpecialty(Enrollee enrollee) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -212,6 +274,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         return null;
     }
 
+    //login
     public Optional<Enrollee> findEnrolleeByEmail(String email) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ENROLLEE_BY_EMAIL)) {
@@ -229,6 +292,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         }
     }
 
+    //login
     public Optional<Passport> findPassportByEnrolleeId(int enrolleeId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_PASSPORT_BY_ENROLLE_ID)) {

@@ -25,6 +25,8 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
     private static final String FIND_SUBJECTS_BY_SPECIALTY_ID =
             "SELECT subject_id, subject_name FROM subject JOIN subject_specialty ON subject.subject_id " +
                     "= subject_specialty.subject_id_fk WHERE specialty_id_fk=?";
+    private static final String FIND_SUBJECTS_BY_SUBJECT_ID =
+            "SELECT subject_id, subject_name FROM subject WHERE subject_id=?";
 
     public static SubjectDaoImpl getInstance() {
         if (instance == null) {
@@ -39,17 +41,29 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
     }
 
     @Override
-    public boolean remove(Subject subject) throws DaoException {
+    public boolean remove(Map<String, Object> parameters) throws DaoException {
         return true;
     }
 
     public boolean update(Subject subject) throws DaoException {
         return false;
     }
-
+//update mark
     @Override
-    public Optional<Subject> findById(int parameter) throws DaoException {
-        return Optional.empty();
+    public Optional<Subject> findById(int subjectId) throws DaoException {
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_SUBJECTS_BY_SUBJECT_ID)) {
+            statement.setInt(1, subjectId);
+            ResultSet resultSet = statement.executeQuery();
+            List<Subject> subjects = createSubjectListFromResultSet(resultSet);
+            if (!subjects.isEmpty()) {
+                return Optional.of(subjects.get(0));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
     }
 
     @Override
@@ -64,7 +78,7 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
         }
     }
 
-    //uncheck
+    //register
     public Optional<List<Subject>> findSubjectsBySpecialtyId(int specialtyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_SUBJECTS_BY_SPECIALTY_ID)) {

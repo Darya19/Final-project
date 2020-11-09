@@ -21,7 +21,7 @@
                     <label for="first_name"><fmt:message key="register.firstname"/></label>
                     <input class="form-control item" type="text" id="first_name" name="first_name"
                            autofocus value="${parameters.get("first_name")}"
-                           required pattern="[a-zA-ZаА-Яя-я]{2,40}">
+                           required pattern="[a-zA-ZаА-Яа-я]{2,40}">
                     <c:if test="${not empty parameters and empty parameters['first_name'] }">
                         <small>
                             <label class="alert-danger"> <fmt:message key="register.registererror"/>
@@ -33,14 +33,14 @@
                 <div class="form-group"><label for="last_name"><fmt:message key="register.lastname"/>
                 </label>
                     <input class="form-control item" type="text" id="last_name" name="last_name"
-                           value="${parameters.get("last_name")}" required pattern="[a-zA-ZаА-Яя-я]{2,40}">
+                           value="${parameters.get("last_name")}" required pattern="[a-zA-ZаА-Яа-я]{2,40}">
                     <c:if test="${not empty parameters and empty parameters['last_name'] }">
                         <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
                     </c:if>
                 </div>
                 <div class="form-group"><label for="middle_name"><fmt:message key="register.middlename"/> </label>
                     <input class="form-control item" type="text" id="middle_name" name="middle_name"
-                           value="${parameters.get("middle_name")}" required pattern="[a-zA-ZаА-Яя-я]{2,40}">
+                           value="${parameters.get("middle_name")}" required pattern="[a-zA-ZаА-Яа-я]{2,40}">
                     <c:if test="${not empty parameters and empty parameters['middle_name'] }">
                         <small><label class="alert-danger"> <fmt:message key="register.registererror"/></label></small>
                     </c:if>

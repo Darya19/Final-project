@@ -29,12 +29,12 @@ public class DeleteFacultyCommand implements Command {
                 request.setAttribute(RequestParameters.HAS_APPLICATION, true);
                 List<Faculty> faculties = facultyService.findAll();
                 request.setAttribute(RequestParameters.FACULTIES, faculties);
-                router = new Router(Router.Type.REDIRECT, PagePath.ADMIN_FACULTIES);
+                router = new Router(PagePath.ADMIN_FACULTIES);
             } else {
                 if (facultyService.remove(facultyId)) {
                     List<Faculty> faculties = facultyService.findAll();
                     request.setAttribute(RequestParameters.FACULTIES, faculties);
-                    router = new Router(Router.Type.REDIRECT, PagePath.ADMIN_FACULTIES);
+                    router = new Router(PagePath.ADMIN_FACULTIES);
                 }
             }
         } catch (ServiceException e) {
