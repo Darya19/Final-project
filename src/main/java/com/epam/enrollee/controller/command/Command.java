@@ -29,10 +29,8 @@ public interface Command {
             Optional<Passport> optionalPassport = enrolleeService.findEnrolleePassport
                     (enrolleeId);
             if (optionalEnrolleeRegister.isPresent() && optionalPassport.isPresent()) {
-                EnrolleeMarkRegister register = markRegisterService.calculateEnrolleeAverageMark
-                        (optionalEnrolleeRegister.get());
                 session.setAttribute(RequestParameters.ENROLLEE, enrollee);
-                session.setAttribute(RequestParameters.REGISTER, register);
+                session.setAttribute(RequestParameters.REGISTER, optionalEnrolleeRegister.get());
                 session.setAttribute(RequestParameters.PASSPORT, optionalPassport.get());
             } else {
                 enrolleeId = -1;

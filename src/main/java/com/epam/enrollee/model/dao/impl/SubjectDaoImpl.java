@@ -35,12 +35,11 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
         return instance;
     }
 
-    @Override
+
     public boolean add(Map<String, Object> parameters) throws DaoException {
         return true;
     }
 
-    @Override
     public boolean remove(Map<String, Object> parameters) throws DaoException {
         return true;
     }
@@ -48,8 +47,7 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
     public boolean update(Subject subject) throws DaoException {
         return false;
     }
-//update mark
-    @Override
+
     public Optional<Subject> findById(int subjectId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_SUBJECTS_BY_SUBJECT_ID)) {

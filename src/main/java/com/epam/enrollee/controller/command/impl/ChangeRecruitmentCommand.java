@@ -22,14 +22,13 @@ public class ChangeRecruitmentCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
-        HttpSession session;
+        HttpSession session = request.getSession();
         Router router;
-        session = request.getSession();
         String specialtyId = request.getParameter(RequestParameters.SPECIALTY_ID);
         String recruitment = request.getParameter(RequestParameters.RECRUITMENT);
         String facultyId = (String) session.getAttribute(RequestParameters.FACULTY_ID);
         try {
-            if (!specialtyService.checkApplications(specialtyId)) {
+            if (!specialtyService.checkConsideredApplications(specialtyId)) {
                 if (specialtyService.changeSpecialtyRecruitment(specialtyId, recruitment)) {
                     List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty
                             (String.valueOf(facultyId));

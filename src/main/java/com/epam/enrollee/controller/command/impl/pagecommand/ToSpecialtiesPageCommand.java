@@ -28,10 +28,8 @@ public class ToSpecialtiesPageCommand implements Command {
         Router router;
         String facultyId = request.getParameter(RequestParameters.FACULTY_ID);
         try {
-            Optional<Faculty> faculty = facultyService.findFacultyById
-                    (facultyId);
-            List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty
-                    (facultyId);
+            Optional<Faculty> faculty = facultyService.findFacultyById(facultyId);
+            List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty(facultyId);
             if (faculty.isPresent() && !specialties.isEmpty()) {
                 request.setAttribute(RequestParameters.SPECIALTIES, specialties);
                 request.setAttribute(RequestParameters.FACULTY, faculty.get());

@@ -22,7 +22,7 @@
                 </small>
             </c:if>
             <p></p>
-                <div class="col-md-4 text-right">
+                <div class="col-md-10 right-button">
                 <button class="btn btn-outline-primary btn-sm"
                         type="button"
                         onclick='location.href = "projectServlet?command=to_edit_faculty_page"'>
@@ -32,6 +32,7 @@
                 <caption><fmt:message key="adminfaculties.note"/></caption>
                 <thead class="thead-light">
                 <tr>
+                    <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>

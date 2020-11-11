@@ -29,7 +29,7 @@
     </c:when>
     <c:when test="${role eq 'ADMIN'}" >
         <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=to_admin_faculties_page"> <fmt:message key="header.facultiesbutton"/></a></li>
+            <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=to_admin_faculties_page"> <fmt:message key="header.adminfacultiesbutton"/></a></li>
             <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=logout"> <fmt:message key="header.logoutbutton"/></a></li>
         </ul>
     </c:when>

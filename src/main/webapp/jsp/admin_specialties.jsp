@@ -22,7 +22,7 @@
                 </small>
             </c:if>
             <p></p>
-            <div class="col-md-4 text-right">
+            <div class="col-md-10 right-button">
                 <button class="btn btn-outline-primary btn-sm"
                         type="button"
                         onclick='location.href = "projectServlet?command=to_edit_specialty_page"'>
@@ -81,7 +81,7 @@
                 </tbody>
             </table>
             <p></p>
-                <div class="col-md-4 text-right">
+                <div class="col-md-10 right-button">
                     <button class="btn btn-primary btn-sm "
                             type="button"
                             onclick='location.href = "projectServlet?command=to_admin_faculties_page"'>

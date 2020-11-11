@@ -14,6 +14,11 @@ public enum CommandType {
             this.command = new AddSpecialtyCommand();
         }
     },
+    CHANGE_APPLICATION_STATUS {
+        {
+            this.command = new ChangeApplicationStatusCommand();
+        }
+    },
     CHANGE_LANGUAGE {
         {
             this.command = new ChangeLanguageCommand();

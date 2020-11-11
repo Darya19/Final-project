@@ -74,7 +74,7 @@
                                 <div class="progress">
                                     <div class="progress-bar" aria-valuenow="${register.value}" aria-valuemin="0"
                                          aria-valuemax="100"
-                                         style="width: ${register.value};"><span
+                                         style="width: ${register.value}%;"><span
                                             class="sr-only"></span>${register.value}
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@
                             <div class="progress">
                                 <div class="progress-bar" aria-valuenow="${register.averageMark}" aria-valuemin="0"
                                      aria-valuemax="100"
-                                     style="width: ${register.averageMark};"><span class="sr-only"></span>${register.averageMark}
+                                     style="width: ${register.averageMark}%;"><span class="sr-only"></span>${register.averageMark}
                                 </div>
                             </div>
                         </div>

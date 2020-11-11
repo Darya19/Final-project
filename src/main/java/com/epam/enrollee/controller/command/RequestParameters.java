@@ -39,6 +39,9 @@ public class RequestParameters {
     public static final String RECRUITMENT = "recruitment";
     public static final String NUMBER_OF_SEATS = "number_of_seats";
     public static final String SPECIALTY_NAME = "specialty_name";
+    public static final String ENROLLEES = "enrollees";
+    public static final String ENROLLEE_ID = "enrollee_id";
+    public static final String STATUS = "status";
 
     private RequestParameters() {
     }

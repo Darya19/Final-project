@@ -24,7 +24,7 @@ public class DeleteFacultyCommand implements Command {
         Router router;
         String facultyId = request.getParameter(RequestParameters.FACULTY_ID);
         try {
-            if (facultyService.checkApplications(facultyId)) {
+            if (facultyService.checkConsideredApplications(facultyId)) {
                 request.setAttribute(RequestParameters.HAS_APPLICATION, true);
                 List<Faculty> faculties = facultyService.findAllActiveFaculties();
                 request.setAttribute(RequestParameters.FACULTIES, faculties);

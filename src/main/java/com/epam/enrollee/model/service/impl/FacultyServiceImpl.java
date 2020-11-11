@@ -48,9 +48,9 @@ public class FacultyServiceImpl {
                 intFacultyId = parser.parseToInt(facultyId);
                 List<Specialty> specialties = specialtyDao.findActiveSpecialtiesListByFacultyId(intFacultyId);
                 for (Specialty specialty : specialties) {
-                    specialtyDao.updateStatusById(specialty.getSpecialtyId());
+                    specialtyDao.updateSpecialtyStatusById(specialty.getSpecialtyId());
                 }
-                return facultyDao.updateStatusById(intFacultyId);
+                return facultyDao.updateFacultyStatusById(intFacultyId);
             } catch (DaoException e) {
                 throw new ServiceException(e);
             }
@@ -59,7 +59,7 @@ public class FacultyServiceImpl {
         }
     }
 
-    public boolean checkApplications(String facultyId) throws ServiceException {
+    public boolean checkConsideredApplications(String facultyId) throws ServiceException {
         FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
@@ -67,7 +67,7 @@ public class FacultyServiceImpl {
         if (validator.isIntParameterValid(facultyId)) {
             try {
                 intFacultyId = parser.parseToInt(facultyId);
-                List<Integer> foundEnrolleId = facultyDao.findEnrolleeIdByFacultyId(intFacultyId);
+                List<Integer> foundEnrolleId = facultyDao.findConsideredEnrolleeIdByFacultyId(intFacultyId);
                 return foundEnrolleId.size() > 0;
             } catch (DaoException e) {
                 throw new ServiceException(e);

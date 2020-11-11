@@ -27,7 +27,7 @@ public class DeleteSpecialtyCommand implements Command {
         String specialtyId = request.getParameter(RequestParameters.SPECIALTY_ID);
         String facultyId = (String) session.getAttribute(RequestParameters.FACULTY_ID);
         try {
-            if (specialtyService.checkApplications(specialtyId)) {
+            if (specialtyService.checkConsideredApplications(specialtyId)) {
                 request.setAttribute(RequestParameters.HAS_APPLICATION, true);
                 List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty(facultyId);
                 request.setAttribute(RequestParameters.SPECIALTIES, specialties);

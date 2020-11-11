@@ -23,7 +23,7 @@
                     <h6><fmt:message key="specialties.recruitment"/> ${specialty.recruitment}</h6>
                     <h6><fmt:message key="specialties.seats"/> ${specialty.numberOfSeats}</h6>
                     <div class="answer">
-                        <c:if test="${empty enrollee}">
+                        <c:if test="${empty enrollee and specialty.recruitment == 'OPENED'}">
                         <button class="btn btn-outline-primary btn-lg"
                                 type="button" onclick='location.href = "projectServlet?command=to_register_page"'>
                         <fmt:message key="specialties.registerbutton"/> </button>
@@ -33,7 +33,7 @@
             </div>
         </div>
             <p></p>
-                <div class="col-md-4 text-right">
+                <div class="col-md-10 right-button">
                     <button class="btn btn-outline-primary btn-sm"
                             type="button"
                             onclick='location.href = "projectServlet?command=to_faculties_page"'>

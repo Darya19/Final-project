@@ -11,6 +11,7 @@ import com.epam.enrollee.model.entity.Passport;
 import com.epam.enrollee.model.entity.Subject;
 import com.epam.enrollee.model.entity.User;
 import com.epam.enrollee.model.type.ApplicationStatus;
+import com.epam.enrollee.model.type.RecruitmentType;
 import com.epam.enrollee.model.type.RoleType;
 import com.epam.enrollee.model.type.StatusType;
 import com.epam.enrollee.parser.NumberParser;
@@ -226,10 +227,57 @@ public class EnrolleeServiceImpl {
     public boolean removeEnrollee(Map<String, Object> parameters) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
         try {
-           return enrolleeDao.remove(parameters);
+            return enrolleeDao.remove(parameters);
         } catch (DaoException e) {
             logger.log(Level.ERROR, "Impossible remove enrollee specialty", e);
             throw new ServiceException("Impossible remove enrollee specialty", e);
+        }
+    }
+
+    public List<Enrollee> findAllEnrolleesOnSpecialty(String specialtyId) throws ServiceException {
+        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        NumberParser parser = new NumberParser();
+        ProjectValidator validator = new ProjectValidator();
+        List<Enrollee> enrollees;
+        int intSpecialtyId;
+        try {
+            if (validator.isIntParameterValid(specialtyId)) {
+                intSpecialtyId = parser.parseToInt(specialtyId);
+                enrollees = enrolleeDao.findEnrolleeBySpecialtyId(intSpecialtyId);
+            } else {
+                enrollees = new ArrayList<>();
+            }
+        } catch (DaoException e) {
+            logger.log(Level.ERROR, "Impossible find enrollees by current specialty", e);
+            throw new ServiceException("Impossible find enrollees by current specialty", e);
+        }
+        return enrollees;
+    }
+
+    public boolean changeApplicationStatus(String enrolleeId, String status)
+            throws ServiceException {
+        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        NumberParser parser = new NumberParser();
+        ProjectValidator validator = new ProjectValidator();
+        int intEnrolleeId;
+        boolean isChanged;
+        if (validator.isIntParameterValid(enrolleeId)
+                && validator.isStringParameterValid(status)) {
+            try {
+                intEnrolleeId = parser.parseToInt(enrolleeId);
+                if (status.equals(ApplicationStatus.ACCEPTED.getApplicationStatus())) {
+                    isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
+                            ApplicationStatus.ACCEPTED.getApplicationStatus());
+                } else {
+                    isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
+                            ApplicationStatus.REJECTED.getApplicationStatus());
+                }
+                return isChanged;
+            } catch (DaoException e) {
+                throw new ServiceException(e);
+            }
+        } else {
+            return false;
         }
     }
 }

@@ -54,7 +54,13 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
     private static final String REMOVE_MARKS = "DELETE FROM mark WHERE enrollee_id_fk=?";
     private static final String REMOVE_ENROLLEE_IN_SPECIALTY = "DELETE FROM enrollee_specialty WHERE enrollee_id_fk=?";
     private static final String REMOVE_ENROLLEE_IN_FACULTY = "DELETE FROM enrollee_faculty WHERE enrollee_id_fk=?";
-
+    private static final String FIND_ENROLLEE_BY_SPECIALTY_ID = "SELECT enrollee_id, email, role, enrollee_status," +
+            "enrollee_first_name, enrollee_last_name, enrollee_middle_name, faculty_id_fk as faculty_id,specialty_id_fk " +
+            "as specialty_id, application_status FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id = " +
+            "enrollee_faculty.enrollee_id_fk JOIN enrollee_specialty on enrollee.enrollee_id = enrollee_specialty.enrollee_id_fk" +
+            " WHERE specialty_id_fk=?";
+    private static final String UPDATE_APPLICATION_STATUS_BY_ENROLLEE_ID = "UPDATE enrollee SET application_status=? " +
+            "WHERE enrollee_id=?";
     public static EnrolleeDaoImpl getInstance() {
         if (instance == null) {
             instance = new EnrolleeDaoImpl();
@@ -321,5 +327,31 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             passport.setPassportSeriesAndNumber(resultSet.getString(ColumnName.PASSPORT_SERIES_AND_NUMBER));
         }
         return passport;
+    }
+
+    public List<Enrollee> findEnrolleeBySpecialtyId(int specialtyId) throws DaoException {
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ENROLLEE_BY_SPECIALTY_ID)) {
+            statement.setInt(1, specialtyId);
+            ResultSet resultSet = statement.executeQuery();
+            List<Enrollee> enrollees = createEnrolleeListFromResultSet(resultSet);
+           return enrollees;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Impossible find enrollees on curent specialty", e);
+            throw new DaoException("Database issues while finding enrollee by specialty id", e);
+        }
+    }
+
+    public boolean updateApplicationStatusByEnrolleeId(int enrolleeId, String applicationStatus) throws DaoException {
+        boolean isUpdated;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_APPLICATION_STATUS_BY_ENROLLEE_ID)) {
+            statement.setString(1, applicationStatus);
+            statement.setInt(2, enrolleeId);
+            isUpdated = statement.executeUpdate() > 0;
+            return isUpdated;
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
     }
 }

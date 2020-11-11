@@ -46,7 +46,7 @@ public class SpecialtyServiceImpl implements BaseService<Specialty> {
         if (validator.isIntParameterValid(specialtyId)) {
             try {
                 intSpecialtyId = parser.parseToInt(specialtyId);
-                return specialtyDao.updateStatusById(intSpecialtyId);
+                return specialtyDao.updateSpecialtyStatusById(intSpecialtyId);
             } catch (DaoException e) {
                 throw new ServiceException(e);
             }
@@ -162,8 +162,7 @@ public class SpecialtyServiceImpl implements BaseService<Specialty> {
         }
     }
 
-    public boolean changeSpecialtyRecruitment(String specialtyId, String recruitment)
-            throws ServiceException {
+    public boolean changeSpecialtyRecruitment(String specialtyId, String recruitment) throws ServiceException {
         SpecialtyDaoImpl specialtyDao = SpecialtyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
@@ -189,7 +188,7 @@ public class SpecialtyServiceImpl implements BaseService<Specialty> {
         }
     }
 
-    public boolean checkApplications(String specialtyId) throws ServiceException {
+    public boolean checkConsideredApplications(String specialtyId) throws ServiceException {
         SpecialtyDaoImpl specialtyDao = SpecialtyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
@@ -197,7 +196,7 @@ public class SpecialtyServiceImpl implements BaseService<Specialty> {
         if (validator.isIntParameterValid(specialtyId)) {
             try {
                 intSpecialtyId = parser.parseToInt(specialtyId);
-                List<Integer> foundEnrolleeId = specialtyDao.findEnrolleeIdBySpecialtyId(intSpecialtyId);
+                List<Integer> foundEnrolleeId = specialtyDao.findConsideredEnrolleeIdBySpecialtyId(intSpecialtyId);
                 return foundEnrolleeId.size() > 0;
             } catch (DaoException e) {
                 throw new ServiceException(e);

@@ -3,7 +3,7 @@ package com.epam.enrollee.model.entity;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EnrolleeMarkRegister {
+public class EnrolleeMarkRegister implements Comparable<EnrolleeMarkRegister>{
 
     private Map<Subject, Integer> testsSubjectsAndMarks;
     private int averageMark;
@@ -69,5 +69,10 @@ public class EnrolleeMarkRegister {
         sb.append(", averageMark=").append(averageMark);
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(EnrolleeMarkRegister register) {
+        return (int)(this.averageMark - register.getAverageMark());
     }
 }

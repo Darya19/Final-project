@@ -5,6 +5,7 @@ import com.epam.enrollee.model.connector.ConnectionPool;
 import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
 import com.epam.enrollee.model.entity.Faculty;
+import com.epam.enrollee.model.type.ApplicationStatus;
 import com.epam.enrollee.model.type.StatusType;
 import com.epam.enrollee.util.MapKeys;
 
@@ -32,7 +33,7 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
             "SELECT faculty_id, faculty_name, faculty_description, faculty_status FROM faculty " +
                     "WHERE faculty_status=?";
     private static final String FIND_ENROLLE_ID_BY_FACULTY_ID = "SELECT enrollee_id_fk as enrollee_id " +
-            "FROM enrollee_faculty WHERE faculty_id_fk=?";
+            "FROM enrollee_faculty JOIN enrollee WHERE application_status =? and faculty_id_fk=?";
     private static final String UPDATE_FACULTY_STATUS_BY_ID = "UPDATE faculty SET faculty_status=?" +
             "WHERE faculty_id=?";
     private static final String UPDATE_FACULTY_BY_ID = "UPDATE faculty SET faculty_name=?, " +
@@ -63,7 +64,7 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
         return true;
     }
 
-    public boolean updateStatusById(int facultyId) throws DaoException {
+    public boolean updateFacultyStatusById(int facultyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_FACULTY_STATUS_BY_ID)) {
             statement.setString(1, StatusType.DELETED.getStatus());
@@ -133,10 +134,11 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
         }
     }
 
-    public List<Integer> findEnrolleeIdByFacultyId(int facultyId) throws DaoException {
+    public List<Integer> findConsideredEnrolleeIdByFacultyId(int facultyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ENROLLE_ID_BY_FACULTY_ID)) {
-            statement.setInt(1, facultyId);
+            statement.setString(1, ApplicationStatus.CONSIDERED.getApplicationStatus());
+            statement.setInt(2, facultyId);
             ResultSet resultSet = statement.executeQuery();
             List<Integer> foundEnrolleeId = new ArrayList<>();
             while (resultSet.next()) {

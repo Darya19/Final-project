@@ -10,8 +10,6 @@ import com.epam.enrollee.model.service.BaseService;
 import com.epam.enrollee.parser.NumberParser;
 import com.epam.enrollee.validator.ProjectValidator;
 
-import java.security.SecureRandom;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,20 +37,25 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
         return false;
     }
 
-    //login register
     public Optional<EnrolleeMarkRegister> findEnrolleeMarkRegister(int enrolleeId) throws ServiceException {
         EnrolleeMarkRegisterDaoImpl dao = EnrolleeMarkRegisterDaoImpl.getInstance();
+        EnrolleeMarkRegister register;
         try {
-            Optional<EnrolleeMarkRegister> markRegister =
+            Optional<EnrolleeMarkRegister> optionalRegister =
                     dao.findEnrolleeMarkRegisterByEnrolleeId(enrolleeId);
-            return markRegister;
+            if (optionalRegister.isPresent()) {
+                register = optionalRegister.get();
+                register = calculateEnrolleeAverageMark(register);
+                return Optional.of(register);
+            } else {
+                return Optional.empty();
+            }
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
     }
 
-    //update mar
-    public Optional<EnrolleeMarkRegister> updateEnrolleRegister(int  enrolleeId, Map<String, String> parameters)
+    public Optional<EnrolleeMarkRegister> updateEnrolleRegister(int enrolleeId, Map<String, String> parameters)
             throws ServiceException {
         EnrolleeMarkRegisterDaoImpl registerDao = EnrolleeMarkRegisterDaoImpl.getInstance();
         SubjectDaoImpl subjectDao = SubjectDaoImpl.getInstance();
@@ -70,13 +73,17 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
                     register.put(foundSubject, markValue);
                 }
             }
-            return registerDao.update(register, enrolleeId) ? Optional.of(register) : Optional.empty();
+            if (registerDao.update(register, enrolleeId)) {
+                register = calculateEnrolleeAverageMark(register);
+                return Optional.of(register);
+            } else {
+                return Optional.empty();
+            }
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
     }
 
-    //update mar
     public Map<String, String> checkParameters(Map<String, String> parameters) {
         ProjectValidator validator = new ProjectValidator();
         for (Map.Entry<String, String> pair : parameters.entrySet()) {
@@ -89,8 +96,7 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
         return parameters;
     }
 
-    //login register
-    public EnrolleeMarkRegister calculateEnrolleeAverageMark(EnrolleeMarkRegister register) {
+    private EnrolleeMarkRegister calculateEnrolleeAverageMark(EnrolleeMarkRegister register) {
         Map<Subject, Integer> testsResults = register.getTestsSubjectsAndMarks();
         int averageMark = 0;
         for (Integer mark : testsResults.values()) {

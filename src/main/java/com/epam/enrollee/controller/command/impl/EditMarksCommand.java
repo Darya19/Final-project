@@ -50,7 +50,6 @@ public class EditMarksCommand implements Command {
                         .updateEnrolleRegister(enrollee.getUserId(), parameters);
                 if (markRegister.isPresent()) {
                     register = markRegister.get();
-                    register = registerService.calculateEnrolleeAverageMark(register);
                     session.removeAttribute(RequestParameters.REGISTER);
                     session.setAttribute(RequestParameters.REGISTER, register);
                     router = new Router(PagePath.PROFILE);

@@ -5,6 +5,7 @@ import com.epam.enrollee.model.connector.ConnectionPool;
 import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
 import com.epam.enrollee.model.entity.Specialty;
+import com.epam.enrollee.model.type.ApplicationStatus;
 import com.epam.enrollee.model.type.RecruitmentType;
 import com.epam.enrollee.model.type.StatusType;
 import com.epam.enrollee.util.MapKeys;
@@ -42,10 +43,10 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
     private static final String FIND_ALL_ACTIVE_SPECIALTIES_BY_FACULTY_ID =
             "SELECT specialty_id, specialty_name, recruitment, number_of_seats, specialty_status" +
                     " FROM specialty WHERE specialty_status=? and faculty_id_fk=?";
-    private static final String UPDATE_RECRUITMENT_BY_SPECIALTY_ID =
-            "UPDATE specialty SET recruitment=? WHERE specialty_id=?";
+    private static final String UPDATE_RECRUITMENT_BY_SPECIALTY_ID = "UPDATE specialty SET recruitment=? WHERE specialty_id=?";
     private static final String FIND_ENROLLE_ID_BY_SPECIALTY_ID =
-            "SELECT enrollee_id_fk as enrollee_id FROM enrollee_specialty WHERE specialty_id_fk=?";
+            "SELECT enrollee_id_fk as enrollee_id FROM enrollee_specialty JOIN enrollee WHERE application_status=? and " +
+                    "specialty_id_fk=?";
     private static final String ADD_SPECIALTY =
             "INSERT INTO specialty(specialty_name, faculty_id_fk, recruitment, number_of_seats, " +
                     "specialty_status) VALUES (?,?,?,?,?)";
@@ -196,10 +197,11 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
         }
     }
 
-    public List<Integer> findEnrolleeIdBySpecialtyId(int specialtyId) throws DaoException {
+    public List<Integer> findConsideredEnrolleeIdBySpecialtyId(int specialtyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
                 PreparedStatement statement = connection.prepareStatement(FIND_ENROLLE_ID_BY_SPECIALTY_ID)) {
-            statement.setInt(1, specialtyId);
+            statement.setString(1, ApplicationStatus.CONSIDERED.getApplicationStatus());
+            statement.setInt(2, specialtyId);
             ResultSet resultSet = statement.executeQuery();
             List<Integer> foundEnrolleeId = new ArrayList<>();
             while (resultSet.next()) {
@@ -229,7 +231,7 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
         return specialties;
     }
 
-    public boolean updateStatusById(int specialtyId) throws DaoException {
+    public boolean updateSpecialtyStatusById(int specialtyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_SPECIALTY_STATUS_BY_ID)) {
             statement.setString(1, StatusType.DELETED.getStatus());
