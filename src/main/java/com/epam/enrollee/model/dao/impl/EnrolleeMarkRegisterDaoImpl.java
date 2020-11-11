@@ -18,11 +18,10 @@ import java.util.Optional;
 public class EnrolleeMarkRegisterDaoImpl implements BaseDao<EnrolleeMarkRegister> {
 
     public static EnrolleeMarkRegisterDaoImpl instance;
-    private static final String FIND_ENROLLEE_REGISTER_BY_ENROLLEE_ID =
-            "SELECT subject_id, subject_name, mark_value FROM subject JOIN mark on subject.subject_id " +
-                    "= mark.subject_id_fk WHERE enrollee_id_fk=?";
-    private static final String UPDATE_ENROLLEE_MARK_REGISTER =
-            "UPDATE mark SET mark_value=? where enrollee_id_fk=? and subject_id_fk=?";
+    private static final String FIND_ENROLLEE_REGISTER_BY_ENROLLEE_ID = "SELECT subject_id, subject_name, mark_value " +
+            "FROM subject JOIN mark on subject.subject_id = mark.subject_id_fk WHERE enrollee_id_fk=?";
+    private static final String UPDATE_ENROLLEE_MARK_REGISTER = "UPDATE mark SET mark_value=? where enrollee_id_fk=? " +
+            "and subject_id_fk=?";
 
     public static EnrolleeMarkRegisterDaoImpl getInstance() {
         if (instance == null) {
@@ -31,17 +30,14 @@ public class EnrolleeMarkRegisterDaoImpl implements BaseDao<EnrolleeMarkRegister
         return instance;
     }
 
-    @Override
     public boolean add(Map<String, Object> parameters) throws DaoException {
-        return false;
+         throw new UnsupportedOperationException("Impossible add enrollee marks");
     }
 
-    @Override
     public boolean remove(Map<String, Object> parameters) throws DaoException {
-        return false;
+        throw new UnsupportedOperationException("Impossible remove enrollee marks");
     }
 
-    //update mark
     public boolean update(EnrolleeMarkRegister register, int enrolleeId) throws DaoException {
         Map<Subject, Integer> parameters = register.getTestsSubjectsAndMarks();
         int countUpdate = 0;
@@ -61,17 +57,10 @@ public class EnrolleeMarkRegisterDaoImpl implements BaseDao<EnrolleeMarkRegister
         }
     }
 
-    @Override
     public Optional<EnrolleeMarkRegister> findById(int parameter) throws DaoException {
         return Optional.empty();
     }
 
-    @Override
-    public List<EnrolleeMarkRegister> findAll() throws DaoException {
-        return null;
-    }
-
-    //login register
     public Optional<EnrolleeMarkRegister> findEnrolleeMarkRegisterByEnrolleeId(int enrolleeId)
             throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();

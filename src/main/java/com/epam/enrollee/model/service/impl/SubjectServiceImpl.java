@@ -27,8 +27,7 @@ public class SubjectServiceImpl implements BaseService<Subject> {
         return Optional.empty();
     }
 
-    @Override
-    public List<Subject> findAll() throws ServiceException {
+    public List<Subject> findAllSubjects() throws ServiceException {
         SubjectDaoImpl dao = SubjectDaoImpl.getInstance();
         try {
             List<Subject> subjects = dao.findAll();

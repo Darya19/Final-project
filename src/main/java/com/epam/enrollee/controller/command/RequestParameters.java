@@ -1,7 +1,7 @@
 package com.epam.enrollee.controller.command;
 
 public class RequestParameters {
-    /*register page parameters*/
+
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String FIRST_NAME = "first_name";
@@ -24,7 +24,7 @@ public class RequestParameters {
     public static final String LOCALE = "locale";
     public static final String FACULTIES = "faculties";
     public static final String HAS_APPLICATION = "has_application";
-   public static final String ENROLLEE = "enrollee";
+    public static final String ENROLLEE = "enrollee";
     public static final String PASSPORT = "passport";
     public static final String SPECIALTIES = "specialties";
     public static final String REGISTER = "register";
@@ -36,6 +36,9 @@ public class RequestParameters {
     public static final String ROLE = "role";
     public static final String FACULTY_NAME = "faculty_name";
     public static final String FACULTY_DESCRIPTION = "faculty_description";
+    public static final String RECRUITMENT = "recruitment";
+    public static final String NUMBER_OF_SEATS = "number_of_seats";
+    public static final String SPECIALTY_NAME = "specialty_name";
 
     private RequestParameters() {
     }

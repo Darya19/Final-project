@@ -28,32 +28,36 @@ public class EditFacultyCommand implements Command {
         FacultyServiceImpl facultyService = new FacultyServiceImpl();
         Map<String, String> parameters = new HashMap<>();
         Router router;
-        int facultyId = Integer.parseInt(request.getParameter(RequestParameters.FACULTY_ID));
+        String facultyId = request.getParameter(RequestParameters.FACULTY_ID);
+        parameters.put(MapKeys.FACULTY_ID, facultyId);
+        parameters.put(MapKeys.FACULTY_NAME, request.getParameter(RequestParameters.FACULTY_NAME));
+        parameters.put(MapKeys.FACULTY_DESCRIPTION, request.getParameter(RequestParameters.FACULTY_DESCRIPTION));
         try {
-            parameters.put(MapKeys.FACULTY_NAME, request.getParameter(RequestParameters.FACULTY_NAME));
-            parameters.put(MapKeys.FACULTY_DESCRIPTION, request.getParameter
-                    (RequestParameters.FACULTY_DESCRIPTION));
-
             Map<String, String> checkedParameters = facultyService.checkParameters(parameters);
-            if (checkedParameters.containsValue(EMPTY_STRING)) {
-                request.setAttribute(RequestParameters.PARAMETERS, checkedParameters);
-                Optional<Faculty> faculty = facultyService.findFacultyById(facultyId);
-                if (faculty.isPresent()) {
-                    request.setAttribute(RequestParameters.FACULTY, faculty.get());
-                    router = new Router(PagePath.EDIT_FACULTY);
+            if (!checkedParameters.get(MapKeys.FACULTY_ID).equals(EMPTY_STRING)) {
+                if (checkedParameters.containsValue(EMPTY_STRING)) {
+                    request.setAttribute(RequestParameters.PARAMETERS, checkedParameters);
+                    Optional<Faculty> faculty = facultyService.findFacultyById(facultyId);
+                    if (faculty.isPresent()) {
+                        request.setAttribute(RequestParameters.FACULTY, faculty.get());
+                        router = new Router(PagePath.EDIT_FACULTY);
+                    } else {
+                        router = new Router(PagePath.ERROR_500);
+                        logger.log(Level.ERROR, "impossible find chosen faculty.");
+                    }
                 } else {
-                    router = new Router(PagePath.ERROR_500);
-                    logger.log(Level.ERROR, "impossible find chosen faculty.");
+                    if (facultyService.update(checkedParameters)) {
+                        List<Faculty> faculties = facultyService.findAllActiveFaculties();
+                        request.setAttribute(RequestParameters.FACULTIES, faculties);
+                        router = new Router(PagePath.ADMIN_FACULTIES);
+                    } else {
+                        router = new Router(PagePath.ERROR_500);
+                        logger.log(Level.ERROR, "Impossible update faculty");
+                    }
                 }
             } else {
-                if (facultyService.update(facultyId, checkedParameters)) {
-                    List<Faculty> faculties = facultyService.findAll();
-                    request.setAttribute(RequestParameters.FACULTIES, faculties);
-                    router = new Router(PagePath.ADMIN_FACULTIES);
-                } else {
-                    router = new Router(PagePath.ERROR_500);
-                    logger.log(Level.ERROR, "impossible update faculty");
-                }
+                router = new Router(PagePath.ERROR_500);
+                logger.log(Level.ERROR, "Incorrect faculty id");
             }
         } catch (ServiceException e) {
             router = new Router(PagePath.ERROR_500);

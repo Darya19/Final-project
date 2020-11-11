@@ -1,8 +1,69 @@
 package com.epam.enrollee.controller.command;
 
 import com.epam.enrollee.controller.command.impl.*;
+import com.epam.enrollee.controller.command.impl.pagecommand.*;
 
 public enum CommandType {
+    ADD_FACULTY {
+        {
+            this.command = new AddFacultyCommand();
+        }
+    },
+    ADD_SPECIALTY {
+        {
+            this.command = new AddSpecialtyCommand();
+        }
+    },
+    CHANGE_LANGUAGE {
+        {
+            this.command = new ChangeLanguageCommand();
+        }
+    },
+    CHANGE_RECRUITMENT {
+        {
+            this.command = new ChangeRecruitmentCommand();
+        }
+    },
+    DELETE_FACULTY {
+        {
+            this.command = new DeleteFacultyCommand();
+        }
+    },
+    DELETE_PROFILE {
+        {
+            this.command = new DeleteProfileCommand();
+        }
+    },
+    DELETE_SPECIALTY {
+        {
+            this.command = new DeleteSpecialtyCommand();
+        }
+    },
+    EDIT_ENROLLEE_SPECIALTY {
+        {
+            this.command = new EditEnrolleeSpecialtyCommand();
+        }
+    },
+    EDIT_FACULTY {
+        {
+            this.command = new EditFacultyCommand();
+        }
+    },
+    EDIT_MARKS {
+        {
+            this.command = new EditMarksCommand();
+        }
+    },
+    EDIT_PERSONAL_INFORMATION {
+        {
+            this.command = new EditPersonalInformationCommand();
+        }
+    },
+    EDIT_SPECIALTY {
+        {
+            this.command = new EditSpecialtyCommand();
+        }
+    },
     LOGIN {
         {
             this.command = new LoginCommand();
@@ -18,99 +79,14 @@ public enum CommandType {
             this.command = new RegisterCommand();
         }
     },
-    TO_FACULTIES_PAGE {
-        {
-            this.command = new ToFacultiesPageCommand();
-        }
-    },
-    TO_MAIN_PAGE {
-        {
-            this.command = new ToMainPageCommand();
-        }
-    },
-    TO_REGISTER_PAGE {
-        {
-            this.command = new ToRegisterPageCommand();
-        }
-    },
-    TO_LOGIN_PAGE {
-        {
-            this.command = new ToLoginPageCommand();
-        }
-    },
-    TO_EDIT_PROFILE_PAGE {
-        {
-            this.command = new ToEditProfilePageCommand();
-        }
-    },
-    EDIT_PERSONAL_INFORMATION {
-        {
-            this.command = new EditPersonalInformationCommand();
-        }
-    },
-    EDIT_ENROLLEE_SPECIALTY {
-        {
-            this.command = new EditEnrolleeSpecialtyCommand();
-        }
-    },
-    EDIT_MARKS {
-        {
-            this.command = new EditMarksCommand();
-        }
-    },
-    TO_SPECIALTIES_PAGE {
-        {
-            this.command = new ToSpecialtiesPageCommand();
-        }
-    },
-    DELETE_FACULTY {
-        {
-            this.command = new DeleteFacultyCommand();
-        }
-    },
-    TO_PROFILE_PAGE {
-        {
-            this.command = new ToProfilePageCommand();
-        }
-    },
-    DELETE_PROFILE {
-        {
-            this.command = new DeleteProfileCommand();
-        }
-    },
-    ADD_FACULTY {
-        {
-            this.command = new AddFacultyCommand();
-        }
-    },
-    TO_EDIT_FACULTY_PAGE {
-        {
-            this.command = new ToEditFacultyPageCommand();
-        }
-    },
-    EDIT_FACULTY {
-        {
-            this.command = new EditFacultyCommand();
-        }
-    },
-    TO_ADMIN_FACULTIES_PAGE{
+    TO_ADMIN_FACULTIES_PAGE {
         {
             this.command = new ToAdminFacultiesPageCommand();
         }
     },
-    TO_ADMIN_SPECIALTIES_PAGE{
+    TO_ADMIN_SPECIALTIES_PAGE {
         {
             this.command = new ToAdminSpecialtiesPageCommand();
-        }
-    },
-    TO_EDIT_SPECIALTY_PAGE {
-        {
-            this.command = new ToEditSpecialtyPageCommand();
-        }
-    },
-    CHANGE_RECRUITMENT {
-        {
-            this.command = new ChangeRecruitmentCommand();
         }
     },
     TO_APPLICATIONS_PAGE {
@@ -118,13 +94,54 @@ public enum CommandType {
             this.command = new ToApplicationsPageCommand();
         }
     },
-    DELETE_SPECIALTY {
+    TO_EDIT_FACULTY_PAGE {
         {
-            this.command = new DeleteSpecialtyCommand();
+            this.command = new ToEditFacultyPageCommand();
+        }
+    },
+    TO_EDIT_PROFILE_PAGE {
+        {
+            this.command = new ToEditProfilePageCommand();
+        }
+    },
+    TO_EDIT_SPECIALTY_PAGE {
+        {
+            this.command = new ToEditSpecialtyPageCommand();
+        }
+    },
+    TO_FACULTIES_PAGE {
+        {
+            this.command = new ToFacultiesPageCommand();
+        }
+    },
+    TO_LOGIN_PAGE {
+        {
+            this.command = new ToLoginPageCommand();
+        }
+    },
+    TO_MAIN_PAGE {
+        {
+            this.command = new ToMainPageCommand();
+        }
+    },
+    TO_PROFILE_PAGE {
+        {
+            this.command = new ToProfilePageCommand();
+        }
+    },
+    TO_REGISTER_PAGE {
+        {
+            this.command = new ToRegisterPageCommand();
+        }
+    },
+    TO_SPECIALTIES_PAGE {
+        {
+            this.command = new ToSpecialtiesPageCommand();
         }
     };
 
     Command command;
+
     public Command getCommand() {
         return command;
     }

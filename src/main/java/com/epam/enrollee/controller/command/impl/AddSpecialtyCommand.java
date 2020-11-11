@@ -7,48 +7,51 @@ import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Specialty;
 import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
+import com.epam.enrollee.util.MapKeys;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ChangeRecruitmentCommand implements Command {
+public class AddSpecialtyCommand implements Command {
 
+    private static final String EMPTY_STRING = "";
     private static Logger logger = LogManager.getLogger();
 
     @Override
     public Router execute(HttpServletRequest request) {
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
-        HttpSession session;
+        Map<String, String> parameters = new HashMap<>();
+        HttpSession session = request.getSession();
         Router router;
-        session = request.getSession();
-        String specialtyId = request.getParameter(RequestParameters.SPECIALTY_ID);
-        String recruitment = request.getParameter(RequestParameters.RECRUITMENT);
         String facultyId = (String) session.getAttribute(RequestParameters.FACULTY_ID);
-        try {
-            if (!specialtyService.checkApplications(specialtyId)) {
-                if (specialtyService.changeSpecialtyRecruitment(specialtyId, recruitment)) {
+        parameters.put(MapKeys.SPECIALTY_NAME, request.getParameter(RequestParameters.SPECIALTY_NAME));
+        parameters.put(MapKeys.NUMBER_OF_SEATS, request.getParameter(RequestParameters.NUMBER_OF_SEATS));
+        parameters.put(MapKeys.FACULTY_ID, facultyId);
+        parameters = specialtyService.checkParameters(parameters);
+        if (parameters.containsValue(EMPTY_STRING)) {
+            request.setAttribute(RequestParameters.PARAMETERS, parameters);
+            router = new Router(PagePath.EDIT_SPECIALTY);
+        } else {
+            try {
+                if (specialtyService.create(parameters)) {
                     List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty
-                            (String.valueOf(facultyId));
+                            (facultyId);
                     request.setAttribute(RequestParameters.SPECIALTIES, specialties);
                     router = new Router(PagePath.ADMIN_SPECIALTIES);
                 } else {
                     router = new Router(PagePath.ERROR_500);
-                    logger.log(Level.ERROR, "Impossible change recruitment");
+                    logger.log(Level.ERROR, "Impossible add specialty to db");
                 }
-            } else {
-                request.setAttribute(RequestParameters.HAS_APPLICATION, true);
-                List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty
-                        (facultyId);
-                request.setAttribute(RequestParameters.SPECIALTIES, specialties);
-                router = new Router(PagePath.ADMIN_SPECIALTIES);
+            } catch (ServiceException e) {
+                router = new Router(PagePath.ERROR_500);
+                logger.log(Level.ERROR, "Application error: ", e);
             }
-        } catch (ServiceException e) {
-            router = new Router(PagePath.ERROR_500);
-            logger.log(Level.ERROR, "Application error: ", e);
         }
         return router;
     }

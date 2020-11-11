@@ -66,7 +66,6 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
         }
     }
 
-    @Override
     public List<Subject> findAll() throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_SUBJECTS)) {

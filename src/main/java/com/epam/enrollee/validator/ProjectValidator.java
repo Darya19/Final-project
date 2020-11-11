@@ -16,9 +16,9 @@ public class ProjectValidator {
     private static final String PASSWORD_PATTERN =
             "[a-zA-Z0-9@#$%!]{8,40}";
     private static final String STRING_PARAMETER_PATTERN =
-            "([a-zA-ZА-Яа-я]{2,40})";
+            "([a-zA-ZА-Яа-я\\s]{2,40})";
     private static final String INT_PARAMETER_PATTERN =
-            "[0-9]";
+            "[0-9]{1,6}";
     private final String PASSPORT_PATTERN =
             "(^[A-Z]{2}[0-9]{7}$)";
     private static final String PERSONAL_NUMBER_PATTERN =

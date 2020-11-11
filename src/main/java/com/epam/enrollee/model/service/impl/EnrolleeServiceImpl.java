@@ -165,7 +165,6 @@ public class EnrolleeServiceImpl {
         }
     }
 
-    //login register
     public Optional<Passport> findEnrolleePassport(int enrolleeId) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
         try {
@@ -177,7 +176,6 @@ public class EnrolleeServiceImpl {
         }
     }
 
-    //update per
     public Optional<Enrollee> updateEnrolleeNameInformation(Enrollee enrollee, Map<String, String> parameters)
             throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
@@ -191,7 +189,6 @@ public class EnrolleeServiceImpl {
         }
     }
 
-    //update per
     public Optional<Passport> updateEnrolleePassportInformation(Passport passport, Map<String, String> parameters)
             throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
@@ -204,7 +201,6 @@ public class EnrolleeServiceImpl {
         }
     }
 
-    //update sp
     public Optional<Enrollee> updateEnrolleeSpecialty(Enrollee enrollee, String specialtyId)
             throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();

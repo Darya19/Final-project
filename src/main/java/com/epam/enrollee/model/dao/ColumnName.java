@@ -1,6 +1,7 @@
 package com.epam.enrollee.model.dao;
 
 public class ColumnName {
+
     /* enrollee table */
     public static final String ENROLLE_ID = "enrollee_id";
     public static final String EMAIL = "email";

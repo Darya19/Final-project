@@ -30,16 +30,15 @@ public class EditPersonalInformationCommand implements Command {
         EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session = request.getSession();
-        Router router = null;
+        Router router;
         Passport passport;
         Enrollee enrollee;
-        try {
             parameters.put(MapKeys.FIRST_NAME, request.getParameter(RequestParameters.FIRST_NAME));
             parameters.put(MapKeys.LAST_NAME, request.getParameter(RequestParameters.LAST_NAME));
             parameters.put(MapKeys.MIDDLE_NAME, request.getParameter(RequestParameters.MIDDLE_NAME));
-            parameters.put(MapKeys.PASSPORT_SERIES_AND_NUMBER, request.getParameter
-                    (RequestParameters.PASSPORT_SERIES_AND_NUMBER));
+            parameters.put(MapKeys.PASSPORT_SERIES_AND_NUMBER, request.getParameter(RequestParameters.PASSPORT_SERIES_AND_NUMBER));
             parameters.put(MapKeys.PERSONAL_NUMBER, request.getParameter(RequestParameters.PERSONAL_NUMBER));
+           try {
             Map<String, String> checkedParameters = enrolleeService.checkParameters(parameters);
             if (checkedParameters.containsValue(EMPTY_STRING)) {
                 request.setAttribute(RequestParameters.PARAMETERS, checkedParameters);
@@ -48,10 +47,8 @@ public class EditPersonalInformationCommand implements Command {
             } else {
                 enrollee = (Enrollee) session.getAttribute(RequestParameters.ENROLLEE);
                 passport = (Passport) session.getAttribute(RequestParameters.PASSPORT);
-                Optional<Enrollee> optionalEnrollee = enrolleeService.updateEnrolleeNameInformation
-                        (enrollee, parameters);
-                Optional<Passport> optionalPassport = enrolleeService.updateEnrolleePassportInformation
-                        (passport, parameters);
+                Optional<Enrollee> optionalEnrollee = enrolleeService.updateEnrolleeNameInformation(enrollee, parameters);
+                Optional<Passport> optionalPassport = enrolleeService.updateEnrolleePassportInformation(passport, parameters);
                 if (optionalEnrollee.isPresent() && optionalPassport.isPresent()) {
                     session.removeAttribute(RequestParameters.ENROLLEE);
                     session.removeAttribute(RequestParameters.PASSPORT);
@@ -60,8 +57,7 @@ public class EditPersonalInformationCommand implements Command {
                     router = new Router(PagePath.PROFILE);
                 } else {
                     router = new Router(PagePath.ERROR_500);
-                    logger.log(Level.ERROR, "Impossible add updated enrollee personal " +
-                            "information in db");
+                    logger.log(Level.ERROR, "Impossible add updated enrollee personal information in db");
                 }
             }
         } catch (ServiceException e) {

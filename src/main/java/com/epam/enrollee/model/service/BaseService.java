@@ -14,7 +14,5 @@ public interface BaseService<T> {
 
     Optional<T> find(String value) throws ServiceException;
 
-    List<T> findAll() throws ServiceException;
-
     boolean update(int value, Map<String, String> parameters) throws ServiceException;
 }

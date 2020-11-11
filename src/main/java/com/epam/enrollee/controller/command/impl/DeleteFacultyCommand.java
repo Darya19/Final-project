@@ -1,9 +1,9 @@
 package com.epam.enrollee.controller.command.impl;
 
-import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
 import com.epam.enrollee.model.service.impl.FacultyServiceImpl;
@@ -21,25 +21,27 @@ public class DeleteFacultyCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         FacultyServiceImpl facultyService = new FacultyServiceImpl();
-        Router router = null;
-        String stringFacultyId = request.getParameter(RequestParameters.FACULTY_ID);
-        int facultyId = Integer.parseInt(stringFacultyId);
+        Router router;
+        String facultyId = request.getParameter(RequestParameters.FACULTY_ID);
         try {
-            if(facultyService.checkFacultyAplications(facultyId)){
+            if (facultyService.checkApplications(facultyId)) {
                 request.setAttribute(RequestParameters.HAS_APPLICATION, true);
-                List<Faculty> faculties = facultyService.findAll();
+                List<Faculty> faculties = facultyService.findAllActiveFaculties();
                 request.setAttribute(RequestParameters.FACULTIES, faculties);
                 router = new Router(PagePath.ADMIN_FACULTIES);
             } else {
-                if (facultyService.remove(facultyId)) {
-                    List<Faculty> faculties = facultyService.findAll();
+                if (facultyService.removeFacultyAndItsSpecialties(facultyId)) {
+                    List<Faculty> faculties = facultyService.findAllActiveFaculties();
                     request.setAttribute(RequestParameters.FACULTIES, faculties);
                     router = new Router(PagePath.ADMIN_FACULTIES);
+                }else {
+                    router = new Router(PagePath.ERROR_500);
+                    logger.log(Level.ERROR, "Impossible delete specialty ");
                 }
             }
         } catch (ServiceException e) {
             router = new Router(PagePath.ERROR_500);
-            logger.log(Level.ERROR, "application error: ", e);
+            logger.log(Level.ERROR, "Application error: ", e);
         }
         return router;
     }

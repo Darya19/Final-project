@@ -10,14 +10,6 @@ import java.util.Optional;
 
 public interface BaseDao<T> {
 
-    boolean add(Map<String, Object> parameters) throws DaoException;
-
-    boolean remove(Map<String, Object> parameters) throws DaoException;
-
-    Optional<T> findById(int parameter) throws DaoException;
-
-    List<T> findAll() throws DaoException;
-
     default void closeStatement(Statement statement) throws DaoException {
         try {
             if (statement != null) {

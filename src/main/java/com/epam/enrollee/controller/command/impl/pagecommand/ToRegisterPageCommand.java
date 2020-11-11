@@ -1,4 +1,4 @@
-package com.epam.enrollee.controller.command.impl;
+package com.epam.enrollee.controller.command.impl.pagecommand;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
@@ -17,12 +17,13 @@ public class ToRegisterPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        Router router = null;
+        Router router;
         try {
             if (putFacultiesSpecialtiesSubjectsInRequest(request)) {
                 router = new Router(PagePath.REGISTER);
             } else {
                 router = new Router(PagePath.ERROR_500);
+                logger.log(Level.ERROR, "Impossible find faculties, specialties,subjects");
             }
         } catch (ServiceException e) {
             router = new Router(PagePath.ERROR_500);

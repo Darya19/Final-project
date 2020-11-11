@@ -29,7 +29,7 @@ public class EditEnrolleeSpecialtyCommand implements Command {
         EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
         HttpSession session = request.getSession();
-        Router router = null;
+        Router router;
         Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameters.ENROLLEE);
         Optional<Enrollee> newEnrollee;
         String specialtyId = request.getParameter(RequestParameters.SPECIALTY_ID);
@@ -37,26 +37,27 @@ public class EditEnrolleeSpecialtyCommand implements Command {
             if (specialtyId.equals(EMPTY_STRING)) {
                 request.setAttribute(RequestParameters.EDIT_PART, EDIT_SPECIALTY);
                 int facultyId = enrollee.getChosenFacultyId();
-                List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty(facultyId);
+                List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty
+                        (String.valueOf(facultyId));
                 request.setAttribute(RequestParameters.SPECIALTIES, specialties);
                 router = new Router(PagePath.EDIT_PROFILE);
             } else {
                 newEnrollee = enrolleeService.updateEnrolleeSpecialty
                         (enrollee, specialtyId);
                 Optional<Specialty> optionalSpecialty = specialtyService
-                        .findSpecialtyById(Integer.parseInt(specialtyId));
+                        .findSpecialtyById(specialtyId);
                 if (newEnrollee.isPresent() && optionalSpecialty.isPresent()) {
                     session.removeAttribute(RequestParameters.SPECIALTY);
                     session.setAttribute(RequestParameters.SPECIALTY, optionalSpecialty.get());
                     router = new Router(PagePath.PROFILE);
                 } else {
                     router = new Router(PagePath.ERROR_500);
-                    logger.log(Level.ERROR, "Impossible add updated enrollee subject in db");
+                    logger.log(Level.ERROR, "Impossible add updated enrollee specialty in db");
                 }
             }
         } catch (ServiceException e) {
             router = new Router(PagePath.ERROR_500);
-            logger.log(Level.ERROR, "application error: ", e);
+            logger.log(Level.ERROR, "Application error: ", e);
         }
         return router;
     }

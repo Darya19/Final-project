@@ -37,7 +37,7 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
             "WHERE faculty_id=?";
     private static final String UPDATE_FACULTY_BY_ID = "UPDATE faculty SET faculty_name=?, " +
             "faculty_description=? WHERE faculty_id=?";
-    private static final String EADD_FACULTY =
+    private static final String ADD_FACULTY =
             "INSERT INTO faculty(faculty_name,faculty_description,faculty_status) VALUES (?,?,?)";
 
     public static FacultyDaoImpl getInstance() {
@@ -47,12 +47,11 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
         return instance;
     }
 
-    @Override
     public boolean add(Map<String, Object> parameters) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
-             PreparedStatement statement = connection.prepareStatement(EADD_FACULTY)) {
-           statement.setString(1,(String) parameters.get(MapKeys.FACULTY_NAME));
-            statement.setString(2,(String) parameters.get(MapKeys.FACULTY_DESCRIPTION));
+             PreparedStatement statement = connection.prepareStatement(ADD_FACULTY)) {
+            statement.setString(1, (String) parameters.get(MapKeys.FACULTY_NAME));
+            statement.setString(2, (String) parameters.get(MapKeys.FACULTY_DESCRIPTION));
             statement.setString(3, StatusType.ACTIVE.getStatus());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -60,12 +59,11 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
         }
     }
 
-    @Override
     public boolean remove(Map<String, Object> parameters) throws DaoException {
         return true;
     }
 
-    public boolean UpdateStatusById(int facultyId) throws DaoException {
+    public boolean updateStatusById(int facultyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_FACULTY_STATUS_BY_ID)) {
             statement.setString(1, StatusType.DELETED.getStatus());
@@ -76,21 +74,20 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
         }
     }
 
-    public boolean update(Faculty faculty) throws DaoException {
+    public boolean update(Map<String, Object> parameters) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_FACULTY_BY_ID)) {
-            statement.setString(1, faculty.getFacultyName());
-          statement.setString(2, faculty.getFacultyDescription());
-           statement.setInt(3, faculty.getFacultyId());
-           isUpdated = statement.executeUpdate() > 0;
-           return isUpdated;
+            statement.setString(1, (String) parameters.get(MapKeys.FACULTY_NAME));
+            statement.setString(2, (String) parameters.get(MapKeys.FACULTY_NAME));
+            statement.setInt(3, (int) parameters.get(MapKeys.FACULTY_ID));
+            isUpdated = statement.executeUpdate() > 0;
+            return isUpdated;
         } catch (SQLException e) {
             throw new DaoException("database issues", e);
         }
     }
 
-    @Override
     public Optional<Faculty> findById(int facultyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_FACULTY_BY_FACULTY_ID)) {
@@ -108,20 +105,18 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
         }
     }
 
-    //loginadmin
-    @Override
     public List<Faculty> findAll() throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ACTIVE_FACULTIES)) {
             statement.setString(1, StatusType.ACTIVE.getStatus());
             ResultSet resultSet = statement.executeQuery();
             List<Faculty> faculties = createFacultyListFromResultSet(resultSet);
-                return faculties;
+            return faculties;
         } catch (SQLException e) {
             throw new DaoException("database issues", e);
         }
     }
-//login rgister
+
     public Optional<Faculty> findFacultyByEnrolleeId(int enrolleeId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_FACULTY_BY_ENROLLEE_ID)) {
@@ -144,10 +139,10 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
             statement.setInt(1, facultyId);
             ResultSet resultSet = statement.executeQuery();
             List<Integer> foundEnrolleeId = new ArrayList<>();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 foundEnrolleeId.add(resultSet.getInt(ColumnName.ENROLLE_ID));
             }
-                return foundEnrolleeId;
+            return foundEnrolleeId;
         } catch (SQLException e) {
             throw new DaoException("database issues", e);
         }
@@ -160,9 +155,7 @@ public class FacultyDaoImpl implements BaseDao<Faculty> {
             faculty.setFacultyId(resultSet.getInt(ColumnName.FACULTY_ID));
             faculty.setFacultyName(resultSet.getString(ColumnName.FACULTY_NAME));
             faculty.setFacultyDescription(resultSet.getString(ColumnName.FACULTY_DESCRIPTION));
-            faculty.setFacultyStatus(StatusType.valueOf(resultSet
-                    .getString(ColumnName.FACULTY_STATUS)
-                    .toUpperCase()));
+            faculty.setFacultyStatus(StatusType.valueOf(resultSet.getString(ColumnName.FACULTY_STATUS).toUpperCase()));
             faculties.add(faculty);
         }
         return faculties;

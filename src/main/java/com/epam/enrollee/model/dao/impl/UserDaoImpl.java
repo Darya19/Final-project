@@ -47,7 +47,6 @@ public class UserDaoImpl implements BaseDao<User> {
         return instance;
     }
 
-    @Override
     public boolean add(Map<String, Object> parameters) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(CREATE_USER)) {
@@ -61,7 +60,6 @@ public class UserDaoImpl implements BaseDao<User> {
         }
     }
 
-    @Override
     public boolean remove(Map<String, Object> parameters) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(REMOVE_USER)) {
@@ -72,7 +70,6 @@ public class UserDaoImpl implements BaseDao<User> {
         }
     }
 
-    @Override
     public Optional<User> findById(int id) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
@@ -129,7 +126,7 @@ public class UserDaoImpl implements BaseDao<User> {
             throw new DaoException("database issues", e);
         }
     }
-//login
+
     public Optional<String> findPasswordByEmail(String email) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_PASSWORD_BY_EMAIL)) {
@@ -145,7 +142,6 @@ public class UserDaoImpl implements BaseDao<User> {
         }
     }
 
-    @Override
     public List<User> findAll() throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS)) {

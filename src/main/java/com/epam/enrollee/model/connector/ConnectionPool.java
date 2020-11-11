@@ -18,8 +18,8 @@ public enum ConnectionPool {
     INSTANCE;
 
     private static final int DEFAULT_POOL_SIZE = 4;
-    private BlockingQueue<ProxyConnection> freeConnections; //свободные соеденения
-    private BlockingQueue<ProxyConnection> givenAwayConnections; // отданные соеденнения
+    private BlockingQueue<ProxyConnection> freeConnections;
+    private BlockingQueue<ProxyConnection> givenAwayConnections;
 
     private static Logger logger = LogManager.getLogger();
 
@@ -37,10 +37,9 @@ public enum ConnectionPool {
                 freeConnections.offer(new ProxyConnection(connection));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("impossible create connection to db or register db driver", e);
+            throw new RuntimeException("Impossible create connection to db or register db driver", e);
         }
     }
-
 
     public ProxyConnection getConnection() {
         ProxyConnection connection = null;
@@ -48,7 +47,7 @@ public enum ConnectionPool {
             connection = freeConnections.take();
             givenAwayConnections.offer(connection);
         } catch (InterruptedException e) {
-            logger.log(Level.ERROR, "impossible provide connection");
+            logger.log(Level.ERROR, "Impossible provide connection");
         }
         return connection;
     }
@@ -58,10 +57,10 @@ public enum ConnectionPool {
             if (givenAwayConnections.remove(connection)) {
                 freeConnections.offer((ProxyConnection) connection);
             } else {
-                logger.log(Level.ERROR, "pool does not include given connection");
+                logger.log(Level.ERROR, "Pool does not include given connection");
             }
         } else {
-            logger.log(Level.ERROR, "given connection is not a proxy connection");
+            logger.log(Level.ERROR, "Given connection is not a proxy connection");
         }
     }
 
@@ -70,7 +69,7 @@ public enum ConnectionPool {
             try {
                 freeConnections.take().reallyClose();
             } catch (SQLException | InterruptedException e) {
-                logger.log(Level.ERROR, "impossible close connection", e);
+                logger.log(Level.ERROR, "Impossible close connection", e);
             }
         }
         deregisterDrivers();
@@ -82,8 +81,8 @@ public enum ConnectionPool {
             try {
                 DriverManager.deregisterDriver(drivers.nextElement());
             } catch (SQLException e) {
-                logger.log(Level.ERROR, "impossible deregister driver", e);
+                logger.log(Level.ERROR, "Impossible deregister driver", e);
             }
         }
-    }//TODO timer task поток для досоздания или удаления коннекшенов
+    }
 }

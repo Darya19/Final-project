@@ -13,6 +13,7 @@
     <section class="lean-block clean-testimonials dark">
         <div class="container">
             <div class="block-heading">
+                <p></p>
                 <h2 class="text-center"><fmt:message key="adminspecialties.title"/></h2>
             </div>
             <c:if test="${has_application}">
@@ -20,7 +21,8 @@
                     <label class="alert-danger"> <fmt:message key="adminspecialties.deletederror"/></label>
                 </small>
             </c:if>
-            <div class="col-md-10">
+            <p></p>
+            <div class="col-md-4 text-right">
                 <button class="btn btn-outline-primary btn-sm"
                         type="button"
                         onclick='location.href = "projectServlet?command=to_edit_specialty_page"'>
@@ -44,7 +46,7 @@
                         <td>${specialty.recruitment}
                             <button class="btn btn-outline-primary btn-sm"
                                     type="button"
-                                    onclick='location.href = "projectServlet?command=change_recruitment&specialty_id=${specialty.specialtyId}"'>
+                                    onclick='location.href = "projectServlet?command=change_recruitment&specialty_id=${specialty.specialtyId}&recruitment=${specialty.recruitment}"'>
                                 <fmt:message key="adminspecialties.recrutmentbutton"/>
                             </button>
                         </td>
@@ -65,19 +67,26 @@
                                     <fmt:message key="adminspecialties.editbutton"/></button>
                             </div>
                         </td>
+                        </c:if>
                         <td>
                             <div>
                                 <button class="btn btn-outline-primary btn-sm"
                                         type="button"
-                                        onclick='location.href = "projectServlet?command=delete_specialty&specialty_id=${specialty_id}"'>
+                                        onclick='location.href = "projectServlet?command=delete_specialty&specialty_id=${specialty.specialtyId}"'>
                                     <fmt:message key="adminspecialties.deletebutton"/></button>
                             </div>
                         </td>
-                        </c:if>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
+            <p></p>
+                <div class="col-md-4 text-right">
+                    <button class="btn btn-primary btn-sm "
+                            type="button"
+                            onclick='location.href = "projectServlet?command=to_admin_faculties_page"'>
+                        <fmt:message key="adminspecialties.backbutton"/>
+                    </button></div>
         </div>
     </section>
 </main>

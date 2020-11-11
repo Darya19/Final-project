@@ -6,6 +6,7 @@ public class Router {
         FORWARD,
         REDIRECT;
     }
+
     private Type type;
     private String page;
 

@@ -26,36 +26,29 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
 
     private static Logger logger = LogManager.getLogger();
 
-    private static final String FIND_ENROLLEE_BY_EMAIL =
-            "SELECT enrollee_id,email,role,enrollee_status,enrollee_first_name,enrollee_last_name," +
-                    "enrollee_middle_name, faculty_id_fk as faculty_id,specialty_id_fk as " +
-                    "specialty_id, application_status FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id " +
-                    "= enrollee_faculty.enrollee_id_fk JOIN enrollee_specialty on enrollee.enrollee_id " +
-                    "= enrollee_specialty.enrollee_id_fk WHERE email=?";
-    private static final String ADD_ENROLLEE =
-            "INSERT INTO enrollee (email, password, enrollee_status, role, enrollee_first_name, " +
-                    "enrollee_last_name, enrollee_middle_name, passport_id_fk, application_status) " +
-                    "VALUES (?,?,?,?,?,?,?,?,?)";
-    private static final String ADD_PASSPORT =
-            "INSERT INTO passport (personal_number, passport_series_and_number) VALUES (?,?)";
-    private static final String ADD_MARKS =
-            "INSERT INTO mark (enrollee_id_fk, subject_id_fk, mark_value) " +
-                    "VALUES (?,?,?)";
-    private static final String ADD_ENROLLEE_IN_SPECIALTY =
-            "INSERT INTO enrollee_specialty (enrollee_id_fk, specialty_id_fk) " +
-                    "VALUES (?,?)";
-    private static final String ADD_ENROLLEE_IN_FACULTY =
-            "INSERT INTO enrollee_faculty (enrollee_id_fk,faculty_id_fk) " +
-                    "VALUES (?,?)";
-    private static final String FIND_PASSPORT_BY_ENROLLE_ID =
-            "SELECT passport_id, personal_number, passport_series_and_number FROM passport " +
-                    "JOIN enrollee e on passport.passport_id = e.passport_id_fk WHERE enrollee_id=?";
-    private static final String UPDATE_ENROLLEE =
-            "UPDATE enrollee SET enrollee_first_name=?, enrollee_last_name=?, enrollee_last_name=? where enrollee_id=?";
-    private static final String UPDATE_PASSPORT =
-            "UPDATE passport SET passport_series_and_number=?, personal_number=? where passport_id=?";
-    private static final String UPDATE_ENROLLEE_SPECIALTY =
-            "UPDATE enrollee_specialty SET specialty_id_fk=? where enrollee_id_fk=?";
+    private static final String FIND_ENROLLEE_BY_EMAIL = "SELECT enrollee_id,email,role,enrollee_status," +
+            "enrollee_first_name, enrollee_last_name, enrollee_middle_name, faculty_id_fk as faculty_id,specialty_id_fk " +
+            "as specialty_id, application_status FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id = " +
+            "enrollee_faculty.enrollee_id_fk JOIN enrollee_specialty on enrollee.enrollee_id = enrollee_specialty.enrollee_id_fk" +
+            " WHERE email=?";
+    private static final String ADD_ENROLLEE = "INSERT INTO enrollee (email, password, enrollee_status, role, " +
+            "enrollee_first_name, enrollee_last_name, enrollee_middle_name, passport_id_fk, application_status) " +
+            "VALUES (?,?,?,?,?,?,?,?,?)";
+    private static final String ADD_PASSPORT = "INSERT INTO passport (personal_number, passport_series_and_number) " +
+            "VALUES (?,?)";
+    private static final String ADD_MARKS = "INSERT INTO mark (enrollee_id_fk, subject_id_fk, mark_value) VALUES (?,?,?)";
+    private static final String ADD_ENROLLEE_IN_SPECIALTY = "INSERT INTO enrollee_specialty (enrollee_id_fk, " +
+            "specialty_id_fk) VALUES (?,?)";
+    private static final String ADD_ENROLLEE_IN_FACULTY = "INSERT INTO enrollee_faculty (enrollee_id_fk,faculty_id_fk) " +
+            "VALUES (?,?)";
+    private static final String FIND_PASSPORT_BY_ENROLLE_ID = "SELECT passport_id, personal_number, passport_series_and_number " +
+            "FROM passport JOIN enrollee e on passport.passport_id = e.passport_id_fk WHERE enrollee_id=?";
+    private static final String UPDATE_ENROLLEE = "UPDATE enrollee SET enrollee_first_name=?, enrollee_last_name=?, " +
+            "enrollee_middle_name=? where enrollee_id=?";
+    private static final String UPDATE_PASSPORT = "UPDATE passport SET passport_series_and_number=?, personal_number=? " +
+            "WHERE passport_id=?";
+    private static final String UPDATE_ENROLLEE_SPECIALTY = "UPDATE enrollee_specialty SET specialty_id_fk=? WHERE " +
+            "enrollee_id_fk=?";
     private static final String REMOVE_ENROLLEE = "DELETE FROM enrollee WHERE enrollee_id=?";
     private static final String REMOVE_PASSPORT = "DELETE FROM passport WHERE passport_id=?";
     private static final String REMOVE_MARKS = "DELETE FROM mark WHERE enrollee_id_fk=?";
@@ -69,8 +62,6 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         return instance;
     }
 
-    //register
-    @Override
     public boolean add(Map<String, Object> objectMap) throws DaoException {
         boolean isEnrolleeAdded = false;
         boolean isPassportAdded;
@@ -141,9 +132,9 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             try {
                 connection.rollback();
             } catch (SQLException ex) {
-                logger.log(Level.ERROR, "impossible rollback committing", ex);
+                logger.log(Level.ERROR, "Impossible rollback committing", ex);
             }
-            throw new DaoException("impossible add new enrollee", e);
+            throw new DaoException("Impossible add new enrollee", e);
         } finally {
             closeStatement(enrolleeStatement);
             closeStatement(passportStatement);
@@ -154,13 +145,12 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
                 connection.setAutoCommit(true);
                 connection.close();
             } catch (SQLException throwables) {
-                logger.log(Level.ERROR, "impossible return connection to pool");
+                logger.log(Level.ERROR, "Impossible return connection to pool", throwables);
             }
         }
         return isEnrolleeAdded;
     }
 
-    @Override
     public boolean remove(Map<String, Object> parameters) throws DaoException {
         boolean isFacultyRemoved = false;
         boolean isSpecialtyRemoved = false;
@@ -200,9 +190,9 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             try {
                 connection.rollback();
             } catch (SQLException ex) {
-                logger.log(Level.ERROR, "impossible rollback committing", ex);
+                logger.log(Level.ERROR, "Impossible rollback committing", ex);
             }
-            throw new DaoException("impossible remove new enrollee", e);
+            throw new DaoException("Impossible remove new enrollee", e);
         } finally {
             closeStatement(enrolleeStatement);
             closeStatement(passportStatement);
@@ -213,13 +203,12 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
                 connection.setAutoCommit(true);
                 connection.close();
             } catch (SQLException throwables) {
-                logger.log(Level.ERROR, "impossible return connection to pool");
+                logger.log(Level.ERROR, "Impossible return connection to pool");
             }
         }
         return isEnrolleeRemoved;
     }
 
-    //update per
     public boolean updateEnrollee(Enrollee enrollee) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -231,11 +220,11 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             isUpdated = statement.executeUpdate() > 0;
             return isUpdated;
         } catch (SQLException e) {
-            throw new DaoException("database issues", e);
+            logger.log(Level.ERROR, "Impossible update enrollee", e);
+            throw new DaoException("Database issues while updating enrollee", e);
         }
     }
 
-    //update pas
     public boolean updatePassport(Passport passport) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -246,11 +235,11 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             isUpdated = statement.executeUpdate() > 0;
             return isUpdated;
         } catch (SQLException e) {
-            throw new DaoException("database issues", e);
+            logger.log(Level.ERROR, "Impossible update passport", e);
+            throw new DaoException("Database issues while updating passport", e);
         }
     }
 
-    //update sp
     public boolean updateEnrolleeSpecialty(Enrollee enrollee) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -260,21 +249,19 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             isUpdated = statement.executeUpdate() > 0;
             return isUpdated;
         } catch (SQLException e) {
-            throw new DaoException("database issues", e);
+            logger.log(Level.ERROR, "Impossible update enrollee specialty", e);
+            throw new DaoException("Database issues while updating enrollee specialty", e);
         }
     }
 
-    @Override
     public Optional<Enrollee> findById(int parameter) throws DaoException {
         return Optional.empty();
     }
 
-    @Override
     public List<Enrollee> findAll() throws DaoException {
         return null;
     }
 
-    //login
     public Optional<Enrollee> findEnrolleeByEmail(String email) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ENROLLEE_BY_EMAIL)) {
@@ -288,24 +275,21 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
                 return Optional.empty();
             }
         } catch (SQLException e) {
-            throw new DaoException("database issues", e);
+            logger.log(Level.ERROR, "Impossible find enrollee by email", e);
+            throw new DaoException("Database issues while finding enrollee by email", e);
         }
     }
 
-    //login
     public Optional<Passport> findPassportByEnrolleeId(int enrolleeId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_PASSPORT_BY_ENROLLE_ID)) {
             statement.setInt(1, enrolleeId);
             ResultSet resultSet = statement.executeQuery();
             Passport passport = createPassportFromResultSet(resultSet);
-            if (passport != null) {
-                return Optional.of(passport);
-            } else {
-                return Optional.empty();
-            }
+            return Optional.of(passport);
         } catch (SQLException e) {
-            throw new DaoException("database issues", e);
+            logger.log(Level.ERROR, "Impossible find passport", e);
+            throw new DaoException("Database issues while finding passport", e);
         }
     }
 
@@ -316,10 +300,9 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             enrollee.setUserId(resultSet.getInt(ColumnName.ENROLLE_ID));
             enrollee.setEmail(resultSet.getString(ColumnName.EMAIL));
             enrollee.setRole(RoleType.valueOf(resultSet.getString(ColumnName.ROLE).toUpperCase()));
-            enrollee.setStatus(StatusType.valueOf(resultSet.getString(ColumnName.ENROLLEE_STATUS)
+            enrollee.setStatus(StatusType.valueOf(resultSet.getString(ColumnName.ENROLLEE_STATUS).toUpperCase()));
+            enrollee.setApplicationStatus(ApplicationStatus.valueOf(resultSet.getString(ColumnName.APPLICATION_STATUS)
                     .toUpperCase()));
-            enrollee.setApplicationStatus(ApplicationStatus
-                    .valueOf(resultSet.getString(ColumnName.APPLICATION_STATUS).toUpperCase()));
             enrollee.setFirstName(resultSet.getString(ColumnName.ENROLLEE_FIRST_NAME));
             enrollee.setLastName(resultSet.getString(ColumnName.ENROLLEE_LAST_NAME));
             enrollee.setMiddleName(resultSet.getString(ColumnName.ENROLLEE_MIDDLE_NAME));

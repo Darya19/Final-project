@@ -7,6 +7,7 @@ import com.epam.enrollee.model.dao.ColumnName;
 import com.epam.enrollee.model.entity.Specialty;
 import com.epam.enrollee.model.type.RecruitmentType;
 import com.epam.enrollee.model.type.StatusType;
+import com.epam.enrollee.util.MapKeys;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,6 +42,17 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
     private static final String FIND_ALL_ACTIVE_SPECIALTIES_BY_FACULTY_ID =
             "SELECT specialty_id, specialty_name, recruitment, number_of_seats, specialty_status" +
                     " FROM specialty WHERE specialty_status=? and faculty_id_fk=?";
+    private static final String UPDATE_RECRUITMENT_BY_SPECIALTY_ID =
+            "UPDATE specialty SET recruitment=? WHERE specialty_id=?";
+    private static final String FIND_ENROLLE_ID_BY_SPECIALTY_ID =
+            "SELECT enrollee_id_fk as enrollee_id FROM enrollee_specialty WHERE specialty_id_fk=?";
+    private static final String ADD_SPECIALTY =
+            "INSERT INTO specialty(specialty_name, faculty_id_fk, recruitment, number_of_seats, " +
+                    "specialty_status) VALUES (?,?,?,?,?)";
+    private static final String UPDATE_SPECIALTY_STATUS_BY_ID = "UPDATE specialty SET specialty_status=?" +
+            "WHERE specialty_id=?";
+    private static final String UPDATE_SPECIALTY_BY_ID = "UPDATE specialty SET specialty_name=?, " +
+            "number_of_seats=? WHERE specialty_id=?";
 
     public static SpecialtyDaoImpl getInstance() {
         if (instance == null) {
@@ -49,21 +61,38 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
         return instance;
     }
 
-    @Override
     public boolean add(Map<String, Object> parameters) throws DaoException {
-        return true;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(ADD_SPECIALTY)) {
+            statement.setString(1,(String) parameters.get(MapKeys.SPECIALTY_NAME));
+            statement.setInt(2, (int) parameters.get(MapKeys.FACULTY_ID));
+            statement.setString(3,RecruitmentType.CLOSED.getType());
+            statement.setInt(4, (int) parameters.get(MapKeys.NUMBER_OF_SEATS));
+            statement.setString(5, StatusType.ACTIVE.getStatus());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
     }
 
-    @Override
     public boolean remove(Map<String, Object> parameters) throws DaoException {
         return true;
     }
 
-    public boolean update(Specialty specialty) throws DaoException {
-        return false;
+    public boolean update(Map<String, Object> parameters) throws DaoException {
+        boolean isUpdated;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_SPECIALTY_BY_ID)) {
+            statement.setString(1, (String) parameters.get(MapKeys.SPECIALTY_NAME));
+            statement.setInt(2, (int) parameters.get(MapKeys.NUMBER_OF_SEATS));
+            statement.setInt(3, (int) parameters.get(MapKeys.SPECIALTY_ID));
+            isUpdated = statement.executeUpdate() > 0;
+            return isUpdated;
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
     }
-//login register
-    @Override
+
     public Optional<Specialty> findById(int specialtyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_SPECIALTY_BY_SPECIALTY_ID)) {
@@ -81,8 +110,6 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
         }
     }
 
-    //check
-    @Override
     public List<Specialty> findAll() throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_SPECIALTIES)) {
@@ -94,7 +121,7 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
             throw new DaoException("database issues", e);
         }
     }
-//register
+
     public Optional<Integer> findFacultyIdBySpecialtyId(int specialtyId) throws DaoException {
         int foundFacultyId = 0;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -111,7 +138,7 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
             throw new DaoException("database issues", e);
         }
     }
-//update sp
+
     public List<Specialty> findOpenSpecialtiesListByFacultyId(int facultyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_OPEN_SPECIALTIES_BY_FACULTY_ID)) {
@@ -125,7 +152,7 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
         }
     }
 
-    public List<Specialty> findAllSpecialtiesListByFacultyId(int facultyId) throws DaoException {
+    public List<Specialty> findActiveSpecialtiesListByFacultyId(int facultyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement
                      (FIND_ALL_ACTIVE_SPECIALTIES_BY_FACULTY_ID)) {
@@ -155,6 +182,36 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
         }
     }
 
+    public boolean updateRecruitmentBySpecialtyId(int specialtyId, String recruitment) throws DaoException {
+        boolean isUpdated;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement
+                     (UPDATE_RECRUITMENT_BY_SPECIALTY_ID)) {
+            statement.setString(1, recruitment);
+            statement.setInt(2, specialtyId);
+            isUpdated = statement.executeUpdate() > 0;
+            return isUpdated;
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
+    }
+
+    public List<Integer> findEnrolleeIdBySpecialtyId(int specialtyId) throws DaoException {
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+                PreparedStatement statement = connection.prepareStatement(FIND_ENROLLE_ID_BY_SPECIALTY_ID)) {
+            statement.setInt(1, specialtyId);
+            ResultSet resultSet = statement.executeQuery();
+            List<Integer> foundEnrolleeId = new ArrayList<>();
+            while (resultSet.next()) {
+                foundEnrolleeId.add(resultSet.getInt(ColumnName.ENROLLE_ID));
+            }
+            return foundEnrolleeId;
+        } catch (
+                SQLException e) {
+            throw new DaoException("database issues", e);
+        }
+
+    }
 
     private List<Specialty> createSpecialtyListFromResultSet(ResultSet resultSet) throws SQLException {
         List<Specialty> specialties = new ArrayList<>();
@@ -170,5 +227,16 @@ public class SpecialtyDaoImpl implements BaseDao<Specialty> {
             specialties.add(specialty);
         }
         return specialties;
+    }
+
+    public boolean updateStatusById(int specialtyId) throws DaoException {
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_SPECIALTY_STATUS_BY_ID)) {
+            statement.setString(1, StatusType.DELETED.getStatus());
+            statement.setInt(2, specialtyId);
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DaoException("database issues", e);
+        }
     }
 }

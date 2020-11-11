@@ -28,7 +28,7 @@ public class RegisterCommand implements Command {
         Map<String, String> parameters = new HashMap<>();
         HttpSession session;
         Router router;
-        int enrolleeId = 0;
+        int enrolleeId;
         boolean isRegister;
         parameters.put(MapKeys.FIRST_NAME, request.getParameter(RequestParameters.FIRST_NAME));
         parameters.put(MapKeys.LAST_NAME, request.getParameter(RequestParameters.LAST_NAME));
@@ -47,8 +47,7 @@ public class RegisterCommand implements Command {
         parameters.put(MapKeys.SUBJECT_ID_4, request.getParameter(RequestParameters.SUBJECT_ID_4));
         parameters.put(MapKeys.MARK_4, request.getParameter(RequestParameters.MARK_4));
         parameters.put(MapKeys.PASSWORD, request.getParameter(RequestParameters.PASSWORD));
-        parameters.put(MapKeys.REPEATED_PASSWORD, request.getParameter
-                (RequestParameters.REPEATED_PASSWORD));
+        parameters.put(MapKeys.REPEATED_PASSWORD, request.getParameter(RequestParameters.REPEATED_PASSWORD));
         parameters.put(MapKeys.EMAIL, request.getParameter(RequestParameters.EMAIL));
         try {
             parameters = enrolleeService.checkParameters(parameters);
@@ -58,6 +57,7 @@ public class RegisterCommand implements Command {
                     router = new Router(PagePath.REGISTER);
                 } else {
                     router = new Router(PagePath.ERROR_500);
+                    logger.log(Level.ERROR, "Impossible create enrollee or register");
                 }
             } else {
                 session = request.getSession();
@@ -72,11 +72,13 @@ public class RegisterCommand implements Command {
                             router = new Router(PagePath.PROFILE);
                         } else {
                             router = new Router(PagePath.ERROR_500);
-                            logger.log(Level.ERROR, "Impossible add updated enrollee subject in db");
+                            logger.log(Level.ERROR, "Impossible create faculty or specialty for enrollee");
                         }
                     } else router = new Router(PagePath.ERROR_500);
+                    logger.log(Level.ERROR, "Incorrect enrollee id");
                 } else {
                     router = new Router(PagePath.ERROR_500);
+                    logger.log(Level.ERROR, "Impossible add enroollee in db");
                 }
             }
         } catch (ServiceException e) {

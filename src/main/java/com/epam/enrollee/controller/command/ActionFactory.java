@@ -17,11 +17,9 @@ public class ActionFactory {
                 current = commandType.getCommand();
             } catch (IllegalArgumentException e) {
                 current = new EmptyCommand();
-                request.setAttribute("wrongAction", WRONG_COMMAND);
             }
         } else {
             current = new EmptyCommand();
-            //TODO log
         }
         return current;
     }

@@ -36,9 +36,9 @@ public class AddFacultyCommand implements Command {
         } else {
             try {
                 if (facultyService.create(parameters)) {
-                    List<Faculty> faculties = facultyService.findAll();
+                    List<Faculty> faculties = facultyService.findAllActiveFaculties();
                     request.setAttribute(RequestParameters.FACULTIES, faculties);
-                    router = new Router(PagePath.FACULTIES);
+                    router = new Router(PagePath.ADMIN_FACULTIES);
                 } else {
                     router = new Router(PagePath.ERROR_500);
                     logger.log(Level.ERROR, "Impossible add faculty to db");

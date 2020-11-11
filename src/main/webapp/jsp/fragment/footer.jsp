@@ -1,4 +1,5 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <fmt:setLocale value="en"/>
 <fmt:setBundle basename="prop.pagecontent"/>
@@ -14,21 +15,28 @@
                 <ul>
                     <li><a href="projectServlet?command=to_main_page"><fmt:message key="footer.home"/></a></li>
                     <p></p>
-                    <li><a href="projectServlet?command=to_register_page"><fmt:message key="footer.signup"/></a></li>
+                    <c:if test="${role eq 'GUEST'}">
+                        <li><a href="projectServlet?command=to_register_page"><fmt:message key="footer.signup"/></a>
+                        </li>
+                    </c:if>
                 </ul>
             </div>
             <div class="col-sm-4">
                 <h5><fmt:message key="footer.resources"/></h5>
                 <ul>
-                    <li> <a href="projectServlet?command=to_faculties_page"><fmt:message key="footer.faculties"/></a></li>
+                    <li><a href="projectServlet?command=to_faculties_page"><fmt:message key="footer.faculties"/></a>
+                    </li>
                     <p></p>
-                    <li> <a href="projectServlet?command=to_profile_page"><fmt:message key="footer.profile"/></a></li>
+                    <c:if test="${role eq 'USER'}">
+                        <li><a href="projectServlet?command=to_profile_page"><fmt:message key="footer.profile"/></a>
+                        </li>
+                    </c:if>
                 </ul>
             </div>
             <div class="col-sm-4">
                 <h5><fmt:message key="footer.contact"/></h5>
                 <ul>
-                <li><a><fmt:message key="footer.address"/></a></li>
+                    <li><a><fmt:message key="footer.address"/></a></li>
                 </ul>
                 <ul>
                     <li><a><fmt:message key="footer.phonenumber"/></a></li>

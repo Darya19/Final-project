@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.epam.enrollee.controller.command.PagePath.ERROR_500;
-import static com.epam.enrollee.controller.command.PagePath.FACULTIES;
 
 
 public class LoginCommand implements Command {
@@ -34,16 +33,15 @@ public class LoginCommand implements Command {
     public Router execute(HttpServletRequest request) {
         UserServiceImpl userService = new UserServiceImpl();
         FacultyServiceImpl facultyService = new FacultyServiceImpl();
-        HttpSession session;
+        HttpSession session = session = request.getSession();
         Map<String, String> parameters = new HashMap<>();
-        Router router = null;
+        Router router;
         String email = request.getParameter(RequestParameters.EMAIL);
         String password = request.getParameter(RequestParameters.PASSWORD);
         try {
             if (userService.checkEmailAndPassword(email, password)) {
                 Optional<User> optionalUser = userService.findUserByEmail(email);
                 if (optionalUser.isPresent()) {
-                    session = request.getSession();
                     if (optionalUser.get().getRole().equals(RoleType.USER)) {
                         int enrolleeId = putInSessionEnrolleeAndPassportAndMarks(email, session);
                         boolean isAdded = putEnrolleeFacultyAndSpecialtyInSession(enrolleeId, session);
@@ -58,7 +56,7 @@ public class LoginCommand implements Command {
                     } else {
                         User user = optionalUser.get();
                         session.setAttribute(RequestParameters.ENROLLEE, user);
-                        List<Faculty> faculties = facultyService.findAll();
+                        List<Faculty> faculties = facultyService.findAllActiveFaculties();
                         request.setAttribute(RequestParameters.FACULTIES, faculties);
                         session.removeAttribute(RequestParameters.ROLE);
                         session.setAttribute(RequestParameters.ROLE, RoleType.ADMIN);
@@ -66,7 +64,7 @@ public class LoginCommand implements Command {
                     }
                 }else {
                     router = new Router(PagePath.ERROR_500);
-                    logger.log(Level.ERROR, "Impossible add find enrollee faculty or specialty in db");
+                    logger.log(Level.ERROR, "Impossible find enrollee faculty or specialty in db");
                 }
             } else {
                 parameters.put(MapKeys.EMAIL, email);

@@ -10,6 +10,7 @@ import com.epam.enrollee.model.service.BaseService;
 import com.epam.enrollee.parser.NumberParser;
 import com.epam.enrollee.validator.ProjectValidator;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,11 +35,6 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
     }
 
     @Override
-    public List<EnrolleeMarkRegister> findAll() throws ServiceException {
-        return null;
-    }
-
-    @Override
     public boolean update(int value, Map<String, String> parameters) throws ServiceException {
         return false;
     }
@@ -56,8 +52,8 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
     }
 
     //update mar
-    public Optional<EnrolleeMarkRegister> updateEnrolleRegister
-    (int enrolleeId, Map<String, String> parameters) throws ServiceException {
+    public Optional<EnrolleeMarkRegister> updateEnrolleRegister(int  enrolleeId, Map<String, String> parameters)
+            throws ServiceException {
         EnrolleeMarkRegisterDaoImpl registerDao = EnrolleeMarkRegisterDaoImpl.getInstance();
         SubjectDaoImpl subjectDao = SubjectDaoImpl.getInstance();
         EnrolleeMarkRegister register = new EnrolleeMarkRegister();

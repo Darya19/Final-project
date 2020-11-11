@@ -13,6 +13,7 @@
     <section class="lean-block clean-testimonials dark">
         <div class="container">
             <div class="block-heading">
+                <p></p>
                 <h2 class="text-center"><fmt:message key="adminfaculties.title"/></h2>
             </div>
             <c:if test="${has_application}">
@@ -20,7 +21,8 @@
                     <label class="alert-danger"> <fmt:message key="adminfaculties.deletederror"/></label>
                 </small>
             </c:if>
-            <div class="col-md-10">
+            <p></p>
+                <div class="col-md-4 text-right">
                 <button class="btn btn-outline-primary btn-sm"
                         type="button"
                         onclick='location.href = "projectServlet?command=to_edit_faculty_page"'>

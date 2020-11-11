@@ -66,9 +66,9 @@ public interface Command {
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
         SubjectServiceImpl subjectService = new SubjectServiceImpl();
         Boolean isAdded;
-        List<Faculty> faculties = facultyService.findAll();
-        List<Specialty> specialties = specialtyService.findAll();
-        List<Subject> subjects = subjectService.findAll();
+        List<Faculty> faculties = facultyService.findAllActiveFaculties();
+        List<Specialty> specialties = specialtyService.findAllOpenSpecialties();
+        List<Subject> subjects = subjectService.findAllSubjects();
         if (!faculties.isEmpty() && !specialties.isEmpty() && !subjects.isEmpty()) {
             request.setAttribute(RequestParameters.FACULTIES, faculties);
             request.setAttribute(RequestParameters.SPECIALTIES, specialties);
