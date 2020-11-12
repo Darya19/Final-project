@@ -9,12 +9,23 @@ import com.epam.enrollee.model.type.RecruitmentType;
 import com.epam.enrollee.parser.NumberParser;
 import com.epam.enrollee.util.MapKeys;
 import com.epam.enrollee.validator.ProjectValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
 public class SpecialtyServiceImpl implements BaseService<Specialty> {
 
     private static final String EMPTY_STRING = "";
+    public static EnrolleeMarkRegisterServiceImpl instance;
+    private static Logger logger = LogManager.getLogger();
+
+    public static EnrolleeMarkRegisterServiceImpl getInstance() {
+        if (instance == null) {
+            instance = new EnrolleeMarkRegisterServiceImpl();
+        }
+        return instance;
+    }
 
     @Override
     public boolean create(Map<String, String> parameters) throws ServiceException {
@@ -46,7 +57,7 @@ public class SpecialtyServiceImpl implements BaseService<Specialty> {
         if (validator.isIntParameterValid(specialtyId)) {
             try {
                 intSpecialtyId = parser.parseToInt(specialtyId);
-                return specialtyDao.updateSpecialtyStatusById(intSpecialtyId);
+                return specialtyDao.updateStatusById(intSpecialtyId);
             } catch (DaoException e) {
                 throw new ServiceException(e);
             }
@@ -79,7 +90,7 @@ public class SpecialtyServiceImpl implements BaseService<Specialty> {
     public Optional<Specialty> findEnrolleeSpecialty(int enrolleeId) throws ServiceException {
         SpecialtyDaoImpl dao = SpecialtyDaoImpl.getInstance();
         try {
-            Optional<Specialty> specialty = dao.findSpecialtyByErolleeId(enrolleeId);
+            Optional<Specialty> specialty = dao.findByEnrolleeId(enrolleeId);
             return specialty;
         } catch (DaoException e) {
             throw new ServiceException(e);
@@ -196,7 +207,7 @@ public class SpecialtyServiceImpl implements BaseService<Specialty> {
         if (validator.isIntParameterValid(specialtyId)) {
             try {
                 intSpecialtyId = parser.parseToInt(specialtyId);
-                List<Integer> foundEnrolleeId = specialtyDao.findConsideredEnrolleeIdBySpecialtyId(intSpecialtyId);
+                List<Integer> foundEnrolleeId = specialtyDao.findConsideredEnrolleeIdById(intSpecialtyId);
                 return foundEnrolleeId.size() > 0;
             } catch (DaoException e) {
                 throw new ServiceException(e);

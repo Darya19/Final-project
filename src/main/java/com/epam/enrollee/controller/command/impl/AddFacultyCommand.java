@@ -2,7 +2,7 @@ package com.epam.enrollee.controller.command.impl;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
@@ -27,17 +27,17 @@ public class AddFacultyCommand implements Command {
         FacultyServiceImpl facultyService = new FacultyServiceImpl();
         Map<String, String> parameters = new HashMap<>();
         Router router;
-        parameters.put(MapKeys.FACULTY_NAME, request.getParameter(RequestParameters.FACULTY_NAME));
-        parameters.put(MapKeys.FACULTY_DESCRIPTION, request.getParameter(RequestParameters.FACULTY_DESCRIPTION));
+        parameters.put(MapKeys.FACULTY_NAME, request.getParameter(RequestParameter.FACULTY_NAME));
+        parameters.put(MapKeys.FACULTY_DESCRIPTION, request.getParameter(RequestParameter.FACULTY_DESCRIPTION));
         parameters = facultyService.checkParameters(parameters);
         if (parameters.containsValue(EMPTY_STRING)) {
-            request.setAttribute(RequestParameters.PARAMETERS, parameters);
+            request.setAttribute(RequestParameter.PARAMETERS, parameters);
             router = new Router(PagePath.EDIT_FACULTY);
         } else {
             try {
                 if (facultyService.create(parameters)) {
                     List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                    request.setAttribute(RequestParameters.FACULTIES, faculties);
+                    request.setAttribute(RequestParameter.FACULTIES, faculties);
                     router = new Router(PagePath.ADMIN_FACULTIES);
                 } else {
                     router = new Router(PagePath.ERROR_500);

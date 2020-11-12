@@ -9,16 +9,12 @@
 </head>
 <body>
 <c:import url="//jsp//fragment//header.jsp"/>
-<main class="page-information">
-    <section class="lean-block clean-testimonials dark">
-        <div class="container">
-        <img class="img-thumbnail" src="/img/error500.jpg">
-        <br/>
-        Status code: ${pageContext.errorData.statusCode}
-        <br/>
-        Exception: ${pageContext.exception}
-        <br/>
-        Message from exception: ${pageContext.exception.message}
+<main class="page landing-page">
+    <section class="">
+        <img src="/img/er500.jpg" alt=""/>
+        <div class="text">
+            <h5 class="text-center" style="color: blue"><c:out value="${pageContext.errorData.statusCode}:
+                ${pageContext.exception}"/></h5>
         </div>
     </section>
 </main>

@@ -1,8 +1,8 @@
-package com.epam.enrollee.controller.command.impl.pagecommand;
+package com.epam.enrollee.controller.command.impl.page;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
@@ -26,13 +26,13 @@ public class ToSpecialtiesPageCommand implements Command {
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
         FacultyServiceImpl facultyService = new FacultyServiceImpl();
         Router router;
-        String facultyId = request.getParameter(RequestParameters.FACULTY_ID);
+        String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         try {
             Optional<Faculty> faculty = facultyService.findFacultyById(facultyId);
             List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty(facultyId);
             if (faculty.isPresent() && !specialties.isEmpty()) {
-                request.setAttribute(RequestParameters.SPECIALTIES, specialties);
-                request.setAttribute(RequestParameters.FACULTY, faculty.get());
+                request.setAttribute(RequestParameter.SPECIALTIES, specialties);
+                request.setAttribute(RequestParameter.FACULTY, faculty.get());
                 router = new Router(PagePath.SPECIALTIES);
             } else {
                 router = new Router(PagePath.ERROR_500);

@@ -2,8 +2,11 @@ package com.epam.enrollee.model.dao.impl;
 
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.model.connector.ConnectionPool;
-import com.epam.enrollee.model.dao.BaseDao;
+import com.epam.enrollee.model.dao.SubjectDao;
 import com.epam.enrollee.model.entity.Subject;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,16 +20,14 @@ import java.util.Optional;
 import static com.epam.enrollee.model.dao.ColumnName.SUBJECT_ID;
 import static com.epam.enrollee.model.dao.ColumnName.SUBJECT_NAME;
 
-public class SubjectDaoImpl implements BaseDao<Subject> {
+public class SubjectDaoImpl implements SubjectDao {
 
     public static SubjectDaoImpl instance;
-    private static final String FIND_ALL_SUBJECTS =
-            "SELECT subject_id , subject_name FROM subject";
-    private static final String FIND_SUBJECTS_BY_SPECIALTY_ID =
-            "SELECT subject_id, subject_name FROM subject JOIN subject_specialty ON subject.subject_id " +
-                    "= subject_specialty.subject_id_fk WHERE specialty_id_fk=?";
-    private static final String FIND_SUBJECTS_BY_SUBJECT_ID =
-            "SELECT subject_id, subject_name FROM subject WHERE subject_id=?";
+    private static Logger logger = LogManager.getLogger();
+    private static final String FIND_ALL_SUBJECTS = "SELECT subject_id , subject_name FROM subject";
+    private static final String FIND_SUBJECTS_BY_SPECIALTY_ID = "SELECT subject_id, subject_name FROM subject JOIN " +
+            "subject_specialty ON subject.subject_id = subject_specialty.subject_id_fk WHERE specialty_id_fk=?";
+    private static final String FIND_SUBJECTS_BY_SUBJECT_ID = "SELECT subject_id, subject_name FROM subject WHERE subject_id=?";
 
     public static SubjectDaoImpl getInstance() {
         if (instance == null) {
@@ -35,19 +36,17 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
         return instance;
     }
 
-
+    @Override
     public boolean add(Map<String, Object> parameters) throws DaoException {
-        return true;
+        throw new UnsupportedOperationException("Subjects can't be added");
     }
 
+    @Override
     public boolean remove(Map<String, Object> parameters) throws DaoException {
-        return true;
+        throw new UnsupportedOperationException("Subjects can't be removed");
     }
 
-    public boolean update(Subject subject) throws DaoException {
-        return false;
-    }
-
+    @Override
     public Optional<Subject> findById(int subjectId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_SUBJECTS_BY_SUBJECT_ID)) {
@@ -60,35 +59,39 @@ public class SubjectDaoImpl implements BaseDao<Subject> {
                 return Optional.empty();
             }
         } catch (SQLException e) {
-            throw new DaoException("database issues", e);
+            logger.log(Level.ERROR, "Impossible find subject by id", e);
+            throw new DaoException("Database issues while finding subject by id", e);
         }
     }
 
+    @Override
     public List<Subject> findAll() throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_SUBJECTS)) {
             ResultSet resultSet = statement.executeQuery();
             List<Subject> foundSubjects = createSubjectListFromResultSet(resultSet);
-                return foundSubjects;
+            return foundSubjects;
         } catch (SQLException e) {
-            throw new DaoException("database issues", e);
+            logger.log(Level.ERROR, "Impossible find all subjects", e);
+            throw new DaoException("Database issues while finding all subjects", e);
         }
     }
 
-    //register
-    public Optional<List<Subject>> findSubjectsBySpecialtyId(int specialtyId) throws DaoException {
+    @Override
+    public List<Subject> findSubjectsBySpecialtyId(int specialtyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_SUBJECTS_BY_SPECIALTY_ID)) {
             statement.setInt(1, specialtyId);
             ResultSet resultSet = statement.executeQuery();
             List<Subject> subjects = createSubjectListFromResultSet(resultSet);
             if (!subjects.isEmpty()) {
-                return Optional.of(subjects);
+                return subjects;
             } else {
-                return Optional.empty();
+                return new ArrayList<>();
             }
         } catch (SQLException e) {
-            throw new DaoException("database issues", e);
+            logger.log(Level.ERROR, "Impossible find subjects by specialty id", e);
+            throw new DaoException("Database issues while finding subjects by specialty id", e);
         }
     }
 

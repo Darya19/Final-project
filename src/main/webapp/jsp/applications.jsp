@@ -20,6 +20,11 @@
                     <div class="col-md-6"><fmt:message key="applications.numberofseats"/>${specialty.numberOfSeats}</div>
             </div>
             </div>
+            <c:if test="${has_application}">
+                <small>
+                    <label class="alert-danger"> <fmt:message key="applications.acceptderror"/></label>
+                </small>
+            </c:if>
             <p></p>
             <table class="table">
                 <thead class="thead-light">
@@ -33,7 +38,7 @@
                 <tbody>
                 <c:forEach items="${enrollees}" var="enrollees">
                     <tr>
-                        <td>${enrollees.value.firstName}${enrollees.value.lastName}</td>
+                        <td><c:out value="${enrollees.value.firstName} ${enrollees.value.lastName}"/></td>
                     <td>${enrollees.key.averageMark}</td>
                             <c:choose>
                                 <c:when test="${enrollees.value.applicationStatus == 'CONSIDERED' }">

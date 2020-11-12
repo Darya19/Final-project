@@ -1,6 +1,6 @@
 package com.epam.enrollee.controller.command;
 
-public class RequestParameters {
+public class RequestParameter {
 
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
@@ -42,7 +42,9 @@ public class RequestParameters {
     public static final String ENROLLEES = "enrollees";
     public static final String ENROLLEE_ID = "enrollee_id";
     public static final String STATUS = "status";
+    public static final String IS_CHANGED = "is_changed";
+    public static final String COMMAND = "command";
 
-    private RequestParameters() {
+    private RequestParameter() {
     }
 }

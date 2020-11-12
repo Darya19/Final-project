@@ -2,11 +2,12 @@ package com.epam.enrollee.controller.command.impl;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
+import com.epam.enrollee.model.entity.Specialty;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 import com.epam.enrollee.model.type.ApplicationStatus;
 import org.apache.logging.log4j.Level;
@@ -26,23 +27,24 @@ public class ChangeApplicationStatusCommand implements Command {
         EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
         HttpSession session = request.getSession();
         Router router;
-        String enrolleeId = request.getParameter(RequestParameters.ENROLLEE_ID);
-        String status = request.getParameter(RequestParameters.STATUS);
+        int count = 0;
+        String enrolleeId = request.getParameter(RequestParameter.ENROLLEE_ID);
+        String status = request.getParameter(RequestParameter.STATUS);
+        Specialty specialty = (Specialty) session.getAttribute(RequestParameter.SPECIALTY);
         try {
-            if (enrolleeService.changeApplicationStatus(enrolleeId, status)) {
+            if (enrolleeService.changeApplicationStatus(enrolleeId, status, specialty)) {
                 int intEnrolleeId = Integer.parseInt(enrolleeId);
                 Map<EnrolleeMarkRegister, Enrollee> enrollees = (Map<EnrolleeMarkRegister, Enrollee>) session.getAttribute
-                        (RequestParameters.ENROLLEES);
-                for(Enrollee enrollee : enrollees.values()){
-                    if(enrollee.getUserId() == intEnrolleeId){
+                        (RequestParameter.ENROLLEES);
+                for (Enrollee enrollee : enrollees.values()) {
+                    if (enrollee.getUserId() == intEnrolleeId) {
                         enrollee.setApplicationStatus(ApplicationStatus.valueOf(status.toUpperCase()));
                     }
                 }
-                        router = new Router(PagePath.APPLICATIONS);
             } else {
-                router = new Router(PagePath.ERROR_500);
-                logger.log(Level.ERROR, "Impossible change application status");
+                request.setAttribute(RequestParameter.IS_CHANGED, false);
             }
+            router = new Router(PagePath.APPLICATIONS);
         } catch (ServiceException e) {
             router = new Router(PagePath.ERROR_500);
             logger.log(Level.ERROR, "Application error: ", e);

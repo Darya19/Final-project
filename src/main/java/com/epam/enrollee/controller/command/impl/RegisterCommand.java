@@ -3,7 +3,7 @@ package com.epam.enrollee.controller.command.impl;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
@@ -30,29 +30,29 @@ public class RegisterCommand implements Command {
         Router router;
         int enrolleeId;
         boolean isRegister;
-        parameters.put(MapKeys.FIRST_NAME, request.getParameter(RequestParameters.FIRST_NAME));
-        parameters.put(MapKeys.LAST_NAME, request.getParameter(RequestParameters.LAST_NAME));
-        parameters.put(MapKeys.MIDDLE_NAME, request.getParameter(RequestParameters.MIDDLE_NAME));
+        parameters.put(MapKeys.FIRST_NAME, request.getParameter(RequestParameter.FIRST_NAME));
+        parameters.put(MapKeys.LAST_NAME, request.getParameter(RequestParameter.LAST_NAME));
+        parameters.put(MapKeys.MIDDLE_NAME, request.getParameter(RequestParameter.MIDDLE_NAME));
         parameters.put(MapKeys.PASSPORT_SERIES_AND_NUMBER, request.getParameter
-                (RequestParameters.PASSPORT_SERIES_AND_NUMBER));
-        parameters.put(MapKeys.PERSONAL_NUMBER, request.getParameter(RequestParameters.PERSONAL_NUMBER));
-        parameters.put(MapKeys.FACULTY_ID, request.getParameter(RequestParameters.FACULTY_ID));
-        parameters.put(MapKeys.SPECIALTY_ID, request.getParameter(RequestParameters.SPECIALTY_ID));
-        parameters.put(MapKeys.SUBJECT_ID_1, request.getParameter(RequestParameters.SUBJECT_ID_1));
-        parameters.put(MapKeys.MARK_1, request.getParameter(RequestParameters.MARK_1));
-        parameters.put(MapKeys.SUBJECT_ID_2, request.getParameter(RequestParameters.SUBJECT_ID_2));
-        parameters.put(MapKeys.MARK_2, request.getParameter(RequestParameters.MARK_2));
-        parameters.put(MapKeys.SUBJECT_ID_3, request.getParameter(RequestParameters.SUBJECT_ID_3));
-        parameters.put(MapKeys.MARK_3, request.getParameter(RequestParameters.MARK_3));
-        parameters.put(MapKeys.SUBJECT_ID_4, request.getParameter(RequestParameters.SUBJECT_ID_4));
-        parameters.put(MapKeys.MARK_4, request.getParameter(RequestParameters.MARK_4));
-        parameters.put(MapKeys.PASSWORD, request.getParameter(RequestParameters.PASSWORD));
-        parameters.put(MapKeys.REPEATED_PASSWORD, request.getParameter(RequestParameters.REPEATED_PASSWORD));
-        parameters.put(MapKeys.EMAIL, request.getParameter(RequestParameters.EMAIL));
+                (RequestParameter.PASSPORT_SERIES_AND_NUMBER));
+        parameters.put(MapKeys.PERSONAL_NUMBER, request.getParameter(RequestParameter.PERSONAL_NUMBER));
+        parameters.put(MapKeys.FACULTY_ID, request.getParameter(RequestParameter.FACULTY_ID));
+        parameters.put(MapKeys.SPECIALTY_ID, request.getParameter(RequestParameter.SPECIALTY_ID));
+        parameters.put(MapKeys.SUBJECT_ID_1, request.getParameter(RequestParameter.SUBJECT_ID_1));
+        parameters.put(MapKeys.MARK_1, request.getParameter(RequestParameter.MARK_1));
+        parameters.put(MapKeys.SUBJECT_ID_2, request.getParameter(RequestParameter.SUBJECT_ID_2));
+        parameters.put(MapKeys.MARK_2, request.getParameter(RequestParameter.MARK_2));
+        parameters.put(MapKeys.SUBJECT_ID_3, request.getParameter(RequestParameter.SUBJECT_ID_3));
+        parameters.put(MapKeys.MARK_3, request.getParameter(RequestParameter.MARK_3));
+        parameters.put(MapKeys.SUBJECT_ID_4, request.getParameter(RequestParameter.SUBJECT_ID_4));
+        parameters.put(MapKeys.MARK_4, request.getParameter(RequestParameter.MARK_4));
+        parameters.put(MapKeys.PASSWORD, request.getParameter(RequestParameter.PASSWORD));
+        parameters.put(MapKeys.REPEATED_PASSWORD, request.getParameter(RequestParameter.REPEATED_PASSWORD));
+        parameters.put(MapKeys.EMAIL, request.getParameter(RequestParameter.EMAIL));
         try {
             parameters = enrolleeService.checkParameters(parameters);
             if (parameters.containsValue("")) {
-                request.setAttribute(RequestParameters.PARAMETERS, parameters);
+                request.setAttribute(RequestParameter.PARAMETERS, parameters);
                 if (putFacultiesSpecialtiesSubjectsInRequest(request)) {
                     router = new Router(PagePath.REGISTER);
                 } else {
@@ -67,8 +67,8 @@ public class RegisterCommand implements Command {
                             (parameters.get(MapKeys.EMAIL), session);
                     if (enrolleeId > 0) {
                         if (putEnrolleeFacultyAndSpecialtyInSession(enrolleeId, session)) {
-                            session.removeAttribute(RequestParameters.ROLE);
-                            session.setAttribute(RequestParameters.ROLE, RoleType.USER);
+                            session.removeAttribute(RequestParameter.ROLE);
+                            session.setAttribute(RequestParameter.ROLE, RoleType.USER);
                             router = new Router(PagePath.PROFILE);
                         } else {
                             router = new Router(PagePath.ERROR_500);

@@ -2,7 +2,7 @@ package com.epam.enrollee.controller.command.impl;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
@@ -30,16 +30,16 @@ public class EditEnrolleeSpecialtyCommand implements Command {
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
         HttpSession session = request.getSession();
         Router router;
-        Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameters.ENROLLEE);
+        Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameter.ENROLLEE);
         Optional<Enrollee> newEnrollee;
-        String specialtyId = request.getParameter(RequestParameters.SPECIALTY_ID);
+        String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
         try {
             if (specialtyId.equals(EMPTY_STRING)) {
-                request.setAttribute(RequestParameters.EDIT_PART, EDIT_SPECIALTY);
+                request.setAttribute(RequestParameter.EDIT_PART, EDIT_SPECIALTY);
                 int facultyId = enrollee.getChosenFacultyId();
                 List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty
                         (String.valueOf(facultyId));
-                request.setAttribute(RequestParameters.SPECIALTIES, specialties);
+                request.setAttribute(RequestParameter.SPECIALTIES, specialties);
                 router = new Router(PagePath.EDIT_PROFILE);
             } else {
                 newEnrollee = enrolleeService.updateEnrolleeSpecialty
@@ -47,8 +47,8 @@ public class EditEnrolleeSpecialtyCommand implements Command {
                 Optional<Specialty> optionalSpecialty = specialtyService
                         .findSpecialtyById(specialtyId);
                 if (newEnrollee.isPresent() && optionalSpecialty.isPresent()) {
-                    session.removeAttribute(RequestParameters.SPECIALTY);
-                    session.setAttribute(RequestParameters.SPECIALTY, optionalSpecialty.get());
+                    session.removeAttribute(RequestParameter.SPECIALTY);
+                    session.setAttribute(RequestParameter.SPECIALTY, optionalSpecialty.get());
                     router = new Router(PagePath.PROFILE);
                 } else {
                     router = new Router(PagePath.ERROR_500);

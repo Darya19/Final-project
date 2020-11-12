@@ -24,23 +24,24 @@
                     <h6><fmt:message key="specialties.seats"/> ${specialty.numberOfSeats}</h6>
                     <div class="answer">
                         <c:if test="${empty enrollee and specialty.recruitment == 'OPENED'}">
-                        <button class="btn btn-outline-primary btn-lg"
-                                type="button" onclick='location.href = "projectServlet?command=to_register_page"'>
-                        <fmt:message key="specialties.registerbutton"/> </button>
+                            <button class="btn btn-outline-primary btn-lg"
+                                    type="button" onclick='location.href = "projectServlet?command=to_register_page"'>
+                                <fmt:message key="specialties.registerbutton"/></button>
                         </c:if>
                     </div>
-                </c:forEach>
+                    </c:forEach>
+                </div>
             </div>
         </div>
-            <p></p>
-                <div class="col-md-10 right-button">
-                    <button class="btn btn-outline-primary btn-sm"
-                            type="button"
-                            onclick='location.href = "projectServlet?command=to_faculties_page"'>
-                        <fmt:message key="specialties.backbutton"/>
-                    </button></div>
-        </div>
     </section>
+    <p></p>
+    <div class="col-md-10 right-button">
+        <button class="btn btn-primary btn-sm"
+                type="button"
+                onclick='location.href = "projectServlet?command=to_faculties_page"'>
+            <fmt:message key="specialties.backbutton"/>
+        </button>
+    </div>
 </main>
 <c:import url="//jsp//fragment//footer.jsp"/>
 </body>

@@ -1,8 +1,8 @@
-package com.epam.enrollee.controller.command.impl.pagecommand;
+package com.epam.enrollee.controller.command.impl.page;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
@@ -22,12 +22,12 @@ public class ToEditFacultyPageCommand implements Command {
     public Router execute(HttpServletRequest request) {
         FacultyServiceImpl facultyService = new FacultyServiceImpl();
         Router router;
-        String facultyId = request.getParameter(RequestParameters.FACULTY_ID);
+        String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         try {
             if (facultyId != null) {
                 Optional<Faculty> faculty = facultyService.findFacultyById(facultyId);
                 if (faculty.isPresent()) {
-                    request.setAttribute(RequestParameters.FACULTY, faculty.get());
+                    request.setAttribute(RequestParameter.FACULTY, faculty.get());
                     router = new Router(PagePath.EDIT_FACULTY);
                 } else {
                     router = new Router(PagePath.ERROR_500);

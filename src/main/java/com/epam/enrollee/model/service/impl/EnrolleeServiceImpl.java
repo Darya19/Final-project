@@ -6,12 +6,8 @@ import com.epam.enrollee.model.dao.impl.EnrolleeDaoImpl;
 import com.epam.enrollee.model.dao.impl.SpecialtyDaoImpl;
 import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
 import com.epam.enrollee.model.dao.impl.UserDaoImpl;
-import com.epam.enrollee.model.entity.Enrollee;
-import com.epam.enrollee.model.entity.Passport;
-import com.epam.enrollee.model.entity.Subject;
-import com.epam.enrollee.model.entity.User;
+import com.epam.enrollee.model.entity.*;
 import com.epam.enrollee.model.type.ApplicationStatus;
-import com.epam.enrollee.model.type.RecruitmentType;
 import com.epam.enrollee.model.type.RoleType;
 import com.epam.enrollee.model.type.StatusType;
 import com.epam.enrollee.parser.NumberParser;
@@ -29,7 +25,15 @@ public class EnrolleeServiceImpl {
 
     private static final String EMPTY_STRING = "";
 
+    public static EnrolleeMarkRegisterServiceImpl instance;
     private static Logger logger = LogManager.getLogger();
+
+    public static EnrolleeMarkRegisterServiceImpl getInstance() {
+        if (instance == null) {
+            instance = new EnrolleeMarkRegisterServiceImpl();
+        }
+        return instance;
+    }
 
     //login register
     public Optional<Enrollee> findEnrolleeByEmail(String email) throws ServiceException {
@@ -74,7 +78,7 @@ public class EnrolleeServiceImpl {
                 int foundFacultyId;
                 Optional<Integer> optionalFacultyId = specialtyDao
                         .findFacultyIdBySpecialtyId(intSpecialtyId);
-                Optional<List<Subject>> optionalSubjects = subjectDao
+                List<Subject> subjects = subjectDao
                         .findSubjectsBySpecialtyId(intSpecialtyId);
                 if (optionalFacultyId.isPresent()) {
                     foundFacultyId = optionalFacultyId.get();
@@ -82,8 +86,7 @@ public class EnrolleeServiceImpl {
                 } else {
                     parameters.put(MapKeys.FACULTY_ID, EMPTY_STRING);
                 }
-                if (optionalSubjects.isPresent()) {
-                    List<Subject> foundSubjects = optionalSubjects.get();
+                if (subjects.isEmpty()) {
                     Set<String> subjectsId = new HashSet<>();
                     subjectsId.add(parameters.get(MapKeys.SUBJECT_ID_1));
                     subjectsId.add(parameters.get(MapKeys.SUBJECT_ID_2));
@@ -91,7 +94,7 @@ public class EnrolleeServiceImpl {
                     subjectsId.add(parameters.get(MapKeys.SUBJECT_ID_4));
 
                     if (subjectsId.size() == 4) {
-                        for (Subject subject : foundSubjects) {
+                        for (Subject subject : subjects) {
                             int foundSubjectId = subject.getSubjectId();
                             if (!subjectsId.contains(String.valueOf(foundSubjectId))
                                     && foundSubjectId != 2 && foundSubjectId != 3) {
@@ -254,9 +257,10 @@ public class EnrolleeServiceImpl {
         return enrollees;
     }
 
-    public boolean changeApplicationStatus(String enrolleeId, String status)
+    public boolean changeApplicationStatus(String enrolleeId, String status, Specialty specialty)
             throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        SpecialtyDaoImpl specialtyDao = SpecialtyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
         int intEnrolleeId;
@@ -264,13 +268,18 @@ public class EnrolleeServiceImpl {
         if (validator.isIntParameterValid(enrolleeId)
                 && validator.isStringParameterValid(status)) {
             try {
-                intEnrolleeId = parser.parseToInt(enrolleeId);
-                if (status.equals(ApplicationStatus.ACCEPTED.getApplicationStatus())) {
-                    isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
-                            ApplicationStatus.ACCEPTED.getApplicationStatus());
+                int count = specialtyDao.findAllEnrolleeWithAcceptedApplicationStatus(specialty.getSpecialtyId());
+                if (count < specialty.getNumberOfSeats()) {
+                    intEnrolleeId = parser.parseToInt(enrolleeId);
+                    if (status.equals(ApplicationStatus.ACCEPTED.getApplicationStatus())) {
+                        isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
+                                ApplicationStatus.ACCEPTED.getApplicationStatus());
+                    } else {
+                        isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
+                                ApplicationStatus.REJECTED.getApplicationStatus());
+                    }
                 } else {
-                    isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
-                            ApplicationStatus.REJECTED.getApplicationStatus());
+                    isChanged = false;
                 }
                 return isChanged;
             } catch (DaoException e) {

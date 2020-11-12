@@ -3,7 +3,7 @@ package com.epam.enrollee.model.dao;
 public class ColumnName {
 
     /* enrollee table */
-    public static final String ENROLLE_ID = "enrollee_id";
+    public static final String ENROLLEE_ID = "enrollee_id";
     public static final String EMAIL = "email";
     public static final String ROLE = "role";
     public static final String ENROLLEE_STATUS = "enrollee_status";

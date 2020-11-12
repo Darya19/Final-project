@@ -16,6 +16,7 @@ public class PagePath {
     public static final String ADMIN_SPECIALTIES = "/jsp/admin_specialties.jsp";
     public static final String EDIT_SPECIALTY = "/jsp/edit_specialty.jsp";
     public static final String APPLICATIONS = "/jsp/applications.jsp";
+    public static final String ERROR = "/jsp/error_page/error.jsp";
 
     private PagePath() {
     }

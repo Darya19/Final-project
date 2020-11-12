@@ -15,10 +15,8 @@
                 <ul>
                     <li><a href="projectServlet?command=to_main_page"><fmt:message key="footer.home"/></a></li>
                     <p></p>
-                    <c:if test="${role eq 'GUEST'}">
-                        <li><a href="projectServlet?command=to_register_page"><fmt:message key="footer.signup"/></a>
+                        <li><a href="projectServlet?command=to_login_page"><fmt:message key="footer.login"/></a>
                         </li>
-                    </c:if>
                 </ul>
             </div>
             <div class="col-sm-4">

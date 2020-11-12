@@ -13,23 +13,25 @@
     <section class="clean-block clean-testimonials dark">
         <div class="container">
             <div class="block-heading">
-                <h2 class="text-info"><fmt:message key="faculties.title"/> </h2>
+                <h2 class="text-info"><fmt:message key="faculties.title"/></h2>
             </div>
             <div class="row">
                 <c:forEach var="faculty" items="${faculties}">
-                <div class="col-lg-4">
-                    <div class="card clean-testimonial-item border-0 rounded-0">
-                        <div class="card-body">
-                            <h3>${faculty.facultyName}</h3>
-                            <p class="card-text">${faculty.facultyDescription}</p>
-                            <h4 class="card-title">
-                                <button class="btn btn-outline-primary btn-lg"
-                                        type="button" onclick='location.href = "projectServlet?command=to_specialties_page&faculty_id=${faculty.facultyId}"'>
-                                <fmt:message key="faculties.learnbutton"/> </button></h4>
+                    <div class="col-lg-4">
+                        <div class="card clean-testimonial-item border-0 rounded-0">
+                            <div class="card-body">
+                                <h3>${faculty.facultyName}</h3>
+                                <p class="card-text">${faculty.facultyDescription}</p>
+                                <h4 class="card-title">
+                                    <button class="btn btn-outline-primary btn-lg"
+                                            type="button"
+                                            onclick='location.href = "projectServlet?command=to_specialties_page&faculty_id=${faculty.facultyId}"'>
+                                        <fmt:message key="faculties.learnbutton"/></button>
+                                </h4>
+                            </div>
                         </div>
                     </div>
-                </div>
-                    </c:forEach>
+                </c:forEach>
             </div>
         </div>
     </section>

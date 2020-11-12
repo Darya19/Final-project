@@ -1,7 +1,7 @@
 package com.epam.enrollee.controller.command.impl;
 
 import com.epam.enrollee.controller.command.Command;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,12 +14,12 @@ public class ChangeLanguageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        String language = request.getParameter(RequestParameters.LOCALE);
+        String language = request.getParameter(RequestParameter.LOCALE);
         HttpSession session = request.getSession();
         if (language.equals(ENGLISH)) {
-            session.setAttribute(RequestParameters.LOCALE, RUSSIAN);
+            session.setAttribute(RequestParameter.LOCALE, RUSSIAN);
         } else {
-            session.setAttribute(RequestParameters.LOCALE, ENGLISH);
+            session.setAttribute(RequestParameter.LOCALE, ENGLISH);
         }
         return null;
     }

@@ -2,7 +2,7 @@ package com.epam.enrollee.controller.command.impl;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
@@ -28,8 +28,8 @@ public class DeleteProfileCommand implements Command {
         HttpSession session = request.getSession();
         Router router = null;
         Map<String, Object> parameters = new HashMap<>();
-        Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameters.ENROLLEE);
-        Passport passport = (Passport) session.getAttribute(RequestParameters.PASSPORT);
+        Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameter.ENROLLEE);
+        Passport passport = (Passport) session.getAttribute(RequestParameter.PASSPORT);
         parameters.put(MapKeys.ENROLLEE, enrollee);
         parameters.put(MapKeys.PASSPORT, passport);
         try {

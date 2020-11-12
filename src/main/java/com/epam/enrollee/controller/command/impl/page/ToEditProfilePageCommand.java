@@ -1,8 +1,8 @@
-package com.epam.enrollee.controller.command.impl.pagecommand;
+package com.epam.enrollee.controller.command.impl.page;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
@@ -26,15 +26,15 @@ public class ToEditProfilePageCommand implements Command {
         SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
         HttpSession  session = request.getSession();
         Router router;
-        String editPart = request.getParameter(RequestParameters.EDIT_PART);
-        request.setAttribute(RequestParameters.EDIT_PART, editPart);
+        String editPart = request.getParameter(RequestParameter.EDIT_PART);
+        request.setAttribute(RequestParameter.EDIT_PART, editPart);
         try {
             if (editPart.equals(EDIT_SPECIALTY)) {
-                Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameters.ENROLLEE);
+                Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameter.ENROLLEE);
                 int facultyId = enrollee.getChosenFacultyId();
                 List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty
                         (String.valueOf(facultyId));
-                request.setAttribute(RequestParameters.SPECIALTIES, specialties);
+                request.setAttribute(RequestParameter.SPECIALTIES, specialties);
             }
             router = new Router(PagePath.EDIT_PROFILE);
         } catch (ServiceException e) {

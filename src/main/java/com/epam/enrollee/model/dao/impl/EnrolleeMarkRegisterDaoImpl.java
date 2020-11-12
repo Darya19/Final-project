@@ -2,22 +2,25 @@ package com.epam.enrollee.model.dao.impl;
 
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.model.connector.ConnectionPool;
-import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
+import com.epam.enrollee.model.dao.EnrolleeMarkRegisterDao;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Subject;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class EnrolleeMarkRegisterDaoImpl implements BaseDao<EnrolleeMarkRegister> {
+public class EnrolleeMarkRegisterDaoImpl implements EnrolleeMarkRegisterDao {
 
     public static EnrolleeMarkRegisterDaoImpl instance;
+    private static Logger logger = LogManager.getLogger();
     private static final String FIND_ENROLLEE_REGISTER_BY_ENROLLEE_ID = "SELECT subject_id, subject_name, mark_value " +
             "FROM subject JOIN mark on subject.subject_id = mark.subject_id_fk WHERE enrollee_id_fk=?";
     private static final String UPDATE_ENROLLEE_MARK_REGISTER = "UPDATE mark SET mark_value=? where enrollee_id_fk=? " +
@@ -30,14 +33,7 @@ public class EnrolleeMarkRegisterDaoImpl implements BaseDao<EnrolleeMarkRegister
         return instance;
     }
 
-    public boolean add(Map<String, Object> parameters) throws DaoException {
-         throw new UnsupportedOperationException("Impossible add enrollee marks");
-    }
-
-    public boolean remove(Map<String, Object> parameters) throws DaoException {
-        throw new UnsupportedOperationException("Impossible remove enrollee marks");
-    }
-
+    @Override
     public boolean update(EnrolleeMarkRegister register, int enrolleeId) throws DaoException {
         Map<Subject, Integer> parameters = register.getTestsSubjectsAndMarks();
         int countUpdate = 0;
@@ -53,16 +49,13 @@ public class EnrolleeMarkRegisterDaoImpl implements BaseDao<EnrolleeMarkRegister
             }
             return countUpdate == 4;
         } catch (SQLException e) {
-            throw new DaoException("database issues", e);
+            logger.log(Level.ERROR, "Impossible update mark register by enrollee id", e);
+            throw new DaoException("Database issues while updating mark register by enrollee id", e);
         }
     }
 
-    public Optional<EnrolleeMarkRegister> findById(int parameter) throws DaoException {
-        return Optional.empty();
-    }
-
-    public Optional<EnrolleeMarkRegister> findEnrolleeMarkRegisterByEnrolleeId(int enrolleeId)
-            throws DaoException {
+    @Override
+    public Optional<EnrolleeMarkRegister> findEnrolleeMarkRegisterByEnrolleeId(int enrolleeId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement
                      (FIND_ENROLLEE_REGISTER_BY_ENROLLEE_ID)) {
@@ -75,7 +68,8 @@ public class EnrolleeMarkRegisterDaoImpl implements BaseDao<EnrolleeMarkRegister
                 return Optional.empty();
             }
         } catch (SQLException e) {
-            throw new DaoException("database issues", e);
+            logger.log(Level.ERROR, "Impossible find mark register by enrollee id", e);
+            throw new DaoException("Database issues while finding mark register by enrollee id", e);
         }
     }
 

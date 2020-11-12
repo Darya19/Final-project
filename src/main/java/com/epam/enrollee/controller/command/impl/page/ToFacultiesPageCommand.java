@@ -1,8 +1,8 @@
-package com.epam.enrollee.controller.command.impl.pagecommand;
+package com.epam.enrollee.controller.command.impl.page;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
@@ -24,7 +24,7 @@ public class ToFacultiesPageCommand implements Command {
         Router router;
         try {
             List<Faculty> faculties = facultyService.findAllActiveFaculties();
-            request.setAttribute(RequestParameters.FACULTIES, faculties);
+            request.setAttribute(RequestParameter.FACULTIES, faculties);
             router = new Router(PagePath.FACULTIES);
         } catch (ServiceException e) {
            router = new Router(PagePath.ERROR_500);

@@ -1,8 +1,8 @@
-package com.epam.enrollee.controller.command.impl.pagecommand;
+package com.epam.enrollee.controller.command.impl.page;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
@@ -25,11 +25,11 @@ public class ToAdminFacultiesPageCommand implements Command {
         HttpSession session = request.getSession();
         Router router;
         try{
-            if(session.getAttribute(RequestParameters.FACULTY_ID) != null){
-                session.removeAttribute(RequestParameters.FACULTY_ID);
+            if(session.getAttribute(RequestParameter.FACULTY_ID) != null){
+                session.removeAttribute(RequestParameter.FACULTY_ID);
             }
         List<Faculty> faculties = facultyService.findAllActiveFaculties();
-        request.setAttribute(RequestParameters.FACULTIES, faculties);
+        request.setAttribute(RequestParameter.FACULTIES, faculties);
         router = new Router(PagePath.ADMIN_FACULTIES);
         }
         catch (ServiceException e){

@@ -2,7 +2,7 @@ package com.epam.enrollee.controller.command.impl;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
@@ -22,17 +22,17 @@ public class DeleteFacultyCommand implements Command {
     public Router execute(HttpServletRequest request) {
         FacultyServiceImpl facultyService = new FacultyServiceImpl();
         Router router;
-        String facultyId = request.getParameter(RequestParameters.FACULTY_ID);
+        String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         try {
             if (facultyService.checkConsideredApplications(facultyId)) {
-                request.setAttribute(RequestParameters.HAS_APPLICATION, true);
+                request.setAttribute(RequestParameter.HAS_APPLICATION, true);
                 List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                request.setAttribute(RequestParameters.FACULTIES, faculties);
+                request.setAttribute(RequestParameter.FACULTIES, faculties);
                 router = new Router(PagePath.ADMIN_FACULTIES);
             } else {
                 if (facultyService.removeFacultyAndItsSpecialties(facultyId)) {
                     List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                    request.setAttribute(RequestParameters.FACULTIES, faculties);
+                    request.setAttribute(RequestParameter.FACULTIES, faculties);
                     router = new Router(PagePath.ADMIN_FACULTIES);
                 }else {
                     router = new Router(PagePath.ERROR_500);

@@ -29,9 +29,9 @@ public interface Command {
             Optional<Passport> optionalPassport = enrolleeService.findEnrolleePassport
                     (enrolleeId);
             if (optionalEnrolleeRegister.isPresent() && optionalPassport.isPresent()) {
-                session.setAttribute(RequestParameters.ENROLLEE, enrollee);
-                session.setAttribute(RequestParameters.REGISTER, optionalEnrolleeRegister.get());
-                session.setAttribute(RequestParameters.PASSPORT, optionalPassport.get());
+                session.setAttribute(RequestParameter.ENROLLEE, enrollee);
+                session.setAttribute(RequestParameter.REGISTER, optionalEnrolleeRegister.get());
+                session.setAttribute(RequestParameter.PASSPORT, optionalPassport.get());
             } else {
                 enrolleeId = -1;
             }
@@ -49,8 +49,8 @@ public interface Command {
         Optional<Faculty> optionalFaculty = facultyService.findEnrolleeFaculty(enrolleeId);
         Optional<Specialty> optionalSpecialty = specialtyService.findEnrolleeSpecialty(enrolleeId);
         if (optionalFaculty.isPresent() && optionalSpecialty.isPresent()) {
-            session.setAttribute(RequestParameters.FACULTY, optionalFaculty.get());
-            session.setAttribute(RequestParameters.SPECIALTY, optionalSpecialty.get());
+            session.setAttribute(RequestParameter.FACULTY, optionalFaculty.get());
+            session.setAttribute(RequestParameter.SPECIALTY, optionalSpecialty.get());
             isAdded = true;
         } else {
             isAdded = false;
@@ -68,9 +68,9 @@ public interface Command {
         List<Specialty> specialties = specialtyService.findAllOpenSpecialties();
         List<Subject> subjects = subjectService.findAllSubjects();
         if (!faculties.isEmpty() && !specialties.isEmpty() && !subjects.isEmpty()) {
-            request.setAttribute(RequestParameters.FACULTIES, faculties);
-            request.setAttribute(RequestParameters.SPECIALTIES, specialties);
-            request.setAttribute(RequestParameters.SUBJECTS, subjects);
+            request.setAttribute(RequestParameter.FACULTIES, faculties);
+            request.setAttribute(RequestParameter.SPECIALTIES, specialties);
+            request.setAttribute(RequestParameter.SUBJECTS, subjects);
             isAdded = true;
         } else {
             isAdded = false;

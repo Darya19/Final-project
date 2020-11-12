@@ -6,12 +6,25 @@ import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Subject;
 import com.epam.enrollee.model.service.BaseService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class SubjectServiceImpl implements BaseService<Subject> {
+
+    public static EnrolleeMarkRegisterServiceImpl instance;
+    private static Logger logger = LogManager.getLogger();
+
+    public static EnrolleeMarkRegisterServiceImpl getInstance() {
+        if (instance == null) {
+            instance = new EnrolleeMarkRegisterServiceImpl();
+        }
+        return instance;
+    }
+
     @Override
     public boolean create(Map<String, String> parameters) throws ServiceException {
         return false;

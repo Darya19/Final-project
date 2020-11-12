@@ -19,8 +19,16 @@ import java.util.Optional;
 
 public class FacultyServiceImpl {
 
-    private static Logger logger = LogManager.getLogger();
     private static final String EMPTY_STRING = "";
+    public static EnrolleeMarkRegisterServiceImpl instance;
+    private static Logger logger = LogManager.getLogger();
+
+    public static EnrolleeMarkRegisterServiceImpl getInstance() {
+        if (instance == null) {
+            instance = new EnrolleeMarkRegisterServiceImpl();
+        }
+        return instance;
+    }
 
     public boolean create(Map<String, String> parameters) throws ServiceException {
         FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
@@ -48,9 +56,9 @@ public class FacultyServiceImpl {
                 intFacultyId = parser.parseToInt(facultyId);
                 List<Specialty> specialties = specialtyDao.findActiveSpecialtiesListByFacultyId(intFacultyId);
                 for (Specialty specialty : specialties) {
-                    specialtyDao.updateSpecialtyStatusById(specialty.getSpecialtyId());
+                    specialtyDao.updateStatusById(specialty.getSpecialtyId());
                 }
-                return facultyDao.updateFacultyStatusById(intFacultyId);
+                return facultyDao.updateStatusById(intFacultyId);
             } catch (DaoException e) {
                 throw new ServiceException(e);
             }
@@ -67,7 +75,7 @@ public class FacultyServiceImpl {
         if (validator.isIntParameterValid(facultyId)) {
             try {
                 intFacultyId = parser.parseToInt(facultyId);
-                List<Integer> foundEnrolleId = facultyDao.findConsideredEnrolleeIdByFacultyId(intFacultyId);
+                List<Integer> foundEnrolleId = facultyDao.findConsideredEnrolleeIdById(intFacultyId);
                 return foundEnrolleId.size() > 0;
             } catch (DaoException e) {
                 throw new ServiceException(e);
@@ -130,7 +138,7 @@ public class FacultyServiceImpl {
     public Optional<Faculty> findEnrolleeFaculty(int enrolleeId) throws ServiceException {
         FacultyDaoImpl dao = FacultyDaoImpl.getInstance();
         try {
-            Optional<Faculty> faculty = dao.findFacultyByEnrolleeId(enrolleeId);
+            Optional<Faculty> faculty = dao.findByEnrolleeId(enrolleeId);
             return faculty;
         } catch (DaoException e) {
             throw new ServiceException(e);

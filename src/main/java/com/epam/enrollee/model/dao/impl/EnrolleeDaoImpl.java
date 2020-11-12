@@ -2,13 +2,12 @@ package com.epam.enrollee.model.dao.impl;
 
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.model.connector.ConnectionPool;
-import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
+import com.epam.enrollee.model.dao.EnrolleeDao;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.Passport;
 import com.epam.enrollee.model.type.ApplicationStatus;
 import com.epam.enrollee.model.type.RoleType;
-import com.epam.enrollee.model.type.StatusType;
 import com.epam.enrollee.util.MapKeys;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -20,20 +19,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
+public class EnrolleeDaoImpl implements EnrolleeDao {
 
     public static EnrolleeDaoImpl instance;
-
     private static Logger logger = LogManager.getLogger();
-
-    private static final String FIND_ENROLLEE_BY_EMAIL = "SELECT enrollee_id,email,role,enrollee_status," +
-            "enrollee_first_name, enrollee_last_name, enrollee_middle_name, faculty_id_fk as faculty_id,specialty_id_fk " +
-            "as specialty_id, application_status FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id = " +
-            "enrollee_faculty.enrollee_id_fk JOIN enrollee_specialty on enrollee.enrollee_id = enrollee_specialty.enrollee_id_fk" +
-            " WHERE email=?";
-    private static final String ADD_ENROLLEE = "INSERT INTO enrollee (email, password, enrollee_status, role, " +
-            "enrollee_first_name, enrollee_last_name, enrollee_middle_name, passport_id_fk, application_status) " +
-            "VALUES (?,?,?,?,?,?,?,?,?)";
+    private static final String FIND_ENROLLEE_BY_EMAIL = "SELECT enrollee_id, email, role, enrollee_first_name, " +
+            "enrollee_last_name, enrollee_middle_name, faculty_id_fk as faculty_id,specialty_id_fk as specialty_id, " +
+            "application_status FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id = enrollee_faculty.enrollee_id_fk" +
+            " JOIN enrollee_specialty on enrollee.enrollee_id = enrollee_specialty.enrollee_id_fk WHERE email=?";
+    private static final String ADD_ENROLLEE = "INSERT INTO enrollee (email, password, role, enrollee_first_name, " +
+            "enrollee_last_name, enrollee_middle_name, passport_id_fk, application_status) VALUES (?,?,?,?,?,?,?,?)";
     private static final String ADD_PASSPORT = "INSERT INTO passport (personal_number, passport_series_and_number) " +
             "VALUES (?,?)";
     private static final String ADD_MARKS = "INSERT INTO mark (enrollee_id_fk, subject_id_fk, mark_value) VALUES (?,?,?)";
@@ -54,13 +49,13 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
     private static final String REMOVE_MARKS = "DELETE FROM mark WHERE enrollee_id_fk=?";
     private static final String REMOVE_ENROLLEE_IN_SPECIALTY = "DELETE FROM enrollee_specialty WHERE enrollee_id_fk=?";
     private static final String REMOVE_ENROLLEE_IN_FACULTY = "DELETE FROM enrollee_faculty WHERE enrollee_id_fk=?";
-    private static final String FIND_ENROLLEE_BY_SPECIALTY_ID = "SELECT enrollee_id, email, role, enrollee_status," +
-            "enrollee_first_name, enrollee_last_name, enrollee_middle_name, faculty_id_fk as faculty_id,specialty_id_fk " +
-            "as specialty_id, application_status FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id = " +
-            "enrollee_faculty.enrollee_id_fk JOIN enrollee_specialty on enrollee.enrollee_id = enrollee_specialty.enrollee_id_fk" +
-            " WHERE specialty_id_fk=?";
+    private static final String FIND_ENROLLEE_BY_SPECIALTY_ID = "SELECT enrollee_id, email, role, enrollee_first_name, " +
+            "enrollee_last_name, enrollee_middle_name, faculty_id_fk as faculty_id,specialty_id_fk as specialty_id, " +
+            "application_status FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id = enrollee_faculty.enrollee_id_fk " +
+            "JOIN enrollee_specialty on enrollee.enrollee_id = enrollee_specialty.enrollee_id_fk WHERE specialty_id_fk=?";
     private static final String UPDATE_APPLICATION_STATUS_BY_ENROLLEE_ID = "UPDATE enrollee SET application_status=? " +
             "WHERE enrollee_id=?";
+
     public static EnrolleeDaoImpl getInstance() {
         if (instance == null) {
             instance = new EnrolleeDaoImpl();
@@ -68,6 +63,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         return instance;
     }
 
+    @Override
     public boolean add(Map<String, Object> objectMap) throws DaoException {
         boolean isEnrolleeAdded = false;
         boolean isPassportAdded;
@@ -96,13 +92,12 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             if (isPassportAdded) {
                 enrolleeStatement.setString(1, (String) objectMap.get(MapKeys.EMAIL));
                 enrolleeStatement.setString(2, (String) objectMap.get(MapKeys.PASSWORD));
-                enrolleeStatement.setString(3, String.valueOf(objectMap.get(MapKeys.ENROLLEE_STATUS)));
-                enrolleeStatement.setString(4, String.valueOf(objectMap.get(MapKeys.ROLE)));
-                enrolleeStatement.setString(5, (String) objectMap.get(MapKeys.FIRST_NAME));
-                enrolleeStatement.setString(6, (String) objectMap.get(MapKeys.LAST_NAME));
-                enrolleeStatement.setString(7, (String) objectMap.get(MapKeys.MIDDLE_NAME));
-                enrolleeStatement.setInt(8, passportId);
-                enrolleeStatement.setString(9, String.valueOf(objectMap.get(MapKeys.APPLICATION_STATUS)));
+                enrolleeStatement.setString(3, String.valueOf(objectMap.get(MapKeys.ROLE)));
+                enrolleeStatement.setString(4, (String) objectMap.get(MapKeys.FIRST_NAME));
+                enrolleeStatement.setString(5, (String) objectMap.get(MapKeys.LAST_NAME));
+                enrolleeStatement.setString(6, (String) objectMap.get(MapKeys.MIDDLE_NAME));
+                enrolleeStatement.setInt(7, passportId);
+                enrolleeStatement.setString(8, String.valueOf(objectMap.get(MapKeys.APPLICATION_STATUS)));
                 isEnrolleeAdded = enrolleeStatement.executeUpdate() > 0;
                 ResultSet enrolleeResultSet = enrolleeStatement.getGeneratedKeys();
                 if (enrolleeResultSet.next()) {
@@ -157,6 +152,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         return isEnrolleeAdded;
     }
 
+    @Override
     public boolean remove(Map<String, Object> parameters) throws DaoException {
         boolean isFacultyRemoved = false;
         boolean isSpecialtyRemoved = false;
@@ -172,8 +168,8 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         Passport passport = (Passport) parameters.get(MapKeys.PASSPORT);
         try {
             connection.setAutoCommit(false);
-            enrolleeStatement = connection.prepareStatement(REMOVE_ENROLLEE, Statement.RETURN_GENERATED_KEYS);
-            passportStatement = connection.prepareStatement(REMOVE_PASSPORT, Statement.RETURN_GENERATED_KEYS);
+            enrolleeStatement = connection.prepareStatement(REMOVE_ENROLLEE);
+            passportStatement = connection.prepareStatement(REMOVE_PASSPORT);
             markStatement = connection.prepareStatement(REMOVE_MARKS);
             specialtyStatement = connection.prepareStatement(REMOVE_ENROLLEE_IN_SPECIALTY);
             facultyStatement = connection.prepareStatement(REMOVE_ENROLLEE_IN_FACULTY);
@@ -215,6 +211,17 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         return isEnrolleeRemoved;
     }
 
+    @Override
+    public Optional<Enrollee> findById(int parameter) throws DaoException {
+        throw new UnsupportedOperationException("Impossible find enrollee by id");
+    }
+
+    @Override
+    public List<Enrollee> findAll() throws DaoException {
+        throw new UnsupportedOperationException("Impossible find all enrollees");
+    }
+
+    @Override
     public boolean updateEnrollee(Enrollee enrollee) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -231,6 +238,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         }
     }
 
+    @Override
     public boolean updatePassport(Passport passport) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -246,6 +254,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         }
     }
 
+    @Override
     public boolean updateEnrolleeSpecialty(Enrollee enrollee) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -260,14 +269,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         }
     }
 
-    public Optional<Enrollee> findById(int parameter) throws DaoException {
-        return Optional.empty();
-    }
-
-    public List<Enrollee> findAll() throws DaoException {
-        return null;
-    }
-
+    @Override
     public Optional<Enrollee> findEnrolleeByEmail(String email) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ENROLLEE_BY_EMAIL)) {
@@ -286,6 +288,7 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         }
     }
 
+    @Override
     public Optional<Passport> findPassportByEnrolleeId(int enrolleeId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_PASSPORT_BY_ENROLLE_ID)) {
@@ -299,14 +302,42 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
         }
     }
 
+    @Override
+    public List<Enrollee> findEnrolleeBySpecialtyId(int specialtyId) throws DaoException {
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ENROLLEE_BY_SPECIALTY_ID)) {
+            statement.setInt(1, specialtyId);
+            ResultSet resultSet = statement.executeQuery();
+            List<Enrollee> enrollees = createEnrolleeListFromResultSet(resultSet);
+            return enrollees;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Impossible find enrollees on curent specialty", e);
+            throw new DaoException("Database issues while finding enrollee by specialty id", e);
+        }
+    }
+
+    @Override
+    public boolean updateApplicationStatusByEnrolleeId(int enrolleeId, String applicationStatus) throws DaoException {
+        boolean isUpdated;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_APPLICATION_STATUS_BY_ENROLLEE_ID)) {
+            statement.setString(1, applicationStatus);
+            statement.setInt(2, enrolleeId);
+            isUpdated = statement.executeUpdate() > 0;
+            return isUpdated;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Database issues while updating application status", e);
+            throw new DaoException("Database issues while updating application status", e);
+        }
+    }
+
     private List<Enrollee> createEnrolleeListFromResultSet(ResultSet resultSet) throws SQLException {
         List<Enrollee> enrollees = new ArrayList<>();
         while (resultSet.next()) {
             Enrollee enrollee = new Enrollee();
-            enrollee.setUserId(resultSet.getInt(ColumnName.ENROLLE_ID));
+            enrollee.setUserId(resultSet.getInt(ColumnName.ENROLLEE_ID));
             enrollee.setEmail(resultSet.getString(ColumnName.EMAIL));
             enrollee.setRole(RoleType.valueOf(resultSet.getString(ColumnName.ROLE).toUpperCase()));
-            enrollee.setStatus(StatusType.valueOf(resultSet.getString(ColumnName.ENROLLEE_STATUS).toUpperCase()));
             enrollee.setApplicationStatus(ApplicationStatus.valueOf(resultSet.getString(ColumnName.APPLICATION_STATUS)
                     .toUpperCase()));
             enrollee.setFirstName(resultSet.getString(ColumnName.ENROLLEE_FIRST_NAME));
@@ -327,31 +358,5 @@ public class EnrolleeDaoImpl implements BaseDao<Enrollee> {
             passport.setPassportSeriesAndNumber(resultSet.getString(ColumnName.PASSPORT_SERIES_AND_NUMBER));
         }
         return passport;
-    }
-
-    public List<Enrollee> findEnrolleeBySpecialtyId(int specialtyId) throws DaoException {
-        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ENROLLEE_BY_SPECIALTY_ID)) {
-            statement.setInt(1, specialtyId);
-            ResultSet resultSet = statement.executeQuery();
-            List<Enrollee> enrollees = createEnrolleeListFromResultSet(resultSet);
-           return enrollees;
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Impossible find enrollees on curent specialty", e);
-            throw new DaoException("Database issues while finding enrollee by specialty id", e);
-        }
-    }
-
-    public boolean updateApplicationStatusByEnrolleeId(int enrolleeId, String applicationStatus) throws DaoException {
-        boolean isUpdated;
-        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_APPLICATION_STATUS_BY_ENROLLEE_ID)) {
-            statement.setString(1, applicationStatus);
-            statement.setInt(2, enrolleeId);
-            isUpdated = statement.executeUpdate() > 0;
-            return isUpdated;
-        } catch (SQLException e) {
-            throw new DaoException("database issues", e);
-        }
     }
 }

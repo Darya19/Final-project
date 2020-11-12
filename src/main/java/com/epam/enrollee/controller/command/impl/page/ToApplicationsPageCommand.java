@@ -1,8 +1,8 @@
-package com.epam.enrollee.controller.command.impl.pagecommand;
+package com.epam.enrollee.controller.command.impl.page;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
@@ -31,7 +31,7 @@ public class ToApplicationsPageCommand implements Command {
         HttpSession session = request.getSession();
         Map<EnrolleeMarkRegister, Enrollee> enrolleesMap = new TreeMap<>(Collections.reverseOrder());
         Router router;
-        String specialtyId = request.getParameter(RequestParameters.SPECIALTY_ID);
+        String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
         try {
             List<Enrollee> enrollees = enrolleeService.findAllEnrolleesOnSpecialty(specialtyId);
             for (Enrollee enrollee : enrollees) {
@@ -45,10 +45,10 @@ public class ToApplicationsPageCommand implements Command {
                 }
                Optional<Specialty> specialty = specialtyService.findSpecialtyById(specialtyId);
                 if(specialty.isPresent()){
-                    session.setAttribute(RequestParameters.SPECIALTY, specialty.get());
+                    session.setAttribute(RequestParameter.SPECIALTY, specialty.get());
                 }
             }
-            session.setAttribute(RequestParameters.ENROLLEES, enrolleesMap);
+            session.setAttribute(RequestParameter.ENROLLEES, enrolleesMap);
             router = new Router(PagePath.APPLICATIONS);
         } catch (ServiceException e) {
             router = new Router(PagePath.ERROR_500);

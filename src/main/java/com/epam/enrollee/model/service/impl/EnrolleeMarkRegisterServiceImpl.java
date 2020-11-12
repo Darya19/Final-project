@@ -9,6 +9,8 @@ import com.epam.enrollee.model.entity.Subject;
 import com.epam.enrollee.model.service.BaseService;
 import com.epam.enrollee.parser.NumberParser;
 import com.epam.enrollee.validator.ProjectValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.Optional;
@@ -16,6 +18,15 @@ import java.util.Optional;
 public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMarkRegister> {
 
     private static final String EMPTY_VALUE = "";
+    public static EnrolleeMarkRegisterServiceImpl instance;
+    private static Logger logger = LogManager.getLogger();
+
+    public static EnrolleeMarkRegisterServiceImpl getInstance() {
+        if (instance == null) {
+            instance = new EnrolleeMarkRegisterServiceImpl();
+        }
+        return instance;
+    }
 
     @Override
     public boolean create(Map<String, String> parameters) throws ServiceException {

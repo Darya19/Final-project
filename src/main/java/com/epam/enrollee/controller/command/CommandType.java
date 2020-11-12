@@ -1,7 +1,7 @@
 package com.epam.enrollee.controller.command;
 
 import com.epam.enrollee.controller.command.impl.*;
-import com.epam.enrollee.controller.command.impl.pagecommand.*;
+import com.epam.enrollee.controller.command.impl.page.*;
 
 public enum CommandType {
     ADD_FACULTY {

@@ -2,7 +2,7 @@ package com.epam.enrollee.controller.command.impl;
 
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameters;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
@@ -36,8 +36,8 @@ public class LoginCommand implements Command {
         HttpSession session = session = request.getSession();
         Map<String, String> parameters = new HashMap<>();
         Router router;
-        String email = request.getParameter(RequestParameters.EMAIL);
-        String password = request.getParameter(RequestParameters.PASSWORD);
+        String email = request.getParameter(RequestParameter.EMAIL);
+        String password = request.getParameter(RequestParameter.PASSWORD);
         try {
             if (userService.checkEmailAndPassword(email, password)) {
                 Optional<User> optionalUser = userService.findUserByEmail(email);
@@ -46,20 +46,20 @@ public class LoginCommand implements Command {
                         int enrolleeId = putInSessionEnrolleeAndPassportAndMarks(email, session);
                         boolean isAdded = putEnrolleeFacultyAndSpecialtyInSession(enrolleeId, session);
                         if (enrolleeId > 0 && isAdded) {
-                            session.removeAttribute(RequestParameters.ROLE);
-                            session.setAttribute(RequestParameters.ROLE, RoleType.USER);
+                            session.removeAttribute(RequestParameter.ROLE);
+                            session.setAttribute(RequestParameter.ROLE, RoleType.USER);
                             router = new Router(PagePath.PROFILE);
                         } else {
-                            router = new Router(ERROR_500);
+                            router = new Router(PagePath.ERROR);
                             logger.log(Level.ERROR, "Impossible find enrollee in db");
                         }
                     } else {
                         User user = optionalUser.get();
-                        session.setAttribute(RequestParameters.ENROLLEE, user);
+                        session.setAttribute(RequestParameter.ENROLLEE, user);
                         List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                        request.setAttribute(RequestParameters.FACULTIES, faculties);
-                        session.removeAttribute(RequestParameters.ROLE);
-                        session.setAttribute(RequestParameters.ROLE, RoleType.ADMIN);
+                        request.setAttribute(RequestParameter.FACULTIES, faculties);
+                        session.removeAttribute(RequestParameter.ROLE);
+                        session.setAttribute(RequestParameter.ROLE, RoleType.ADMIN);
                         router = new Router(PagePath.ADMIN_FACULTIES);
                     }
                 }else {
@@ -69,11 +69,11 @@ public class LoginCommand implements Command {
             } else {
                 parameters.put(MapKeys.EMAIL, email);
                 parameters.put(MapKeys.PASSWORD, password);
-                request.setAttribute(RequestParameters.PARAMETERS, parameters);
+                request.setAttribute(RequestParameter.PARAMETERS, parameters);
                 router = new Router(PagePath.LOGIN);
             }
         } catch (ServiceException e) {
-            router = new Router(ERROR_500);
+            router = new Router(PagePath.ERROR_500);
             logger.log(Level.ERROR, "Application error:", e);
         }
         return router;

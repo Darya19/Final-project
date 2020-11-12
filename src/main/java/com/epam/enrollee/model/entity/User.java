@@ -8,7 +8,6 @@ public class User {
     private int userId;
     private String email;
     private RoleType role;
-    private StatusType status;
 
     public User() {
     }
@@ -37,14 +36,6 @@ public class User {
         this.role = role;
     }
 
-    public StatusType getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusType status) {
-        this.status = status;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,8 +45,7 @@ public class User {
 
         if (getUserId() != user.getUserId()) return false;
         if (getEmail() != null ? !getEmail().equals(user.getEmail()) : user.getEmail() != null) return false;
-        if (getRole() != user.getRole()) return false;
-        return getStatus() == user.getStatus();
+        return getRole() == user.getRole();
     }
 
     @Override
@@ -63,17 +53,15 @@ public class User {
         int result = getUserId();
         result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
         result = 31 * result + (getRole() != null ? getRole().hashCode() : 0);
-        result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
-        sb.append("id=").append(userId);
+        sb.append("userId=").append(userId);
         sb.append(", email='").append(email).append('\'');
         sb.append(", role=").append(role);
-        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }
