@@ -23,12 +23,12 @@ public class EditMarksCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();
     private static final String EDIT_MARKS = "edit_marks";
-    private static final String EMPTY_STRING = "";
+    private static final String EMPTY_VALUE = "";
 
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeMarkRegisterServiceImpl registerService = new EnrolleeMarkRegisterServiceImpl();
+        EnrolleeMarkRegisterServiceImpl registerService = EnrolleeMarkRegisterServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session = request.getSession();
         Router router;
@@ -40,21 +40,21 @@ public class EditMarksCommand implements Command {
             parameters.put(key, request.getParameter(key));
         }
         parameters = registerService.checkParameters(parameters);
-        if (parameters.containsValue(EMPTY_STRING)) {
+        if (parameters.containsValue(EMPTY_VALUE)) {
             request.setAttribute(RequestParameter.PARAMETERS, parameters);
             request.setAttribute(RequestParameter.EDIT_PART, EDIT_MARKS);
             router = new Router(PagePath.EDIT_PROFILE);
         } else {
             try {
                 Optional<EnrolleeMarkRegister> markRegister = registerService
-                        .updateEnrolleRegister(enrollee.getUserId(), parameters);
+                        .updateEnrolleeRegister(enrollee.getUserId(), parameters);
                 if (markRegister.isPresent()) {
                     register = markRegister.get();
                     session.removeAttribute(RequestParameter.REGISTER);
                     session.setAttribute(RequestParameter.REGISTER, register);
                     router = new Router(PagePath.PROFILE);
                 } else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add updated marks in db");
                 }
             } catch (ServiceException e) {

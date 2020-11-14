@@ -1,14 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<fmt:setLocale value="en"/>
+<fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title><fmt:message key="main.title"/></title>
 </head>
 <body>
-<c:import url="//jsp//fragment//header.jsp"/>
+<c:import url="/jsp/fragment/header.jsp"/>
 <main class="page landing-page">
     <section class="clean-block clean-hero" style="background-image: url(/img/picture.jpg);color:rgba(9, 162, 255, 0.85);">
         <div class="text">
@@ -34,6 +35,6 @@
         </div>
     </section>
 </main>
-<c:import url="//jsp//fragment//footer.jsp"/>
+<c:import url="/jsp/fragment/footer.jsp"/>
 </body>
 </html>

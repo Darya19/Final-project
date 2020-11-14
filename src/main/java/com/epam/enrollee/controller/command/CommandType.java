@@ -79,6 +79,11 @@ public enum CommandType {
             this.command = new LogoutCommand();
         }
     },
+    PAGINATION {
+        {
+            this.command = new PaginationCommand();
+        }
+    },
     REGISTER {
         {
             this.command = new RegisterCommand();

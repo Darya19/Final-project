@@ -16,8 +16,8 @@ public interface Command {
 
     default int putInSessionEnrolleeAndPassportAndMarks(String email, HttpSession session)
             throws ServiceException {
-        EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
-        EnrolleeMarkRegisterServiceImpl markRegisterService = new EnrolleeMarkRegisterServiceImpl();
+        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
+        EnrolleeMarkRegisterServiceImpl markRegisterService = EnrolleeMarkRegisterServiceImpl.getInstance();
         Enrollee enrollee;
         int enrolleeId;
         Optional<Enrollee> optionalEnrollee = enrolleeService.findEnrolleeByEmail(email);
@@ -43,8 +43,8 @@ public interface Command {
 
     default boolean putEnrolleeFacultyAndSpecialtyInSession(int enrolleeId, HttpSession session)
             throws ServiceException {
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
+        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         boolean isAdded;
         Optional<Faculty> optionalFaculty = facultyService.findEnrolleeFaculty(enrolleeId);
         Optional<Specialty> optionalSpecialty = specialtyService.findEnrolleeSpecialty(enrolleeId);
@@ -60,10 +60,10 @@ public interface Command {
 
     default boolean putFacultiesSpecialtiesSubjectsInRequest(HttpServletRequest request)
             throws ServiceException {
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
-        SubjectServiceImpl subjectService = new SubjectServiceImpl();
-        Boolean isAdded;
+        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
+        SubjectServiceImpl subjectService = SubjectServiceImpl.getInstance();
+        boolean isAdded;
         List<Faculty> faculties = facultyService.findAllActiveFaculties();
         List<Specialty> specialties = specialtyService.findAllOpenSpecialties();
         List<Subject> subjects = subjectService.findAllSubjects();

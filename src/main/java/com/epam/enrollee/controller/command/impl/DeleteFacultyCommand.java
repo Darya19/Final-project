@@ -20,7 +20,7 @@ public class DeleteFacultyCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
         Router router;
         String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         try {
@@ -35,8 +35,8 @@ public class DeleteFacultyCommand implements Command {
                     request.setAttribute(RequestParameter.FACULTIES, faculties);
                     router = new Router(PagePath.ADMIN_FACULTIES);
                 }else {
-                    router = new Router(PagePath.ERROR_500);
-                    logger.log(Level.ERROR, "Impossible delete specialty ");
+                    router = new Router(PagePath.ERROR);
+                    logger.log(Level.ERROR, "Impossible delete specialty");
                 }
             }
         } catch (ServiceException e) {

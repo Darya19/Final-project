@@ -4,7 +4,8 @@ public enum  ApplicationStatus {
 
     CONSIDERED("considered"),
     ACCEPTED("accepted"),
-    REJECTED("rejected");
+    REJECTED("rejected"),
+    ARCHIVED("archived");
 
     private String applicationStatus;
 

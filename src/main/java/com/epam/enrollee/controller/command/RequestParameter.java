@@ -44,6 +44,8 @@ public class RequestParameter {
     public static final String STATUS = "status";
     public static final String IS_CHANGED = "is_changed";
     public static final String COMMAND = "command";
+    public static final String PAGE_NUMBER = "page_number";
+    public static final String CURRENT_PAGE = "current_page";
 
     private RequestParameter() {
     }

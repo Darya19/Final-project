@@ -55,7 +55,8 @@ public class EnrolleeMarkRegisterDaoImpl implements EnrolleeMarkRegisterDao {
     }
 
     @Override
-    public Optional<EnrolleeMarkRegister> findEnrolleeMarkRegisterByEnrolleeId(int enrolleeId) throws DaoException {
+    public Optional<EnrolleeMarkRegister> findEnrolleeMarkRegisterByEnrolleeId(int enrolleeId)
+            throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement
                      (FIND_ENROLLEE_REGISTER_BY_ENROLLEE_ID)) {

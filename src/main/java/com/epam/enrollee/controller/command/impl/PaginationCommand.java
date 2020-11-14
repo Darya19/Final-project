@@ -8,20 +8,16 @@ import com.epam.enrollee.controller.router.Router;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-public class ChangeLanguageCommand implements Command {
-
-    private static final String ENGLISH = "en";
-    private static final String RUSSIAN = "";
+public class PaginationCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        String language = request.getParameter(RequestParameter.LOCALE);
+        Router router;
+        String pageNumber = request.getParameter(RequestParameter.PAGE_NUMBER);
         HttpSession session = request.getSession();
-        if (language.equals(ENGLISH)) {
-            session.setAttribute(RequestParameter.LOCALE, RUSSIAN);
-        } else {
-            session.setAttribute(RequestParameter.LOCALE, ENGLISH);
-        }
-       return new Router(PagePath.MAIN);
+        session.removeAttribute(RequestParameter.PAGE_NUMBER);
+        session.setAttribute(RequestParameter.PAGE_NUMBER, pageNumber);
+        router = new Router(PagePath.APPLICATIONS);
+        return router;
     }
 }

@@ -10,4 +10,5 @@ public interface EnrolleeMarkRegisterDao {
     boolean update(EnrolleeMarkRegister register, int enrolleeId) throws DaoException;
 
     Optional<EnrolleeMarkRegister> findEnrolleeMarkRegisterByEnrolleeId(int enrolleeId) throws DaoException;
+
 }

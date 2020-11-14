@@ -23,7 +23,7 @@ public class ToEditProfilePageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         HttpSession  session = request.getSession();
         Router router;
         String editPart = request.getParameter(RequestParameter.EDIT_PART);
@@ -32,8 +32,7 @@ public class ToEditProfilePageCommand implements Command {
             if (editPart.equals(EDIT_SPECIALTY)) {
                 Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameter.ENROLLEE);
                 int facultyId = enrollee.getChosenFacultyId();
-                List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty
-                        (String.valueOf(facultyId));
+                List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty(String.valueOf(facultyId));
                 request.setAttribute(RequestParameter.SPECIALTIES, specialties);
             }
             router = new Router(PagePath.EDIT_PROFILE);

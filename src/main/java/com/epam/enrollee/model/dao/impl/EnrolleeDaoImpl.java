@@ -49,10 +49,11 @@ public class EnrolleeDaoImpl implements EnrolleeDao {
     private static final String REMOVE_MARKS = "DELETE FROM mark WHERE enrollee_id_fk=?";
     private static final String REMOVE_ENROLLEE_IN_SPECIALTY = "DELETE FROM enrollee_specialty WHERE enrollee_id_fk=?";
     private static final String REMOVE_ENROLLEE_IN_FACULTY = "DELETE FROM enrollee_faculty WHERE enrollee_id_fk=?";
-    private static final String FIND_ENROLLEE_BY_SPECIALTY_ID = "SELECT enrollee_id, email, role, enrollee_first_name, " +
+    private static final String FIND_UNARCHIVED_ENROLLEE_BY_SPECIALTY_ID = "SELECT enrollee_id, email, role, enrollee_first_name, " +
             "enrollee_last_name, enrollee_middle_name, faculty_id_fk as faculty_id,specialty_id_fk as specialty_id, " +
             "application_status FROM enrollee JOIN enrollee_faculty on enrollee.enrollee_id = enrollee_faculty.enrollee_id_fk " +
-            "JOIN enrollee_specialty on enrollee.enrollee_id = enrollee_specialty.enrollee_id_fk WHERE specialty_id_fk=?";
+            "JOIN enrollee_specialty on enrollee.enrollee_id = enrollee_specialty.enrollee_id_fk WHERE specialty_id_fk=? " +
+            "and application_status!=?";
     private static final String UPDATE_APPLICATION_STATUS_BY_ENROLLEE_ID = "UPDATE enrollee SET application_status=? " +
             "WHERE enrollee_id=?";
 
@@ -154,9 +155,9 @@ public class EnrolleeDaoImpl implements EnrolleeDao {
 
     @Override
     public boolean remove(Map<String, Object> parameters) throws DaoException {
-        boolean isFacultyRemoved = false;
-        boolean isSpecialtyRemoved = false;
-        boolean isMarksRemoved = false;
+        boolean isFacultyRemoved;
+        boolean isSpecialtyRemoved;
+        boolean isMarksRemoved;
         boolean isEnrolleeRemoved = false;
         Connection connection = ConnectionPool.INSTANCE.getConnection();
         PreparedStatement enrolleeStatement = null;
@@ -303,10 +304,11 @@ public class EnrolleeDaoImpl implements EnrolleeDao {
     }
 
     @Override
-    public List<Enrollee> findEnrolleeBySpecialtyId(int specialtyId) throws DaoException {
+    public List<Enrollee> findUnarchivedEnrolleeBySpecialtyId(int specialtyId) throws DaoException {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ENROLLEE_BY_SPECIALTY_ID)) {
+             PreparedStatement statement = connection.prepareStatement(FIND_UNARCHIVED_ENROLLEE_BY_SPECIALTY_ID)) {
             statement.setInt(1, specialtyId);
+            statement.setString(2, ApplicationStatus.ARCHIVED.getApplicationStatus());
             ResultSet resultSet = statement.executeQuery();
             List<Enrollee> enrollees = createEnrolleeListFromResultSet(resultSet);
             return enrollees;

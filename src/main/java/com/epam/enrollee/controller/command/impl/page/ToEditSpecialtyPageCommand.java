@@ -20,7 +20,7 @@ public class ToEditSpecialtyPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         Router router;
         String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
         try {
@@ -30,7 +30,7 @@ public class ToEditSpecialtyPageCommand implements Command {
                     request.setAttribute(RequestParameter.SPECIALTY, specialty.get());
                     router = new Router(PagePath.EDIT_SPECIALTY);
                 } else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible find chosen faculty.");
                 }
             } else {

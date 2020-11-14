@@ -24,9 +24,9 @@ public class RegisterCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
+        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
-        HttpSession session;
+        HttpSession session = request.getSession();
         Router router;
         int enrolleeId;
         boolean isRegister;
@@ -60,8 +60,7 @@ public class RegisterCommand implements Command {
                     logger.log(Level.ERROR, "Impossible create enrollee or register");
                 }
             } else {
-                session = request.getSession();
-                isRegister = enrolleeService.registerEnrollee(parameters);
+                isRegister = enrolleeService.create(parameters);
                 if (isRegister) {
                     enrolleeId = putInSessionEnrolleeAndPassportAndMarks
                             (parameters.get(MapKeys.EMAIL), session);
@@ -71,13 +70,13 @@ public class RegisterCommand implements Command {
                             session.setAttribute(RequestParameter.ROLE, RoleType.USER);
                             router = new Router(PagePath.PROFILE);
                         } else {
-                            router = new Router(PagePath.ERROR_500);
+                            router = new Router(PagePath.ERROR);
                             logger.log(Level.ERROR, "Impossible create faculty or specialty for enrollee");
                         }
-                    } else router = new Router(PagePath.ERROR_500);
+                    } else router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Incorrect enrollee id");
                 } else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add enroollee in db");
                 }
             }

@@ -1,7 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<fmt:setLocale value="en"/>
+<%@ taglib prefix="ctg" uri="customtags" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
@@ -19,8 +20,16 @@
                     <div class="col-md-6"><fmt:message key="applications.specialtyname"/> ${specialty.specialtyName}</div>
                     <div class="col-md-6"><fmt:message key="applications.numberofseats"/>${specialty.numberOfSeats}</div>
             </div>
+                <p></p>
             </div>
-            <c:if test="${has_application}">
+            <c:if test="${is_changed}">
+                <small>
+                    <label class="alert-danger"> <fmt:message key="applications.error"/></label>
+                </small>
+            </c:if>
+            <p></p>
+            </div>
+            <c:if test="${is_changed}">
                 <small>
                     <label class="alert-danger"> <fmt:message key="applications.acceptderror"/></label>
                 </small>
@@ -36,34 +45,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${enrollees}" var="enrollees">
-                    <tr>
-                        <td><c:out value="${enrollees.value.firstName} ${enrollees.value.lastName}"/></td>
-                    <td>${enrollees.key.averageMark}</td>
-                            <c:choose>
-                                <c:when test="${enrollees.value.applicationStatus == 'CONSIDERED' }">
-                        <td>
-                            <button class="btn btn-outline-primary btn-sm"
-                                    type="button"
-                                    onclick='location.href = "projectServlet?command=change_application_status&enrollee_id=${enrollees.value.userId}&status=accepted"'>
-                                <fmt:message key="applications.acceptbutton"/>
-                            </button>
-                        </td>
-                            <td>
-                                <button class="btn btn-outline-primary btn-sm"
-                                        type="button"
-                                        onclick='location.href = "projectServlet?command=change_application_status&enrollee_id=${enrollees.value.userId}&status=rejected"'>
-                                    <fmt:message key="applications.rejectbutton"/>
-                                </button>
-                            </td>
-                    </tr>
-                                </c:when>
-                    <c:otherwise>
-                        <td>${enrollees.value.applicationStatus}</td>
-                    </c:otherwise>
-                            </c:choose>
-                </c:forEach>
-                </tbody>
+               <ctg:application-pagination/>
             </table>
             <p></p>
             <div class="right-button">

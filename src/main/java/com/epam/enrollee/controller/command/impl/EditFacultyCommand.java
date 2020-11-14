@@ -25,7 +25,7 @@ public class EditFacultyCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
         Router router;
         String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
@@ -42,7 +42,7 @@ public class EditFacultyCommand implements Command {
                         request.setAttribute(RequestParameter.FACULTY, faculty.get());
                         router = new Router(PagePath.EDIT_FACULTY);
                     } else {
-                        router = new Router(PagePath.ERROR_500);
+                        router = new Router(PagePath.ERROR);
                         logger.log(Level.ERROR, "impossible find chosen faculty.");
                     }
                 } else {

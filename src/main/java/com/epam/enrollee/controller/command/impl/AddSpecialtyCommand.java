@@ -25,7 +25,7 @@ public class AddSpecialtyCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session = request.getSession();
         Router router;
@@ -45,7 +45,7 @@ public class AddSpecialtyCommand implements Command {
                     request.setAttribute(RequestParameter.SPECIALTIES, specialties);
                     router = new Router(PagePath.ADMIN_SPECIALTIES);
                 } else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add specialty to db");
                 }
             } catch (ServiceException e) {

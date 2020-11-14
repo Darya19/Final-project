@@ -24,10 +24,9 @@ public class ChangeApplicationStatusCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
+        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router;
-        int count = 0;
         String enrolleeId = request.getParameter(RequestParameter.ENROLLEE_ID);
         String status = request.getParameter(RequestParameter.STATUS);
         Specialty specialty = (Specialty) session.getAttribute(RequestParameter.SPECIALTY);

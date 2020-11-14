@@ -6,18 +6,18 @@ import com.epam.enrollee.model.dao.impl.EnrolleeMarkRegisterDaoImpl;
 import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Subject;
-import com.epam.enrollee.model.service.BaseService;
+import com.epam.enrollee.model.service.EnrolleeMarkRegisterService;
 import com.epam.enrollee.parser.NumberParser;
 import com.epam.enrollee.validator.ProjectValidator;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.Optional;
 
-public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMarkRegister> {
+public class EnrolleeMarkRegisterServiceImpl implements EnrolleeMarkRegisterService {
 
-    private static final String EMPTY_VALUE = "";
     public static EnrolleeMarkRegisterServiceImpl instance;
     private static Logger logger = LogManager.getLogger();
 
@@ -34,20 +34,6 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
     }
 
     @Override
-    public int remove(EnrolleeMarkRegister value) throws ServiceException {
-        return 0;
-    }
-
-    @Override
-    public Optional<EnrolleeMarkRegister> find(String value) throws ServiceException {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean update(int value, Map<String, String> parameters) throws ServiceException {
-        return false;
-    }
-
     public Optional<EnrolleeMarkRegister> findEnrolleeMarkRegister(int enrolleeId) throws ServiceException {
         EnrolleeMarkRegisterDaoImpl dao = EnrolleeMarkRegisterDaoImpl.getInstance();
         EnrolleeMarkRegister register;
@@ -62,11 +48,12 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
                 return Optional.empty();
             }
         } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in finding register", e);
             throw new ServiceException(e);
         }
     }
 
-    public Optional<EnrolleeMarkRegister> updateEnrolleRegister(int enrolleeId, Map<String, String> parameters)
+    public Optional<EnrolleeMarkRegister> updateEnrolleeRegister(int enrolleeId, Map<String, String> parameters)
             throws ServiceException {
         EnrolleeMarkRegisterDaoImpl registerDao = EnrolleeMarkRegisterDaoImpl.getInstance();
         SubjectDaoImpl subjectDao = SubjectDaoImpl.getInstance();
@@ -91,6 +78,7 @@ public class EnrolleeMarkRegisterServiceImpl implements BaseService<EnrolleeMark
                 return Optional.empty();
             }
         } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in updating register", e);
             throw new ServiceException(e);
         }
     }

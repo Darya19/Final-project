@@ -21,18 +21,17 @@ public class ToAdminFacultiesPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router;
-        try{
-            if(session.getAttribute(RequestParameter.FACULTY_ID) != null){
+        try {
+            if (session.getAttribute(RequestParameter.FACULTY_ID) != null) {
                 session.removeAttribute(RequestParameter.FACULTY_ID);
             }
-        List<Faculty> faculties = facultyService.findAllActiveFaculties();
-        request.setAttribute(RequestParameter.FACULTIES, faculties);
-        router = new Router(PagePath.ADMIN_FACULTIES);
-        }
-        catch (ServiceException e){
+            List<Faculty> faculties = facultyService.findAllActiveFaculties();
+            request.setAttribute(RequestParameter.FACULTIES, faculties);
+            router = new Router(PagePath.ADMIN_FACULTIES);
+        } catch (ServiceException e) {
             router = new Router(PagePath.ERROR_500);
             logger.log(Level.ERROR, "Application error:", e);
         }

@@ -19,18 +19,18 @@ import java.util.Map;
 
 public class AddFacultyCommand implements Command {
 
-    private static final String EMPTY_STRING = "";
+    private static final String EMPTY_VALUE = "";
     private static Logger logger = LogManager.getLogger();
 
     @Override
     public Router execute(HttpServletRequest request) {
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
         Router router;
         parameters.put(MapKeys.FACULTY_NAME, request.getParameter(RequestParameter.FACULTY_NAME));
         parameters.put(MapKeys.FACULTY_DESCRIPTION, request.getParameter(RequestParameter.FACULTY_DESCRIPTION));
         parameters = facultyService.checkParameters(parameters);
-        if (parameters.containsValue(EMPTY_STRING)) {
+        if (parameters.containsValue(EMPTY_VALUE)) {
             request.setAttribute(RequestParameter.PARAMETERS, parameters);
             router = new Router(PagePath.EDIT_FACULTY);
         } else {
@@ -40,7 +40,7 @@ public class AddFacultyCommand implements Command {
                     request.setAttribute(RequestParameter.FACULTIES, faculties);
                     router = new Router(PagePath.ADMIN_FACULTIES);
                 } else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add faculty to db");
                 }
             } catch (ServiceException e) {

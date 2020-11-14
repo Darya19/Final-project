@@ -20,7 +20,7 @@ public class ToEditFacultyPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
         Router router;
         String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         try {
@@ -30,7 +30,7 @@ public class ToEditFacultyPageCommand implements Command {
                     request.setAttribute(RequestParameter.FACULTY, faculty.get());
                     router = new Router(PagePath.EDIT_FACULTY);
                 } else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible find chosen faculty in db.");
                 }
             } else {

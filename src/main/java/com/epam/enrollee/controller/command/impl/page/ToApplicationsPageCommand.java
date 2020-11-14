@@ -25,27 +25,23 @@ public class ToApplicationsPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
-        EnrolleeMarkRegisterServiceImpl registerService = new EnrolleeMarkRegisterServiceImpl();
+        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
+        EnrolleeMarkRegisterServiceImpl registerService = EnrolleeMarkRegisterServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Map<EnrolleeMarkRegister, Enrollee> enrolleesMap = new TreeMap<>(Collections.reverseOrder());
         Router router;
         String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
         try {
-            List<Enrollee> enrollees = enrolleeService.findAllEnrolleesOnSpecialty(specialtyId);
+            session.setAttribute(RequestParameter.PAGE_NUMBER, 1);
+            Optional<Specialty> specialty = specialtyService.findSpecialtyById(specialtyId);
+            specialty.ifPresent(value -> session.setAttribute(RequestParameter.SPECIALTY, value));
+            List<Enrollee> enrollees = enrolleeService.findAllUnarchivedEnrolleesOnSpecialty(specialtyId);
             for (Enrollee enrollee : enrollees) {
                 int enrolleeId = enrollee.getUserId();
                 Optional<EnrolleeMarkRegister> register = registerService.findEnrolleeMarkRegister(enrolleeId);
                 if (register.isPresent()) {
                     enrolleesMap.put(register.get(), enrollee);
-                } else {
-                    router = new Router(PagePath.ERROR_500);
-                    logger.log(Level.ERROR, "Impossible find enrollee parameters");
-                }
-               Optional<Specialty> specialty = specialtyService.findSpecialtyById(specialtyId);
-                if(specialty.isPresent()){
-                    session.setAttribute(RequestParameter.SPECIALTY, specialty.get());
                 }
             }
             session.setAttribute(RequestParameter.ENROLLEES, enrolleesMap);

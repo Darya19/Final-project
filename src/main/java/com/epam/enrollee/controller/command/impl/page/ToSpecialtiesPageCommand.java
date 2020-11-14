@@ -23,8 +23,8 @@ public class ToSpecialtiesPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
+        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
         Router router;
         String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         try {
@@ -35,7 +35,7 @@ public class ToSpecialtiesPageCommand implements Command {
                 request.setAttribute(RequestParameter.FACULTY, faculty.get());
                 router = new Router(PagePath.SPECIALTIES);
             } else {
-                router = new Router(PagePath.ERROR_500);
+                router = new Router(PagePath.ERROR);
                 logger.log(Level.ERROR, "Impossible find faculty or specialty in db");
             }
         } catch (ServiceException e) {

@@ -3,55 +3,48 @@ package com.epam.enrollee.model.service.impl;
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
-import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Subject;
-import com.epam.enrollee.model.service.BaseService;
+import com.epam.enrollee.model.service.SubjectService;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-public class SubjectServiceImpl implements BaseService<Subject> {
+public class SubjectServiceImpl implements SubjectService {
 
-    public static EnrolleeMarkRegisterServiceImpl instance;
+    public static SubjectServiceImpl instance;
     private static Logger logger = LogManager.getLogger();
 
-    public static EnrolleeMarkRegisterServiceImpl getInstance() {
+    public static SubjectServiceImpl getInstance() {
         if (instance == null) {
-            instance = new EnrolleeMarkRegisterServiceImpl();
+            instance = new SubjectServiceImpl();
         }
         return instance;
     }
 
     @Override
     public boolean create(Map<String, String> parameters) throws ServiceException {
-        return false;
+        throw new UnsupportedOperationException("Impossible create subject");
     }
 
     @Override
-    public int remove(Subject user) throws ServiceException {
-        return 0;
+    public Map<String, String> checkParameters(Map<String, String> parameters) throws ServiceException {
+        throw new UnsupportedOperationException("Subject parameters is always true");
     }
+
 
     @Override
-    public Optional<Subject> find(String value) throws ServiceException {
-        return Optional.empty();
-    }
-
     public List<Subject> findAllSubjects() throws ServiceException {
         SubjectDaoImpl dao = SubjectDaoImpl.getInstance();
         try {
             List<Subject> subjects = dao.findAll();
-                return subjects;
+            return subjects;
         } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in finding all subjects", e);
             throw new ServiceException(e);
         }
     }
 
-    @Override
-    public boolean update(int value, Map<String, String> parameters) throws ServiceException {
-        return false;
-    }
 }

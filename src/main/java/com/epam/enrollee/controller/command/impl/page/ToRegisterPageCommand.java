@@ -22,7 +22,7 @@ public class ToRegisterPageCommand implements Command {
             if (putFacultiesSpecialtiesSubjectsInRequest(request)) {
                 router = new Router(PagePath.REGISTER);
             } else {
-                router = new Router(PagePath.ERROR_500);
+                router = new Router(PagePath.ERROR);
                 logger.log(Level.ERROR, "Impossible find faculties, specialties,subjects");
             }
         } catch (ServiceException e) {

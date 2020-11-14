@@ -20,7 +20,7 @@ public class ToFacultiesPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
         Router router;
         try {
             List<Faculty> faculties = facultyService.findAllActiveFaculties();

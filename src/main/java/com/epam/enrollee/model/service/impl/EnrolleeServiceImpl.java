@@ -7,6 +7,7 @@ import com.epam.enrollee.model.dao.impl.SpecialtyDaoImpl;
 import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
 import com.epam.enrollee.model.dao.impl.UserDaoImpl;
 import com.epam.enrollee.model.entity.*;
+import com.epam.enrollee.model.service.EnrolleeService;
 import com.epam.enrollee.model.type.ApplicationStatus;
 import com.epam.enrollee.model.type.RoleType;
 import com.epam.enrollee.model.type.StatusType;
@@ -21,21 +22,19 @@ import org.apache.logging.log4j.Logger;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public class EnrolleeServiceImpl {
+public class EnrolleeServiceImpl implements EnrolleeService {
 
-    private static final String EMPTY_STRING = "";
-
-    public static EnrolleeMarkRegisterServiceImpl instance;
+    public static EnrolleeServiceImpl instance;
     private static Logger logger = LogManager.getLogger();
 
-    public static EnrolleeMarkRegisterServiceImpl getInstance() {
+    public static EnrolleeServiceImpl getInstance() {
         if (instance == null) {
-            instance = new EnrolleeMarkRegisterServiceImpl();
+            instance = new EnrolleeServiceImpl();
         }
         return instance;
     }
 
-    //login register
+    @Override
     public Optional<Enrollee> findEnrolleeByEmail(String email) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
         try {
@@ -43,11 +42,11 @@ public class EnrolleeServiceImpl {
             return foundEnrollee;
         } catch (DaoException e) {
             logger.log(Level.ERROR, "Error while checking enrollee email", e);
-            throw new ServiceException("Checking email error", e);
+            throw new ServiceException(e);
         }
     }
 
-    //register edit pers
+    @Override
     public Map<String, String> checkParameters(Map<String, String> parameters)
             throws ServiceException {
         ProjectValidator validator = new ProjectValidator();
@@ -60,7 +59,7 @@ public class EnrolleeServiceImpl {
             if (parameters.containsKey(MapKeys.EMAIL) && !parameters.get(MapKeys.EMAIL).isEmpty()) {
                 Optional<User> user = userDao.findUserByEmail(parameters.get(MapKeys.EMAIL));
                 if (user.isPresent()) {
-                    parameters.put(MapKeys.EMAIL, EMPTY_STRING);
+                    parameters.put(MapKeys.EMAIL, EMPTY_VALUE);
                 }
             }
             if (parameters.containsKey(MapKeys.PASSWORD)
@@ -68,8 +67,8 @@ public class EnrolleeServiceImpl {
                     && !parameters.get(MapKeys.PASSWORD).isEmpty()
                     && !parameters.get(MapKeys.REPEATED_PASSWORD).isEmpty())) {
                 if (!parameters.get(MapKeys.PASSWORD).equals(parameters.get(MapKeys.REPEATED_PASSWORD))) {
-                    parameters.put(MapKeys.REPEATED_PASSWORD, EMPTY_STRING);
-                    parameters.put(MapKeys.PASSWORD, EMPTY_STRING);
+                    parameters.put(MapKeys.REPEATED_PASSWORD, EMPTY_VALUE);
+                    parameters.put(MapKeys.PASSWORD, EMPTY_VALUE);
                 }
             }
             if (parameters.containsKey(MapKeys.SPECIALTY_ID)
@@ -84,7 +83,7 @@ public class EnrolleeServiceImpl {
                     foundFacultyId = optionalFacultyId.get();
                     parameters.put(MapKeys.FACULTY_ID, String.valueOf(foundFacultyId));
                 } else {
-                    parameters.put(MapKeys.FACULTY_ID, EMPTY_STRING);
+                    parameters.put(MapKeys.FACULTY_ID, EMPTY_VALUE);
                 }
                 if (subjects.isEmpty()) {
                     Set<String> subjectsId = new HashSet<>();
@@ -98,34 +97,34 @@ public class EnrolleeServiceImpl {
                             int foundSubjectId = subject.getSubjectId();
                             if (!subjectsId.contains(String.valueOf(foundSubjectId))
                                     && foundSubjectId != 2 && foundSubjectId != 3) {
-                                parameters.put(MapKeys.SUBJECT_ID_1, EMPTY_STRING);
-                                parameters.put(MapKeys.SUBJECT_ID_2, EMPTY_STRING);
-                                parameters.put(MapKeys.SUBJECT_ID_3, EMPTY_STRING);
-                                parameters.put(MapKeys.SUBJECT_ID_4, EMPTY_STRING);
+                                parameters.put(MapKeys.SUBJECT_ID_1, EMPTY_VALUE);
+                                parameters.put(MapKeys.SUBJECT_ID_2, EMPTY_VALUE);
+                                parameters.put(MapKeys.SUBJECT_ID_3, EMPTY_VALUE);
+                                parameters.put(MapKeys.SUBJECT_ID_4, EMPTY_VALUE);
                             }
                         }
                     } else {
-                        parameters.put(MapKeys.SUBJECT_ID_1, EMPTY_STRING);
-                        parameters.put(MapKeys.SUBJECT_ID_2, EMPTY_STRING);
-                        parameters.put(MapKeys.SUBJECT_ID_3, EMPTY_STRING);
-                        parameters.put(MapKeys.SUBJECT_ID_4, EMPTY_STRING);
+                        parameters.put(MapKeys.SUBJECT_ID_1, EMPTY_VALUE);
+                        parameters.put(MapKeys.SUBJECT_ID_2, EMPTY_VALUE);
+                        parameters.put(MapKeys.SUBJECT_ID_3, EMPTY_VALUE);
+                        parameters.put(MapKeys.SUBJECT_ID_4, EMPTY_VALUE);
                     }
                 } else {
-                    parameters.put(MapKeys.SUBJECT_ID_1, EMPTY_STRING);
-                    parameters.put(MapKeys.SUBJECT_ID_2, EMPTY_STRING);
-                    parameters.put(MapKeys.SUBJECT_ID_3, EMPTY_STRING);
-                    parameters.put(MapKeys.SUBJECT_ID_4, EMPTY_STRING);
+                    parameters.put(MapKeys.SUBJECT_ID_1, EMPTY_VALUE);
+                    parameters.put(MapKeys.SUBJECT_ID_2, EMPTY_VALUE);
+                    parameters.put(MapKeys.SUBJECT_ID_3, EMPTY_VALUE);
+                    parameters.put(MapKeys.SUBJECT_ID_4, EMPTY_VALUE);
                 }
             }
             return parameters;
         } catch (DaoException e) {
             logger.log(Level.ERROR, "Error in checking parameters", e);
-            throw new ServiceException("Error while checking input parameters", e);
+            throw new ServiceException(e);
         }
     }
 
-    //register
-    public boolean registerEnrollee(Map<String, String> parameters) throws ServiceException {
+    @Override
+    public boolean create(Map<String, String> parameters) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         Map<String, Object> createdObjects = new HashMap<>();
@@ -165,10 +164,11 @@ public class EnrolleeServiceImpl {
             return enrolleeDao.add(createdObjects);
         } catch (DaoException | NoSuchAlgorithmException e) {
             logger.log(Level.ERROR, "Error while adding enrollee to db", e);
-            throw new ServiceException("Error while adding enrollee", e);
+            throw new ServiceException(e);
         }
     }
 
+    @Override
     public Optional<Passport> findEnrolleePassport(int enrolleeId) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
         try {
@@ -180,6 +180,7 @@ public class EnrolleeServiceImpl {
         }
     }
 
+    @Override
     public Optional<Enrollee> updateEnrolleeNameInformation(Enrollee enrollee, Map<String, String> parameters)
             throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
@@ -189,10 +190,12 @@ public class EnrolleeServiceImpl {
         try {
             return enrolleeDao.updateEnrollee(enrollee) ? Optional.of(enrollee) : Optional.empty();
         } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in updating enrollee information", e);
             throw new ServiceException(e);
         }
     }
 
+    @Override
     public Optional<Passport> updateEnrolleePassportInformation(Passport passport, Map<String, String> parameters)
             throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
@@ -201,12 +204,13 @@ public class EnrolleeServiceImpl {
         try {
             return enrolleeDao.updatePassport(passport) ? Optional.of(passport) : Optional.empty();
         } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in updating passport information", e);
             throw new ServiceException(e);
         }
     }
 
-    public Optional<Enrollee> updateEnrolleeSpecialty(Enrollee enrollee, String specialtyId)
-            throws ServiceException {
+    @Override
+    public Optional<Enrollee> updateEnrolleeSpecialty(Enrollee enrollee, String specialtyId) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
@@ -222,22 +226,24 @@ public class EnrolleeServiceImpl {
             }
             return updatedEnrollee;
         } catch (DaoException e) {
-            logger.log(Level.ERROR, "Impossible update enrollee specialty", e);
-            throw new ServiceException("Impossible update enrollee specialty", e);
+            logger.log(Level.ERROR, "Error in updating enrollee specialty", e);
+            throw new ServiceException(e);
         }
     }
 
-    public boolean removeEnrollee(Map<String, Object> parameters) throws ServiceException {
+    @Override
+    public boolean remove(Map<String, Object> parameters) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
         try {
             return enrolleeDao.remove(parameters);
         } catch (DaoException e) {
-            logger.log(Level.ERROR, "Impossible remove enrollee specialty", e);
-            throw new ServiceException("Impossible remove enrollee specialty", e);
+            logger.log(Level.ERROR, "Error in removing enrollee specialty", e);
+            throw new ServiceException(e);
         }
     }
 
-    public List<Enrollee> findAllEnrolleesOnSpecialty(String specialtyId) throws ServiceException {
+    @Override
+    public List<Enrollee> findAllUnarchivedEnrolleesOnSpecialty(String specialtyId) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
@@ -246,19 +252,19 @@ public class EnrolleeServiceImpl {
         try {
             if (validator.isIntParameterValid(specialtyId)) {
                 intSpecialtyId = parser.parseToInt(specialtyId);
-                enrollees = enrolleeDao.findEnrolleeBySpecialtyId(intSpecialtyId);
+                enrollees = enrolleeDao.findUnarchivedEnrolleeBySpecialtyId(intSpecialtyId);
             } else {
                 enrollees = new ArrayList<>();
             }
         } catch (DaoException e) {
-            logger.log(Level.ERROR, "Impossible find enrollees by current specialty", e);
-            throw new ServiceException("Impossible find enrollees by current specialty", e);
+            logger.log(Level.ERROR, "Error in finding enrollees by current specialty", e);
+            throw new ServiceException(e);
         }
         return enrollees;
     }
 
-    public boolean changeApplicationStatus(String enrolleeId, String status, Specialty specialty)
-            throws ServiceException {
+    @Override
+    public boolean changeApplicationStatus(String enrolleeId, String status, Specialty specialty) throws ServiceException {
         EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
         SpecialtyDaoImpl specialtyDao = SpecialtyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
@@ -268,21 +274,22 @@ public class EnrolleeServiceImpl {
         if (validator.isIntParameterValid(enrolleeId)
                 && validator.isStringParameterValid(status)) {
             try {
-                int count = specialtyDao.findAllEnrolleeWithAcceptedApplicationStatus(specialty.getSpecialtyId());
-                if (count < specialty.getNumberOfSeats()) {
-                    intEnrolleeId = parser.parseToInt(enrolleeId);
-                    if (status.equals(ApplicationStatus.ACCEPTED.getApplicationStatus())) {
+                intEnrolleeId = parser.parseToInt(enrolleeId);
+                if (status.equals(ApplicationStatus.ACCEPTED.getApplicationStatus())) {
+                    int count = specialtyDao.findAllEnrolleeWithAcceptedApplicationStatus(specialty.getSpecialtyId());
+                    if (count < specialty.getNumberOfSeats()) {
                         isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
                                 ApplicationStatus.ACCEPTED.getApplicationStatus());
                     } else {
-                        isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
-                                ApplicationStatus.REJECTED.getApplicationStatus());
+                        isChanged = false;
                     }
                 } else {
-                    isChanged = false;
+                    isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
+                            ApplicationStatus.REJECTED.getApplicationStatus());
                 }
                 return isChanged;
             } catch (DaoException e) {
+                logger.log(Level.ERROR, "Error in changing application status", e);
                 throw new ServiceException(e);
             }
         } else {

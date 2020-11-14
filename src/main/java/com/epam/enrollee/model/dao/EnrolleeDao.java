@@ -19,7 +19,7 @@ public interface EnrolleeDao extends BaseDao<Enrollee> {
 
     Optional<Passport> findPassportByEnrolleeId(int enrolleeId) throws DaoException;
 
-    List<Enrollee> findEnrolleeBySpecialtyId(int specialtyId) throws DaoException;
+    List<Enrollee> findUnarchivedEnrolleeBySpecialtyId(int specialtyId) throws DaoException;
 
     boolean updateApplicationStatusByEnrolleeId(int enrolleeId, String applicationStatus) throws DaoException;
 }

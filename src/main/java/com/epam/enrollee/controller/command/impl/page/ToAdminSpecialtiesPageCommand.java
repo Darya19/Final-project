@@ -21,7 +21,7 @@ public class ToAdminSpecialtiesPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router;
         String facultyId = request.getParameter(RequestParameter.FACULTY_ID);

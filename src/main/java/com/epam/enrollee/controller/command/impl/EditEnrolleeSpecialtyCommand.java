@@ -26,8 +26,8 @@ public class EditEnrolleeSpecialtyCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
+        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router;
         Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameter.ENROLLEE);
@@ -51,7 +51,7 @@ public class EditEnrolleeSpecialtyCommand implements Command {
                     session.setAttribute(RequestParameter.SPECIALTY, optionalSpecialty.get());
                     router = new Router(PagePath.PROFILE);
                 } else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add updated enrollee specialty in db");
                 }
             }

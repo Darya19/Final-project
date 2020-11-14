@@ -31,9 +31,9 @@ public class LoginCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        UserServiceImpl userService = new UserServiceImpl();
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
-        HttpSession session = session = request.getSession();
+        UserServiceImpl userService = UserServiceImpl.getInstance();
+        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
+        HttpSession session = request.getSession();
         Map<String, String> parameters = new HashMap<>();
         Router router;
         String email = request.getParameter(RequestParameter.EMAIL);
@@ -63,7 +63,7 @@ public class LoginCommand implements Command {
                         router = new Router(PagePath.ADMIN_FACULTIES);
                     }
                 }else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible find enrollee faculty or specialty in db");
                 }
             } else {

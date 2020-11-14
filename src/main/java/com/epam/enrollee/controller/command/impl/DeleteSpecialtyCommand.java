@@ -21,7 +21,7 @@ public class DeleteSpecialtyCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router;
         String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
@@ -38,7 +38,7 @@ public class DeleteSpecialtyCommand implements Command {
                     request.setAttribute(RequestParameter.SPECIALTIES, specialties);
                     router = new Router(PagePath.ADMIN_SPECIALTIES);
                 } else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible delete specialty ");
                 }
             }

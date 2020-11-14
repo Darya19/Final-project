@@ -43,7 +43,8 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
             "recruitment, number_of_seats, specialty_status FROM specialty WHERE specialty_status=? and faculty_id_fk=?";
     private static final String UPDATE_RECRUITMENT_BY_SPECIALTY_ID = "UPDATE specialty SET recruitment=? WHERE specialty_id=?";
     private static final String FIND_ENROLLE_ID_BY_SPECIALTY_ID = "SELECT enrollee_id_fk as enrollee_id FROM " +
-            "enrollee_specialty JOIN enrollee WHERE application_status=? and specialty_id_fk=?";
+            "enrollee JOIN enrollee_specialty es on enrollee.enrollee_id = es.enrollee_id_fk  WHERE application_status=? " +
+            "and specialty_id_fk=?";
     private static final String ADD_SPECIALTY = "INSERT INTO specialty(specialty_name, faculty_id_fk, recruitment, " +
             "number_of_seats, specialty_status) VALUES (?,?,?,?,?)";
     private static final String UPDATE_SPECIALTY_STATUS_BY_ID = "UPDATE specialty SET specialty_status=? WHERE specialty_id=?";
@@ -51,6 +52,11 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
             "specialty_id=?";
     private static final String FIND_ENROLLE_ID_WITH_ACCEPTED_STATUS = "SELECT enrollee_id FROM enrollee JOIN " +
             "enrollee_specialty es on enrollee.enrollee_id = es.enrollee_id_fk WHERE application_status=? and specialty_id_fk=?";
+    private static final String FIND_ENROLLE_ID_WITH_ACCEPTED_AND_REJECTED_STATUS = "SELECT enrollee_id FROM enrollee JOIN " +
+            "enrollee_specialty es on enrollee.enrollee_id = es.enrollee_id_fk WHERE (application_status=? or " +
+            "application_status =?) and specialty_id_fk=?";
+    private static final String UPDATE_ENROLLEE_APPLICATION_STATUS = "UPDATE enrollee SET application_status=? " +
+            "WHERE enrollee_id=?";
 
     public static SpecialtyDaoImpl getInstance() {
         if (instance == null) {
@@ -70,7 +76,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
             statement.setString(5, StatusType.ACTIVE.getStatus());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Impossible add subject", e);
+            logger.log(Level.ERROR, "Impossible add specialty", e);
             throw new DaoException("Database issues while adding specialty", e);
         }
     }
@@ -230,18 +236,78 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     }
 
     @Override
-    public boolean updateRecruitmentBySpecialtyId(int specialtyId, String recruitment) throws DaoException {
+    public boolean updateOpenedRecruitmentBySpecialtyId(int specialtyId, List<Integer> applications) throws DaoException {
+        boolean isRecruitmentUpdate;
+        Connection connection = ConnectionPool.INSTANCE.getConnection();
+        PreparedStatement specialtyStatement = null;
+        PreparedStatement enrolleeStatement = null;
+        try {
+            connection.setAutoCommit(false);
+            specialtyStatement = connection.prepareStatement(UPDATE_RECRUITMENT_BY_SPECIALTY_ID);
+            enrolleeStatement = connection.prepareStatement(UPDATE_ENROLLEE_APPLICATION_STATUS);
+            specialtyStatement.setString(1, RecruitmentType.CLOSED.getType());
+            specialtyStatement.setInt(2, specialtyId);
+            isRecruitmentUpdate = specialtyStatement.executeUpdate() > 0;
+            if (isRecruitmentUpdate) {
+                for (Integer enrolleeId : applications) {
+                    enrolleeStatement.setString(1, ApplicationStatus.ARCHIVED.getApplicationStatus());
+                    enrolleeStatement.setInt(2, enrolleeId);
+                    enrolleeStatement.executeUpdate();
+                }
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                logger.log(Level.ERROR, "Impossible rollback committing", ex);
+            }
+            throw new DaoException("Impossible update specialty recruitment for enrollee", e);
+        } finally {
+            closeStatement(enrolleeStatement);
+            closeStatement(specialtyStatement);
+            try {
+                connection.setAutoCommit(true);
+                connection.close();
+            } catch (SQLException throwables) {
+                logger.log(Level.ERROR, "Impossible return connection to pool");
+            }
+        }
+        return isRecruitmentUpdate;
+    }
+
+    @Override
+    public boolean updateClosedRecruitmentBySpecialtyId(int specialtyId) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
-             PreparedStatement statement = connection.prepareStatement
-                     (UPDATE_RECRUITMENT_BY_SPECIALTY_ID)) {
-            statement.setString(1, recruitment);
+             PreparedStatement statement = connection.prepareStatement (UPDATE_RECRUITMENT_BY_SPECIALTY_ID)) {
+            statement.setString(1, RecruitmentType.OPENED.getType());
             statement.setInt(2, specialtyId);
             isUpdated = statement.executeUpdate() > 0;
             return isUpdated;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Impossible update recruitment by specialty id", e);
             throw new DaoException("Database issues while updating recruitment by specialty id", e);
+        }
+    }
+
+    @Override
+    public List<Integer> findAllUnarchivedEnrolleeBySpecialtyId(int specialtyId) throws DaoException {
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ENROLLE_ID_WITH_ACCEPTED_AND_REJECTED_STATUS)) {
+            statement.setString(1, ApplicationStatus.ACCEPTED.getApplicationStatus());
+            statement.setString(2, ApplicationStatus.REJECTED.getApplicationStatus());
+            statement.setInt(3, specialtyId);
+            ResultSet resultSet = statement.executeQuery();
+            List<Integer> foundEnrolleeId = new ArrayList<>();
+            while (resultSet.next()) {
+                foundEnrolleeId.add(resultSet.getInt(ColumnName.ENROLLEE_ID));
+            }
+            return foundEnrolleeId;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Impossible find enrollee with accepted and rejected status by specialty id", e);
+            throw new DaoException("Database issues while finding enrollee with accepted  and rejected status by " +
+                    "specialty id", e);
         }
     }
 

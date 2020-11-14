@@ -22,7 +22,7 @@ import java.util.Optional;
 public class EditPersonalInformationCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();
-    private static final String EMPTY_STRING = "";
+    private static final String EMPTY_VALUE = "";
     private static final String EDIT_PERSONAL_INFORMATION = "edit_personal_information";
 
     @Override
@@ -40,7 +40,7 @@ public class EditPersonalInformationCommand implements Command {
             parameters.put(MapKeys.PERSONAL_NUMBER, request.getParameter(RequestParameter.PERSONAL_NUMBER));
            try {
             Map<String, String> checkedParameters = enrolleeService.checkParameters(parameters);
-            if (checkedParameters.containsValue(EMPTY_STRING)) {
+            if (checkedParameters.containsValue(EMPTY_VALUE)) {
                 request.setAttribute(RequestParameter.PARAMETERS, checkedParameters);
                 request.setAttribute(RequestParameter.EDIT_PART, EDIT_PERSONAL_INFORMATION);
                 router = new Router(PagePath.EDIT_PROFILE);
@@ -56,7 +56,7 @@ public class EditPersonalInformationCommand implements Command {
                     session.setAttribute(RequestParameter.PASSPORT, optionalPassport.get());
                     router = new Router(PagePath.PROFILE);
                 } else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add updated enrollee personal information in db");
                 }
             }

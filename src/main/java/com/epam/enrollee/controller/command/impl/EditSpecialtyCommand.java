@@ -26,7 +26,7 @@ public class EditSpecialtyCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = new SpecialtyServiceImpl();
+        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session = request.getSession();
         Router router;
@@ -45,7 +45,7 @@ public class EditSpecialtyCommand implements Command {
                         request.setAttribute(RequestParameter.SPECIALTY, specialty.get());
                         router = new Router(PagePath.EDIT_SPECIALTY);
                     } else {
-                        router = new Router(PagePath.ERROR_500);
+                        router = new Router(PagePath.ERROR);
                         logger.log(Level.ERROR, "Impossible find chosen specialty.");
                     }
                 } else {
@@ -54,12 +54,12 @@ public class EditSpecialtyCommand implements Command {
                         request.setAttribute(RequestParameter.SPECIALTIES, specialties);
                         router = new Router(PagePath.ADMIN_SPECIALTIES);
                     } else {
-                        router = new Router(PagePath.ERROR_500);
+                        router = new Router(PagePath.ERROR);
                         logger.log(Level.ERROR, "impossible update faculty");
                     }
                 }
             } else {
-                router = new Router(PagePath.ERROR_500);
+                router = new Router(PagePath.ERROR);
                 logger.log(Level.ERROR, "Incorrect specialty id.");
             }
         } catch (ServiceException e) {

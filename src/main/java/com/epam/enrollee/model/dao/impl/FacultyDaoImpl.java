@@ -33,7 +33,7 @@ public class FacultyDaoImpl implements UniversityDao<Faculty> {
     private static final String FIND_ALL_ACTIVE_FACULTIES = "SELECT faculty_id, faculty_name, faculty_description, " +
             "faculty_status FROM faculty WHERE faculty_status=?";
     private static final String FIND_ENROLLE_ID_BY_FACULTY_ID = "SELECT enrollee_id_fk as enrollee_id FROM " +
-            "enrollee_faculty JOIN enrollee WHERE application_status =? and faculty_id_fk=?";
+            "enrollee_faculty JOIN enrollee ON enrollee_faculty.enrollee_id_fk = enrollee.enrollee_id WHERE application_status =? and faculty_id_fk=?";
     private static final String UPDATE_FACULTY_STATUS_BY_ID = "UPDATE faculty SET faculty_status=? WHERE faculty_id=?";
     private static final String UPDATE_FACULTY_BY_ID = "UPDATE faculty SET faculty_name=?, faculty_description=? WHERE " +
             "faculty_id=?";

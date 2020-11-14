@@ -14,7 +14,11 @@ public interface SpecialtyDao extends UniversityDao<Specialty> {
 
     List<Specialty> findActiveSpecialtiesListByFacultyId(int facultyId) throws DaoException;
 
-    boolean updateRecruitmentBySpecialtyId(int specialtyId, String recruitment) throws DaoException;
+    boolean updateOpenedRecruitmentBySpecialtyId(int specialtyId, List<Integer> applications) throws DaoException;
+
+    boolean updateClosedRecruitmentBySpecialtyId(int specialtyId) throws DaoException;
 
     int findAllEnrolleeWithAcceptedApplicationStatus(int specialtyId) throws DaoException;
+
+    List<Integer> findAllUnarchivedEnrolleeBySpecialtyId(int specialtyId) throws DaoException;
 }

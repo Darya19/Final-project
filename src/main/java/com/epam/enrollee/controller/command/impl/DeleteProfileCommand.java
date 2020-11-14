@@ -24,7 +24,7 @@ public class DeleteProfileCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeServiceImpl enrolleeService = new EnrolleeServiceImpl();
+        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router = null;
         Map<String, Object> parameters = new HashMap<>();
@@ -33,7 +33,7 @@ public class DeleteProfileCommand implements Command {
         parameters.put(MapKeys.ENROLLEE, enrollee);
         parameters.put(MapKeys.PASSPORT, passport);
         try {
-            if (enrolleeService.removeEnrollee(parameters)) {
+            if (enrolleeService.remove(parameters)) {
                 router = new Router(PagePath.INDEX);
                 session.invalidate();
             }

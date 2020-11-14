@@ -6,9 +6,11 @@ import com.epam.enrollee.model.dao.impl.FacultyDaoImpl;
 import com.epam.enrollee.model.dao.impl.SpecialtyDaoImpl;
 import com.epam.enrollee.model.entity.Faculty;
 import com.epam.enrollee.model.entity.Specialty;
+import com.epam.enrollee.model.service.FacultyService;
 import com.epam.enrollee.parser.NumberParser;
 import com.epam.enrollee.util.MapKeys;
 import com.epam.enrollee.validator.ProjectValidator;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,19 +19,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class FacultyServiceImpl {
+public class FacultyServiceImpl implements FacultyService {
 
-    private static final String EMPTY_STRING = "";
-    public static EnrolleeMarkRegisterServiceImpl instance;
+    public static FacultyServiceImpl instance;
     private static Logger logger = LogManager.getLogger();
 
-    public static EnrolleeMarkRegisterServiceImpl getInstance() {
+    public static FacultyServiceImpl getInstance() {
         if (instance == null) {
-            instance = new EnrolleeMarkRegisterServiceImpl();
+            instance = new FacultyServiceImpl();
         }
         return instance;
     }
 
+    @Override
     public boolean create(Map<String, String> parameters) throws ServiceException {
         FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
         Map<String, Object> objectMap = new HashMap<>();
@@ -41,10 +43,12 @@ public class FacultyServiceImpl {
         try {
             return facultyDao.add(objectMap);
         } catch (DaoException e) {
-            throw new ServiceException("Impossible add faculty", e);
+            logger.log(Level.ERROR, "Error in adding faculty", e);
+            throw new ServiceException(e);
         }
     }
 
+    @Override
     public boolean removeFacultyAndItsSpecialties(String facultyId) throws ServiceException {
         FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
         SpecialtyDaoImpl specialtyDao = SpecialtyDaoImpl.getInstance();
@@ -60,6 +64,7 @@ public class FacultyServiceImpl {
                 }
                 return facultyDao.updateStatusById(intFacultyId);
             } catch (DaoException e) {
+                logger.log(Level.ERROR, "Error in removing faculty and it's specialties", e);
                 throw new ServiceException(e);
             }
         } else {
@@ -67,6 +72,7 @@ public class FacultyServiceImpl {
         }
     }
 
+    @Override
     public boolean checkConsideredApplications(String facultyId) throws ServiceException {
         FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
@@ -78,6 +84,7 @@ public class FacultyServiceImpl {
                 List<Integer> foundEnrolleId = facultyDao.findConsideredEnrolleeIdById(intFacultyId);
                 return foundEnrolleId.size() > 0;
             } catch (DaoException e) {
+                logger.log(Level.ERROR, "Error in checking applications", e);
                 throw new ServiceException(e);
             }
         } else {
@@ -85,23 +92,18 @@ public class FacultyServiceImpl {
         }
     }
 
-
-    public Optional<Faculty> find(String value) throws ServiceException {
-        return Optional.empty();
-    }
-
-    //login admin
     public List<Faculty> findAllActiveFaculties() throws ServiceException {
         FacultyDaoImpl dao = FacultyDaoImpl.getInstance();
         try {
             List<Faculty> faculties = dao.findAll();
             return faculties;
         } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in finding active faculties", e);
             throw new ServiceException(e);
         }
     }
 
-
+    @Override
     public boolean update(Map<String, String> parameters) throws ServiceException {
         FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
@@ -114,10 +116,12 @@ public class FacultyServiceImpl {
             objectParameters.put(MapKeys.FACULTY_DESCRIPTION, parameters.get(MapKeys.FACULTY_DESCRIPTION));
             return facultyDao.update(objectParameters);
         } catch (DaoException e) {
-            throw new ServiceException("Impossible add faculty", e);
+            logger.log(Level.ERROR, "Error in updating faculty", e);
+            throw new ServiceException(e);
         }
     }
 
+    @Override
     public Optional<Faculty> findFacultyById(String facultyId) throws ServiceException {
         FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
@@ -130,21 +134,24 @@ public class FacultyServiceImpl {
             Optional<Faculty> faculty = facultyDao.findById(intFacultyId);
             return faculty;
         } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in finding faculty", e);
             throw new ServiceException(e);
         }
     }
 
-    //login register
+    @Override
     public Optional<Faculty> findEnrolleeFaculty(int enrolleeId) throws ServiceException {
         FacultyDaoImpl dao = FacultyDaoImpl.getInstance();
         try {
             Optional<Faculty> faculty = dao.findByEnrolleeId(enrolleeId);
             return faculty;
         } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in finding enrollee faculty", e);
             throw new ServiceException(e);
         }
     }
 
+    @Override
     public Map<String, String> checkParameters(Map<String, String> parameters) {
         ProjectValidator validator = new ProjectValidator();
         boolean isNameValid;
@@ -152,13 +159,13 @@ public class FacultyServiceImpl {
             boolean isFacultyIdValid;
             isFacultyIdValid = validator.isIntParameterValid(parameters.get(MapKeys.FACULTY_ID));
             if (!isFacultyIdValid) {
-                parameters.put(MapKeys.FACULTY_ID, EMPTY_STRING);
+                parameters.put(MapKeys.FACULTY_ID, EMPTY_VALUE);
             }
         }
         isNameValid = validator.isStringParameterValid(parameters.get(MapKeys.FACULTY_NAME));
         String description = validator.validateDescription(parameters.get(MapKeys.FACULTY_DESCRIPTION));
         if (!isNameValid) {
-            parameters.put(MapKeys.FACULTY_NAME, EMPTY_STRING);
+            parameters.put(MapKeys.FACULTY_NAME, EMPTY_VALUE);
             parameters.put(MapKeys.FACULTY_DESCRIPTION, description);
         }
         return parameters;
