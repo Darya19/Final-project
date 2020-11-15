@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -22,7 +23,6 @@ import java.util.Optional;
 public class EditPersonalInformationCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();
-    private static final String EMPTY_VALUE = "";
     private static final String EDIT_PERSONAL_INFORMATION = "edit_personal_information";
 
     @Override
@@ -33,27 +33,27 @@ public class EditPersonalInformationCommand implements Command {
         Router router;
         Passport passport;
         Enrollee enrollee;
-            parameters.put(MapKeys.FIRST_NAME, request.getParameter(RequestParameter.FIRST_NAME));
-            parameters.put(MapKeys.LAST_NAME, request.getParameter(RequestParameter.LAST_NAME));
-            parameters.put(MapKeys.MIDDLE_NAME, request.getParameter(RequestParameter.MIDDLE_NAME));
-            parameters.put(MapKeys.PASSPORT_SERIES_AND_NUMBER, request.getParameter(RequestParameter.PASSPORT_SERIES_AND_NUMBER));
-            parameters.put(MapKeys.PERSONAL_NUMBER, request.getParameter(RequestParameter.PERSONAL_NUMBER));
-           try {
+        parameters.put(MapKeys.FIRST_NAME, request.getParameter(RequestParameter.FIRST_NAME));
+        parameters.put(MapKeys.LAST_NAME, request.getParameter(RequestParameter.LAST_NAME));
+        parameters.put(MapKeys.MIDDLE_NAME, request.getParameter(RequestParameter.MIDDLE_NAME));
+        parameters.put(MapKeys.PASSPORT_SERIES_AND_NUMBER, request.getParameter(RequestParameter.PASSPORT_SERIES_AND_NUMBER));
+        parameters.put(MapKeys.PERSONAL_NUMBER, request.getParameter(RequestParameter.PERSONAL_NUMBER));
+        try {
             Map<String, String> checkedParameters = enrolleeService.checkParameters(parameters);
             if (checkedParameters.containsValue(EMPTY_VALUE)) {
-                request.setAttribute(RequestParameter.PARAMETERS, checkedParameters);
-                request.setAttribute(RequestParameter.EDIT_PART, EDIT_PERSONAL_INFORMATION);
+                request.setAttribute(AttributeName.PARAMETERS, checkedParameters);
+                request.setAttribute(AttributeName.EDIT_PART, EDIT_PERSONAL_INFORMATION);
                 router = new Router(PagePath.EDIT_PROFILE);
             } else {
-                enrollee = (Enrollee) session.getAttribute(RequestParameter.ENROLLEE);
-                passport = (Passport) session.getAttribute(RequestParameter.PASSPORT);
+                enrollee = (Enrollee) session.getAttribute(AttributeName.ENROLLEE);
+                passport = (Passport) session.getAttribute(AttributeName.PASSPORT);
                 Optional<Enrollee> optionalEnrollee = enrolleeService.updateEnrolleeNameInformation(enrollee, parameters);
                 Optional<Passport> optionalPassport = enrolleeService.updateEnrolleePassportInformation(passport, parameters);
                 if (optionalEnrollee.isPresent() && optionalPassport.isPresent()) {
-                    session.removeAttribute(RequestParameter.ENROLLEE);
-                    session.removeAttribute(RequestParameter.PASSPORT);
-                    session.setAttribute(RequestParameter.ENROLLEE, optionalEnrollee.get());
-                    session.setAttribute(RequestParameter.PASSPORT, optionalPassport.get());
+                    session.removeAttribute(AttributeName.ENROLLEE);
+                    session.removeAttribute(AttributeName.PASSPORT);
+                    session.setAttribute(AttributeName.ENROLLEE, optionalEnrollee.get());
+                    session.setAttribute(AttributeName.PASSPORT, optionalPassport.get());
                     router = new Router(PagePath.PROFILE);
                 } else {
                     router = new Router(PagePath.ERROR);

@@ -2,7 +2,6 @@ package com.epam.enrollee.util;
 
 public class MapKeys {
 
-    public static final String ENROLLEE_ID = "enrolle_id";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String FIRST_NAME = "first_name";
@@ -28,9 +27,7 @@ public class MapKeys {
     public static final String ROLE = "role";
     public static final String ENROLLEE_STATUS = "status";
     public static final String FACULTY = "faculty";
-    public static final String SPECIALTY = "specialty";
     public static final String APPLICATION_STATUS = "specialty";
-    public static final String AVERAGE_MARK = "average_mark";
     public static final String FACULTY_NAME = "faculty_name";
     public static final String FACULTY_DESCRIPTION = "faculty_description";
     public static final String NUMBER_OF_SEATS ="number_of_seats";

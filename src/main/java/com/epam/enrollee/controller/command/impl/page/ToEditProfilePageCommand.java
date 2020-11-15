@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl.page;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -24,16 +25,16 @@ public class ToEditProfilePageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
-        HttpSession  session = request.getSession();
+        HttpSession session = request.getSession();
         Router router;
         String editPart = request.getParameter(RequestParameter.EDIT_PART);
-        request.setAttribute(RequestParameter.EDIT_PART, editPart);
+        request.setAttribute(AttributeName.EDIT_PART, editPart);
         try {
             if (editPart.equals(EDIT_SPECIALTY)) {
-                Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameter.ENROLLEE);
+                Enrollee enrollee = (Enrollee) session.getAttribute(AttributeName.ENROLLEE);
                 int facultyId = enrollee.getChosenFacultyId();
                 List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty(String.valueOf(facultyId));
-                request.setAttribute(RequestParameter.SPECIALTIES, specialties);
+                request.setAttribute(AttributeName.SPECIALTIES, specialties);
             }
             router = new Router(PagePath.EDIT_PROFILE);
         } catch (ServiceException e) {

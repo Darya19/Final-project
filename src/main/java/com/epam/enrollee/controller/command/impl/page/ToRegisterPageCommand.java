@@ -1,7 +1,9 @@
 package com.epam.enrollee.controller.command.impl.page;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
+import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import org.apache.logging.log4j.Level;
@@ -17,6 +19,9 @@ public class ToRegisterPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
+        if(request.getParameter(RequestParameter.TYPE) != null){
+            request.setAttribute(AttributeName.TYPE, request.getParameter(RequestParameter.TYPE));
+        }
         Router router;
         try {
             if (putFacultiesSpecialtiesSubjectsInRequest(request)) {

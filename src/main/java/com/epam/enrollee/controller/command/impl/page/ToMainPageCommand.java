@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl.page;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -17,9 +18,10 @@ public class ToMainPageCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
-        if(session.getAttribute(RequestParameter.LOCALE) == null){
-        session.setAttribute(RequestParameter.LOCALE, ENGLISH_LANGUAGE);
-        session.setAttribute(RequestParameter.ROLE, RoleType.GUEST);}
+        if (session.getAttribute(AttributeName.LOCALE) == null) {
+            session.setAttribute(AttributeName.LOCALE, ENGLISH_LANGUAGE);
+            session.setAttribute(AttributeName.ROLE, RoleType.GUEST);
+        }
         router = new Router(PagePath.MAIN);
         return router;
     }

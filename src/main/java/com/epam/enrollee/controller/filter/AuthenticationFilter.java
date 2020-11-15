@@ -1,6 +1,7 @@
 package com.epam.enrollee.controller.filter;
 
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.model.type.RoleType;
@@ -23,8 +24,8 @@ public class AuthenticationFilter implements Filter {
         boolean isRegisterCommand;
         boolean isLogInCommand;
         if (request.getParameter(RequestParameter.COMMAND) != null){
-        isLoggedIn = (session != null && session.getAttribute(RequestParameter.ROLE) != null
-                && session.getAttribute(RequestParameter.ROLE) != RoleType.GUEST);
+        isLoggedIn = (session != null && session.getAttribute(AttributeName.ROLE) != null
+                && session.getAttribute(AttributeName.ROLE) != RoleType.GUEST);
         isLogInCommand = request.getParameter(RequestParameter.COMMAND).equals("to_login_page");
             isRegisterCommand = request.getParameter(RequestParameter.COMMAND).equals("to_register_page");
             if (isLoggedIn && (isLogInCommand || isRegisterCommand)) {

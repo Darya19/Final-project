@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -19,7 +20,6 @@ import java.util.Map;
 
 public class AddFacultyCommand implements Command {
 
-    private static final String EMPTY_VALUE = "";
     private static Logger logger = LogManager.getLogger();
 
     @Override
@@ -31,13 +31,13 @@ public class AddFacultyCommand implements Command {
         parameters.put(MapKeys.FACULTY_DESCRIPTION, request.getParameter(RequestParameter.FACULTY_DESCRIPTION));
         parameters = facultyService.checkParameters(parameters);
         if (parameters.containsValue(EMPTY_VALUE)) {
-            request.setAttribute(RequestParameter.PARAMETERS, parameters);
+            request.setAttribute(AttributeName.PARAMETERS, parameters);
             router = new Router(PagePath.EDIT_FACULTY);
         } else {
             try {
                 if (facultyService.create(parameters)) {
                     List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                    request.setAttribute(RequestParameter.FACULTIES, faculties);
+                    request.setAttribute(AttributeName.FACULTIES, faculties);
                     router = new Router(PagePath.ADMIN_FACULTIES);
                 } else {
                     router = new Router(PagePath.ERROR);

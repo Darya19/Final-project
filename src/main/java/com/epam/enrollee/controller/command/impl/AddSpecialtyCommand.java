@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -20,7 +21,6 @@ import java.util.Map;
 
 public class AddSpecialtyCommand implements Command {
 
-    private static final String EMPTY_STRING = "";
     private static Logger logger = LogManager.getLogger();
 
     @Override
@@ -29,20 +29,20 @@ public class AddSpecialtyCommand implements Command {
         Map<String, String> parameters = new HashMap<>();
         HttpSession session = request.getSession();
         Router router;
-        String facultyId = (String) session.getAttribute(RequestParameter.FACULTY_ID);
+        String facultyId = (String) session.getAttribute(AttributeName.FACULTY_ID);
         parameters.put(MapKeys.SPECIALTY_NAME, request.getParameter(RequestParameter.SPECIALTY_NAME));
         parameters.put(MapKeys.NUMBER_OF_SEATS, request.getParameter(RequestParameter.NUMBER_OF_SEATS));
         parameters.put(MapKeys.FACULTY_ID, facultyId);
         parameters = specialtyService.checkParameters(parameters);
-        if (parameters.containsValue(EMPTY_STRING)) {
-            request.setAttribute(RequestParameter.PARAMETERS, parameters);
+        if (parameters.containsValue(EMPTY_VALUE)) {
+            request.setAttribute(AttributeName.PARAMETERS, parameters);
             router = new Router(PagePath.EDIT_SPECIALTY);
         } else {
             try {
                 if (specialtyService.create(parameters)) {
                     List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty
                             (facultyId);
-                    request.setAttribute(RequestParameter.SPECIALTIES, specialties);
+                    request.setAttribute(AttributeName.SPECIALTIES, specialties);
                     router = new Router(PagePath.ADMIN_SPECIALTIES);
                 } else {
                     router = new Router(PagePath.ERROR);

@@ -34,7 +34,7 @@
         </div>
     </section>
     <p></p>
-    <section class="faulty-block profile">
+    <section class="faculty-block profile">
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
@@ -60,9 +60,17 @@
                             <div class="col-2">
                             </div>
                         </div>
-                        <button class="btn btn-outline-primary btn-sm" type="button"
-                                onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_specialty"'>
-                            <fmt:message key="profile.edit"/></button>
+                        <c:if test="${enrollee.applicationStatus eq 'ARCHIVED'}">
+                            <button class="btn btn-outline-primary btn-sm" type="button"
+                                    onclick='location.href = "projectServlet?command=to_register_page&type=add_application"'>
+                                <fmt:message key="profile.add"/></button>
+                        </c:if>
+                        <c:if test="${enrollee.applicationStatus eq 'CONSIDERED'}">
+                            <button class="btn btn-outline-primary btn-sm" type="button"
+                                    onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_specialty"'>
+                                <fmt:message key="profile.edit"/></button>
+                        </c:if>
+
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -83,20 +91,25 @@
                             <div class="progress">
                                 <div class="progress-bar" aria-valuenow="${register.averageMark}" aria-valuemin="0"
                                      aria-valuemax="100"
-                                     style="width: ${register.averageMark}%;"><span class="sr-only"></span>${register.averageMark}
+                                     style="width: ${register.averageMark}%;"><span
+                                        class="sr-only"></span>${register.averageMark}
                                 </div>
                             </div>
                         </div>
                         <p></p>
-                        <button class="btn btn-outline-primary btn-sm" type="button"
-                                onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_marks"'>
-                            <fmt:message key="profile.edit"/></button>
+                        <c:if test="${enrollee.applicationStatus eq 'CONSIDERED'}">
+                            <button class="btn btn-outline-primary btn-sm" type="button"
+                                    onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_marks"'>
+                                <fmt:message key="profile.edit"/></button>
+                        </c:if>
                     </div>
                 </div>
             </div>
-        <ul>
-            <li class="nav-item" role="presentation"><a class="nav-link active" href="projectServlet?command=delete_profile"> <fmt:message key="profile.deleteprofile"/></a></li>
-        </ul>
+            <ul>
+                <li class="nav-item" role="presentation"><a class="nav-link active"
+                                                            href="projectServlet?command=delete_profile"> <fmt:message
+                        key="profile.deleteprofile"/></a></li>
+            </ul>
         </div>
     </section>
 </main>

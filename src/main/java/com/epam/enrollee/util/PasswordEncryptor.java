@@ -13,7 +13,7 @@ public class PasswordEncryptor {
 
     public static String encryptPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest messageDigest;
-        byte[] digest = new byte[0];
+        byte[] digest;
         messageDigest = MessageDigest.getInstance("MD5");
         messageDigest.reset();
         messageDigest.update(password.getBytes());
@@ -24,9 +24,5 @@ public class PasswordEncryptor {
             md5Hex = "0" + md5Hex;
         }
         return md5Hex;
-    }
-
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-        System.out.println(ApplicationStatus.valueOf("accepted".toUpperCase()));
     }
 }

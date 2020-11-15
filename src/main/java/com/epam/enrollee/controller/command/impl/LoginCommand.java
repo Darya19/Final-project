@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -21,8 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.epam.enrollee.controller.command.PagePath.ERROR_500;
 
 
 public class LoginCommand implements Command {
@@ -46,8 +45,8 @@ public class LoginCommand implements Command {
                         int enrolleeId = putInSessionEnrolleeAndPassportAndMarks(email, session);
                         boolean isAdded = putEnrolleeFacultyAndSpecialtyInSession(enrolleeId, session);
                         if (enrolleeId > 0 && isAdded) {
-                            session.removeAttribute(RequestParameter.ROLE);
-                            session.setAttribute(RequestParameter.ROLE, RoleType.USER);
+                            session.removeAttribute(AttributeName.ROLE);
+                            session.setAttribute(AttributeName.ROLE, RoleType.USER);
                             router = new Router(PagePath.PROFILE);
                         } else {
                             router = new Router(PagePath.ERROR);
@@ -55,21 +54,21 @@ public class LoginCommand implements Command {
                         }
                     } else {
                         User user = optionalUser.get();
-                        session.setAttribute(RequestParameter.ENROLLEE, user);
+                        session.setAttribute(AttributeName.ENROLLEE, user);
                         List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                        request.setAttribute(RequestParameter.FACULTIES, faculties);
-                        session.removeAttribute(RequestParameter.ROLE);
-                        session.setAttribute(RequestParameter.ROLE, RoleType.ADMIN);
+                        request.setAttribute(AttributeName.FACULTIES, faculties);
+                        session.removeAttribute(AttributeName.ROLE);
+                        session.setAttribute(AttributeName.ROLE, RoleType.ADMIN);
                         router = new Router(PagePath.ADMIN_FACULTIES);
                     }
-                }else {
+                } else {
                     router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible find enrollee faculty or specialty in db");
                 }
             } else {
                 parameters.put(MapKeys.EMAIL, email);
                 parameters.put(MapKeys.PASSWORD, password);
-                request.setAttribute(RequestParameter.PARAMETERS, parameters);
+                request.setAttribute(AttributeName.PARAMETERS, parameters);
                 router = new Router(PagePath.LOGIN);
             }
         } catch (ServiceException e) {

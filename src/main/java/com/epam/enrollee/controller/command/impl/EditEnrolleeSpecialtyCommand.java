@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -20,9 +21,8 @@ import java.util.Optional;
 
 public class EditEnrolleeSpecialtyCommand implements Command {
 
-    private static final String EDIT_SPECIALTY = "edit_specialty";
-    private static final String EMPTY_STRING = "";
     private static Logger logger = LogManager.getLogger();
+    private static final String EDIT_SPECIALTY = "edit_specialty";
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -30,16 +30,16 @@ public class EditEnrolleeSpecialtyCommand implements Command {
         SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router;
-        Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameter.ENROLLEE);
+        Enrollee enrollee = (Enrollee) session.getAttribute(AttributeName.ENROLLEE);
         Optional<Enrollee> newEnrollee;
         String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
         try {
-            if (specialtyId.equals(EMPTY_STRING)) {
-                request.setAttribute(RequestParameter.EDIT_PART, EDIT_SPECIALTY);
+            if (specialtyId.equals(EMPTY_VALUE)) {
+                request.setAttribute(AttributeName.EDIT_PART, EDIT_SPECIALTY);
                 int facultyId = enrollee.getChosenFacultyId();
                 List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty
                         (String.valueOf(facultyId));
-                request.setAttribute(RequestParameter.SPECIALTIES, specialties);
+                request.setAttribute(AttributeName.SPECIALTIES, specialties);
                 router = new Router(PagePath.EDIT_PROFILE);
             } else {
                 newEnrollee = enrolleeService.updateEnrolleeSpecialty
@@ -47,8 +47,8 @@ public class EditEnrolleeSpecialtyCommand implements Command {
                 Optional<Specialty> optionalSpecialty = specialtyService
                         .findSpecialtyById(specialtyId);
                 if (newEnrollee.isPresent() && optionalSpecialty.isPresent()) {
-                    session.removeAttribute(RequestParameter.SPECIALTY);
-                    session.setAttribute(RequestParameter.SPECIALTY, optionalSpecialty.get());
+                    session.removeAttribute(AttributeName.SPECIALTY);
+                    session.setAttribute(AttributeName.SPECIALTY, optionalSpecialty.get());
                     router = new Router(PagePath.PROFILE);
                 } else {
                     router = new Router(PagePath.ERROR);

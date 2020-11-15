@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -18,10 +19,10 @@ public class ChangeLanguageCommand implements Command {
         String language = request.getParameter(RequestParameter.LOCALE);
         HttpSession session = request.getSession();
         if (language.equals(ENGLISH)) {
-            session.setAttribute(RequestParameter.LOCALE, RUSSIAN);
+            session.setAttribute(AttributeName.LOCALE, RUSSIAN);
         } else {
-            session.setAttribute(RequestParameter.LOCALE, ENGLISH);
+            session.setAttribute(AttributeName.LOCALE, ENGLISH);
         }
-       return new Router(PagePath.MAIN);
+        return new Router(PagePath.MAIN);
     }
 }

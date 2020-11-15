@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -25,16 +26,16 @@ public class DeleteFacultyCommand implements Command {
         String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         try {
             if (facultyService.checkConsideredApplications(facultyId)) {
-                request.setAttribute(RequestParameter.HAS_APPLICATION, true);
+                request.setAttribute(AttributeName.HAS_APPLICATION, true);
                 List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                request.setAttribute(RequestParameter.FACULTIES, faculties);
+                request.setAttribute(AttributeName.FACULTIES, faculties);
                 router = new Router(PagePath.ADMIN_FACULTIES);
             } else {
                 if (facultyService.removeFacultyAndItsSpecialties(facultyId)) {
                     List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                    request.setAttribute(RequestParameter.FACULTIES, faculties);
+                    request.setAttribute(AttributeName.FACULTIES, faculties);
                     router = new Router(PagePath.ADMIN_FACULTIES);
-                }else {
+                } else {
                     router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible delete specialty");
                 }

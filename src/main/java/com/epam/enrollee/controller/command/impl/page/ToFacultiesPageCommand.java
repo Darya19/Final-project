@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl.page;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -24,10 +25,10 @@ public class ToFacultiesPageCommand implements Command {
         Router router;
         try {
             List<Faculty> faculties = facultyService.findAllActiveFaculties();
-            request.setAttribute(RequestParameter.FACULTIES, faculties);
+            request.setAttribute(AttributeName.FACULTIES, faculties);
             router = new Router(PagePath.FACULTIES);
         } catch (ServiceException e) {
-           router = new Router(PagePath.ERROR_500);
+            router = new Router(PagePath.ERROR_500);
             logger.log(Level.ERROR, "Application error:", e);
         }
         return router;

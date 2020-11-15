@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -21,7 +22,6 @@ import java.util.Optional;
 public class EditFacultyCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();
-    private static final String EMPTY_STRING = "";
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -34,12 +34,12 @@ public class EditFacultyCommand implements Command {
         parameters.put(MapKeys.FACULTY_DESCRIPTION, request.getParameter(RequestParameter.FACULTY_DESCRIPTION));
         try {
             Map<String, String> checkedParameters = facultyService.checkParameters(parameters);
-            if (!checkedParameters.get(MapKeys.FACULTY_ID).equals(EMPTY_STRING)) {
-                if (checkedParameters.containsValue(EMPTY_STRING)) {
-                    request.setAttribute(RequestParameter.PARAMETERS, checkedParameters);
+            if (!checkedParameters.get(MapKeys.FACULTY_ID).equals(EMPTY_VALUE)) {
+                if (checkedParameters.containsValue(EMPTY_VALUE)) {
+                    request.setAttribute(AttributeName.PARAMETERS, checkedParameters);
                     Optional<Faculty> faculty = facultyService.findFacultyById(facultyId);
                     if (faculty.isPresent()) {
-                        request.setAttribute(RequestParameter.FACULTY, faculty.get());
+                        request.setAttribute(AttributeName.FACULTY, faculty.get());
                         router = new Router(PagePath.EDIT_FACULTY);
                     } else {
                         router = new Router(PagePath.ERROR);
@@ -48,15 +48,15 @@ public class EditFacultyCommand implements Command {
                 } else {
                     if (facultyService.update(checkedParameters)) {
                         List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                        request.setAttribute(RequestParameter.FACULTIES, faculties);
+                        request.setAttribute(AttributeName.FACULTIES, faculties);
                         router = new Router(PagePath.ADMIN_FACULTIES);
                     } else {
-                        router = new Router(PagePath.ERROR_500);
+                        router = new Router(PagePath.ERROR);
                         logger.log(Level.ERROR, "Impossible update faculty");
                     }
                 }
             } else {
-                router = new Router(PagePath.ERROR_500);
+                router = new Router(PagePath.ERROR);
                 logger.log(Level.ERROR, "Incorrect faculty id");
             }
         } catch (ServiceException e) {

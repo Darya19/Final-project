@@ -1,5 +1,6 @@
 package com.epam.enrollee.tag;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
@@ -26,12 +27,12 @@ public class CustomTag extends TagSupport {
     @Override
     public int doStartTag() throws JspException {
         HttpSession session = pageContext.getSession();
-        Locale locale = new Locale((String) session.getAttribute(RequestParameter.LOCALE));
+        Locale locale = new Locale((String) session.getAttribute(AttributeName.LOCALE));
         ResourceBundle bundle = ResourceBundle.getBundle(CONTENT_PAGE, locale);
         Map<EnrolleeMarkRegister, Enrollee> enrolleeMap =
-                (Map<EnrolleeMarkRegister, Enrollee>) session.getAttribute(RequestParameter.ENROLLEES);
+                (Map<EnrolleeMarkRegister, Enrollee>) session.getAttribute(AttributeName.ENROLLEES);
         List<List<Object>> enrolleeObjects = new ArrayList<>();
-        int pageNumber = (int) session.getAttribute(RequestParameter.PAGE_NUMBER);
+        int pageNumber = (int) session.getAttribute(AttributeName.PAGE_NUMBER);
         int fromIndex = pageNumber * PAGE_ROWS - PAGE_ROWS;
         int toIndex = fromIndex + PAGE_ROWS;
         int count = 0;

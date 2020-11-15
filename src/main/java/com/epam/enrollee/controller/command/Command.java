@@ -12,10 +12,11 @@ import java.util.Optional;
 
 public interface Command {
 
+    String EMPTY_VALUE = "";
+
     Router execute(HttpServletRequest request);
 
-    default int putInSessionEnrolleeAndPassportAndMarks(String email, HttpSession session)
-            throws ServiceException {
+    default int putInSessionEnrolleeAndPassportAndMarks(String email, HttpSession session) throws ServiceException {
         EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
         EnrolleeMarkRegisterServiceImpl markRegisterService = EnrolleeMarkRegisterServiceImpl.getInstance();
         Enrollee enrollee;
@@ -29,9 +30,9 @@ public interface Command {
             Optional<Passport> optionalPassport = enrolleeService.findEnrolleePassport
                     (enrolleeId);
             if (optionalEnrolleeRegister.isPresent() && optionalPassport.isPresent()) {
-                session.setAttribute(RequestParameter.ENROLLEE, enrollee);
-                session.setAttribute(RequestParameter.REGISTER, optionalEnrolleeRegister.get());
-                session.setAttribute(RequestParameter.PASSPORT, optionalPassport.get());
+                session.setAttribute(AttributeName.ENROLLEE, enrollee);
+                session.setAttribute(AttributeName.REGISTER, optionalEnrolleeRegister.get());
+                session.setAttribute(AttributeName.PASSPORT, optionalPassport.get());
             } else {
                 enrolleeId = -1;
             }
@@ -41,16 +42,15 @@ public interface Command {
         return enrolleeId;
     }
 
-    default boolean putEnrolleeFacultyAndSpecialtyInSession(int enrolleeId, HttpSession session)
-            throws ServiceException {
+    default boolean putEnrolleeFacultyAndSpecialtyInSession(int enrolleeId, HttpSession session) throws ServiceException {
         FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
         SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         boolean isAdded;
         Optional<Faculty> optionalFaculty = facultyService.findEnrolleeFaculty(enrolleeId);
         Optional<Specialty> optionalSpecialty = specialtyService.findEnrolleeSpecialty(enrolleeId);
         if (optionalFaculty.isPresent() && optionalSpecialty.isPresent()) {
-            session.setAttribute(RequestParameter.FACULTY, optionalFaculty.get());
-            session.setAttribute(RequestParameter.SPECIALTY, optionalSpecialty.get());
+            session.setAttribute(AttributeName.FACULTY, optionalFaculty.get());
+            session.setAttribute(AttributeName.SPECIALTY, optionalSpecialty.get());
             isAdded = true;
         } else {
             isAdded = false;
@@ -58,8 +58,7 @@ public interface Command {
         return isAdded;
     }
 
-    default boolean putFacultiesSpecialtiesSubjectsInRequest(HttpServletRequest request)
-            throws ServiceException {
+    default boolean putFacultiesSpecialtiesSubjectsInRequest(HttpServletRequest request) throws ServiceException {
         FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
         SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
         SubjectServiceImpl subjectService = SubjectServiceImpl.getInstance();
@@ -68,9 +67,9 @@ public interface Command {
         List<Specialty> specialties = specialtyService.findAllOpenSpecialties();
         List<Subject> subjects = subjectService.findAllSubjects();
         if (!faculties.isEmpty() && !specialties.isEmpty() && !subjects.isEmpty()) {
-            request.setAttribute(RequestParameter.FACULTIES, faculties);
-            request.setAttribute(RequestParameter.SPECIALTIES, specialties);
-            request.setAttribute(RequestParameter.SUBJECTS, subjects);
+            request.setAttribute(AttributeName.FACULTIES, faculties);
+            request.setAttribute(AttributeName.SPECIALTIES, specialties);
+            request.setAttribute(AttributeName.SUBJECTS, subjects);
             isAdded = true;
         } else {
             isAdded = false;

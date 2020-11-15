@@ -7,8 +7,9 @@ import com.epam.enrollee.controller.router.Router;
 import javax.servlet.http.HttpServletRequest;
 
 public class ToProfilePageCommand implements Command {
+
     @Override
     public Router execute(HttpServletRequest request) {
-       return new Router(PagePath.PROFILE);
+        return new Router(PagePath.PROFILE);
     }
 }

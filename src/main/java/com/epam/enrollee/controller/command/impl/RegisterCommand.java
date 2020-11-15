@@ -1,6 +1,7 @@
 package com.epam.enrollee.controller.command.impl;
 
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -52,7 +53,7 @@ public class RegisterCommand implements Command {
         try {
             parameters = enrolleeService.checkParameters(parameters);
             if (parameters.containsValue("")) {
-                request.setAttribute(RequestParameter.PARAMETERS, parameters);
+                request.setAttribute(AttributeName.PARAMETERS, parameters);
                 if (putFacultiesSpecialtiesSubjectsInRequest(request)) {
                     router = new Router(PagePath.REGISTER);
                 } else {
@@ -66,8 +67,8 @@ public class RegisterCommand implements Command {
                             (parameters.get(MapKeys.EMAIL), session);
                     if (enrolleeId > 0) {
                         if (putEnrolleeFacultyAndSpecialtyInSession(enrolleeId, session)) {
-                            session.removeAttribute(RequestParameter.ROLE);
-                            session.setAttribute(RequestParameter.ROLE, RoleType.USER);
+                            session.removeAttribute(AttributeName.ROLE);
+                            session.setAttribute(AttributeName.ROLE, RoleType.USER);
                             router = new Router(PagePath.PROFILE);
                         } else {
                             router = new Router(PagePath.ERROR);

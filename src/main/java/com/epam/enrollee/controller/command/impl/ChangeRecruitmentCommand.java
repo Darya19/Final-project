@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -26,23 +27,23 @@ public class ChangeRecruitmentCommand implements Command {
         Router router;
         String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
         String recruitment = request.getParameter(RequestParameter.RECRUITMENT);
-        String facultyId = (String) session.getAttribute(RequestParameter.FACULTY_ID);
+        String facultyId = (String) session.getAttribute(AttributeName.FACULTY_ID);
         try {
             if (!specialtyService.checkConsideredApplications(specialtyId)) {
-               List<Integer> oldApplications = specialtyService.findAllApplicationsBySpecialty(specialtyId);
+                List<Integer> oldApplications = specialtyService.findAllApplicationsBySpecialty(specialtyId);
                 if (specialtyService.changeSpecialtyRecruitment(specialtyId, recruitment, oldApplications)) {
                     List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty(String.valueOf(facultyId));
-                    request.setAttribute(RequestParameter.SPECIALTIES, specialties);
+                    request.setAttribute(AttributeName.SPECIALTIES, specialties);
                     router = new Router(PagePath.ADMIN_SPECIALTIES);
                 } else {
                     router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible change recruitment");
                 }
             } else {
-                request.setAttribute(RequestParameter.HAS_APPLICATION, true);
+                request.setAttribute(AttributeName.HAS_APPLICATION, true);
                 List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty
                         (facultyId);
-                request.setAttribute(RequestParameter.SPECIALTIES, specialties);
+                request.setAttribute(AttributeName.SPECIALTIES, specialties);
                 router = new Router(PagePath.ADMIN_SPECIALTIES);
             }
         } catch (ServiceException e) {

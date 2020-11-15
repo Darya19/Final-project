@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -29,19 +30,19 @@ public class ChangeApplicationStatusCommand implements Command {
         Router router;
         String enrolleeId = request.getParameter(RequestParameter.ENROLLEE_ID);
         String status = request.getParameter(RequestParameter.STATUS);
-        Specialty specialty = (Specialty) session.getAttribute(RequestParameter.SPECIALTY);
+        Specialty specialty = (Specialty) session.getAttribute(AttributeName.SPECIALTY);
         try {
             if (enrolleeService.changeApplicationStatus(enrolleeId, status, specialty)) {
                 int intEnrolleeId = Integer.parseInt(enrolleeId);
                 Map<EnrolleeMarkRegister, Enrollee> enrollees = (Map<EnrolleeMarkRegister, Enrollee>) session.getAttribute
-                        (RequestParameter.ENROLLEES);
+                        (AttributeName.ENROLLEES);
                 for (Enrollee enrollee : enrollees.values()) {
                     if (enrollee.getUserId() == intEnrolleeId) {
                         enrollee.setApplicationStatus(ApplicationStatus.valueOf(status.toUpperCase()));
                     }
                 }
             } else {
-                request.setAttribute(RequestParameter.IS_CHANGED, false);
+                request.setAttribute(AttributeName.IS_CHANGED, false);
             }
             router = new Router(PagePath.APPLICATIONS);
         } catch (ServiceException e) {

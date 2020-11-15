@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl.page;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -27,7 +28,7 @@ public class ToEditSpecialtyPageCommand implements Command {
             if (specialtyId != null) {
                 Optional<Specialty> specialty = specialtyService.findSpecialtyById(specialtyId);
                 if (specialty.isPresent()) {
-                    request.setAttribute(RequestParameter.SPECIALTY, specialty.get());
+                    request.setAttribute(AttributeName.SPECIALTY, specialty.get());
                     router = new Router(PagePath.EDIT_SPECIALTY);
                 } else {
                     router = new Router(PagePath.ERROR);

@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -22,7 +23,6 @@ import java.util.Optional;
 public class EditSpecialtyCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();
-    private static final String EMPTY_STRING = "";
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -31,18 +31,18 @@ public class EditSpecialtyCommand implements Command {
         HttpSession session = request.getSession();
         Router router;
         String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
-        String facultyId = (String) session.getAttribute(RequestParameter.FACULTY_ID);
+        String facultyId = (String) session.getAttribute(AttributeName.FACULTY_ID);
         parameters.put(MapKeys.SPECIALTY_ID, specialtyId);
         parameters.put(MapKeys.SPECIALTY_NAME, request.getParameter(RequestParameter.SPECIALTY_NAME));
         parameters.put(MapKeys.NUMBER_OF_SEATS, request.getParameter(RequestParameter.NUMBER_OF_SEATS));
         try {
             Map<String, String> checkedParameters = specialtyService.checkParameters(parameters);
-            if (!checkedParameters.get(MapKeys.SPECIALTY_ID).equals(EMPTY_STRING)) {
-                if (checkedParameters.containsValue(EMPTY_STRING)) {
-                    request.setAttribute(RequestParameter.PARAMETERS, checkedParameters);
+            if (!checkedParameters.get(MapKeys.SPECIALTY_ID).equals(EMPTY_VALUE)) {
+                if (checkedParameters.containsValue(EMPTY_VALUE)) {
+                    request.setAttribute(AttributeName.PARAMETERS, checkedParameters);
                     Optional<Specialty> specialty = specialtyService.findSpecialtyById(specialtyId);
                     if (specialty.isPresent()) {
-                        request.setAttribute(RequestParameter.SPECIALTY, specialty.get());
+                        request.setAttribute(AttributeName.SPECIALTY, specialty.get());
                         router = new Router(PagePath.EDIT_SPECIALTY);
                     } else {
                         router = new Router(PagePath.ERROR);
@@ -51,7 +51,7 @@ public class EditSpecialtyCommand implements Command {
                 } else {
                     if (specialtyService.update(checkedParameters)) {
                         List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty(facultyId);
-                        request.setAttribute(RequestParameter.SPECIALTIES, specialties);
+                        request.setAttribute(AttributeName.SPECIALTIES, specialties);
                         router = new Router(PagePath.ADMIN_SPECIALTIES);
                     } else {
                         router = new Router(PagePath.ERROR);

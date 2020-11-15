@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl.page;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -33,9 +34,9 @@ public class ToApplicationsPageCommand implements Command {
         Router router;
         String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
         try {
-            session.setAttribute(RequestParameter.PAGE_NUMBER, 1);
+            session.setAttribute(AttributeName.PAGE_NUMBER, 1);
             Optional<Specialty> specialty = specialtyService.findSpecialtyById(specialtyId);
-            specialty.ifPresent(value -> session.setAttribute(RequestParameter.SPECIALTY, value));
+            specialty.ifPresent(value -> session.setAttribute(AttributeName.SPECIALTY, value));
             List<Enrollee> enrollees = enrolleeService.findAllUnarchivedEnrolleesOnSpecialty(specialtyId);
             for (Enrollee enrollee : enrollees) {
                 int enrolleeId = enrollee.getUserId();
@@ -44,7 +45,7 @@ public class ToApplicationsPageCommand implements Command {
                     enrolleesMap.put(register.get(), enrollee);
                 }
             }
-            session.setAttribute(RequestParameter.ENROLLEES, enrolleesMap);
+            session.setAttribute(AttributeName.ENROLLEES, enrolleesMap);
             router = new Router(PagePath.APPLICATIONS);
         } catch (ServiceException e) {
             router = new Router(PagePath.ERROR_500);

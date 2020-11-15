@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -23,8 +24,6 @@ public class EditMarksCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();
     private static final String EDIT_MARKS = "edit_marks";
-    private static final String EMPTY_VALUE = "";
-
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -33,16 +32,16 @@ public class EditMarksCommand implements Command {
         HttpSession session = request.getSession();
         Router router;
         EnrolleeMarkRegister register;
-        register = (EnrolleeMarkRegister) session.getAttribute(RequestParameter.REGISTER);
-        Enrollee enrollee = (Enrollee) session.getAttribute(RequestParameter.ENROLLEE);
+        register = (EnrolleeMarkRegister) session.getAttribute(AttributeName.REGISTER);
+        Enrollee enrollee = (Enrollee) session.getAttribute(AttributeName.ENROLLEE);
         for (Subject subject : register.getTestsSubjectsAndMarks().keySet()) {
             String key = String.valueOf(subject.getSubjectId());
             parameters.put(key, request.getParameter(key));
         }
         parameters = registerService.checkParameters(parameters);
         if (parameters.containsValue(EMPTY_VALUE)) {
-            request.setAttribute(RequestParameter.PARAMETERS, parameters);
-            request.setAttribute(RequestParameter.EDIT_PART, EDIT_MARKS);
+            request.setAttribute(AttributeName.PARAMETERS, parameters);
+            request.setAttribute(AttributeName.EDIT_PART, EDIT_MARKS);
             router = new Router(PagePath.EDIT_PROFILE);
         } else {
             try {
@@ -50,8 +49,8 @@ public class EditMarksCommand implements Command {
                         .updateEnrolleeRegister(enrollee.getUserId(), parameters);
                 if (markRegister.isPresent()) {
                     register = markRegister.get();
-                    session.removeAttribute(RequestParameter.REGISTER);
-                    session.setAttribute(RequestParameter.REGISTER, register);
+                    session.removeAttribute(AttributeName.REGISTER);
+                    session.setAttribute(AttributeName.REGISTER, register);
                     router = new Router(PagePath.PROFILE);
                 } else {
                     router = new Router(PagePath.ERROR);

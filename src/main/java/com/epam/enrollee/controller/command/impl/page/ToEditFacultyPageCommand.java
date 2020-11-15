@@ -1,5 +1,6 @@
 package com.epam.enrollee.controller.command.impl.page;
 
+import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
@@ -27,7 +28,7 @@ public class ToEditFacultyPageCommand implements Command {
             if (facultyId != null) {
                 Optional<Faculty> faculty = facultyService.findFacultyById(facultyId);
                 if (faculty.isPresent()) {
-                    request.setAttribute(RequestParameter.FACULTY, faculty.get());
+                    request.setAttribute(AttributeName.FACULTY, faculty.get());
                     router = new Router(PagePath.EDIT_FACULTY);
                 } else {
                     router = new Router(PagePath.ERROR);
