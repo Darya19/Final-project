@@ -79,6 +79,11 @@ public enum CommandType {
             this.command = new LogoutCommand();
         }
     },
+    NEW_APPLICATION {
+        {
+            this.command = new NewApplicationCommand();
+        }
+    },
     PAGINATION {
         {
             this.command = new PaginationCommand();
@@ -102,6 +107,11 @@ public enum CommandType {
     TO_APPLICATIONS_PAGE {
         {
             this.command = new ToApplicationsPageCommand();
+        }
+    },
+    TO_EDIT_APPLICATION {
+        {
+            this.command = new ToEditApplicationCommand();
         }
     },
     TO_EDIT_FACULTY_PAGE {

@@ -13,6 +13,8 @@ public interface EnrolleeDao extends BaseDao<Enrollee> {
 
     boolean updatePassport(Passport passport) throws DaoException;
 
+    boolean updateEnrolleeFaculty(Enrollee enrollee) throws DaoException;
+
     boolean updateEnrolleeSpecialty(Enrollee enrollee) throws DaoException;
 
     Optional<Enrollee> findEnrolleeByEmail(String email) throws DaoException;

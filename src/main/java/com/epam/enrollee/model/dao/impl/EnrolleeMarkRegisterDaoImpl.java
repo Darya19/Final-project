@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,8 +24,10 @@ public class EnrolleeMarkRegisterDaoImpl implements EnrolleeMarkRegisterDao {
     private static Logger logger = LogManager.getLogger();
     private static final String FIND_ENROLLEE_REGISTER_BY_ENROLLEE_ID = "SELECT subject_id, subject_name, mark_value " +
             "FROM subject JOIN mark on subject.subject_id = mark.subject_id_fk WHERE enrollee_id_fk=?";
-    private static final String UPDATE_ENROLLEE_MARK_REGISTER = "UPDATE mark SET mark_value=? where enrollee_id_fk=? " +
+    private static final String UPDATE_ENROLLEE_MARK_REGISTER = "UPDATE mark SET mark_value=? WHERE enrollee_id_fk=? " +
             "and subject_id_fk=?";
+    private static final String UPDATE_ENROLLEE_REGISTER = "UPDATE mark SET mark_value=?, subject_id_fk=? WHERE " +
+            "enrollee_id_fk=? and subject_id_fk=?";
 
     public static EnrolleeMarkRegisterDaoImpl getInstance() {
         if (instance == null) {
@@ -46,6 +49,31 @@ public class EnrolleeMarkRegisterDaoImpl implements EnrolleeMarkRegisterDao {
                 statement.setInt(2, enrolleeId);
                 statement.setInt(3, subject.getSubjectId());
                 countUpdate += statement.executeUpdate();
+            }
+            return countUpdate == 4;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Impossible update mark register by enrollee id", e);
+            throw new DaoException("Database issues while updating mark register by enrollee id", e);
+        }
+    }
+
+
+    @Override
+    public boolean update(EnrolleeMarkRegister register, int enrolleeId, List<Subject> subjectsForUpdate) throws DaoException {
+        Map<Subject, Integer> parameters = register.getTestsSubjectsAndMarks();
+        int countUpdate = 0;
+        int countSubjects = 0;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_ENROLLEE_REGISTER)) {
+            for (Map.Entry<Subject, Integer> pair : parameters.entrySet()) {
+                Subject subject = pair.getKey();
+                int markValue = pair.getValue();
+                statement.setInt(1, markValue);
+                statement.setInt(2, subject.getSubjectId());
+                statement.setInt(3, enrolleeId);
+                statement.setInt(4, subjectsForUpdate.get(countSubjects).getSubjectId());
+                countUpdate += statement.executeUpdate();
+                countSubjects++;
             }
             return countUpdate == 4;
         } catch (SQLException e) {

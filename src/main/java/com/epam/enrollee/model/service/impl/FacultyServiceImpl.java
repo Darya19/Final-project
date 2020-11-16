@@ -2,6 +2,8 @@ package com.epam.enrollee.model.service.impl;
 
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.exception.ServiceException;
+import com.epam.enrollee.model.dao.SpecialtyDao;
+import com.epam.enrollee.model.dao.UniversityDao;
 import com.epam.enrollee.model.dao.impl.FacultyDaoImpl;
 import com.epam.enrollee.model.dao.impl.SpecialtyDaoImpl;
 import com.epam.enrollee.model.entity.Faculty;
@@ -33,7 +35,7 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public boolean create(Map<String, String> parameters) throws ServiceException {
-        FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
+        UniversityDao facultyDao = FacultyDaoImpl.getInstance();
         Map<String, Object> objectMap = new HashMap<>();
         for (Map.Entry<String, String> pair : parameters.entrySet()) {
             String key = pair.getKey();
@@ -50,8 +52,8 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public boolean removeFacultyAndItsSpecialties(String facultyId) throws ServiceException {
-        FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
-        SpecialtyDaoImpl specialtyDao = SpecialtyDaoImpl.getInstance();
+        UniversityDao facultyDao = FacultyDaoImpl.getInstance();
+        SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
         int intFacultyId;
@@ -74,7 +76,7 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public boolean checkConsideredApplications(String facultyId) throws ServiceException {
-        FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
+        UniversityDao facultyDao = FacultyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
         int intFacultyId;
@@ -92,8 +94,9 @@ public class FacultyServiceImpl implements FacultyService {
         }
     }
 
+    @Override
     public List<Faculty> findAllActiveFaculties() throws ServiceException {
-        FacultyDaoImpl dao = FacultyDaoImpl.getInstance();
+        UniversityDao dao = FacultyDaoImpl.getInstance();
         try {
             List<Faculty> faculties = dao.findAll();
             return faculties;

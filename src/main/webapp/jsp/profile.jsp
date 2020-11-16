@@ -62,7 +62,7 @@
                         </div>
                         <c:if test="${enrollee.applicationStatus eq 'ARCHIVED'}">
                             <button class="btn btn-outline-primary btn-sm" type="button"
-                                    onclick='location.href = "projectServlet?command=to_register_page&type=add_application"'>
+                                    onclick='location.href = "projectServlet?command=to_edit_application"'>
                                 <fmt:message key="profile.add"/></button>
                         </c:if>
                         <c:if test="${enrollee.applicationStatus eq 'CONSIDERED'}">

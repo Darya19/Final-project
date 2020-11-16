@@ -3,6 +3,7 @@ package com.epam.enrollee.controller.command;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.*;
+import com.epam.enrollee.model.service.*;
 import com.epam.enrollee.model.service.impl.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +18,8 @@ public interface Command {
     Router execute(HttpServletRequest request);
 
     default int putInSessionEnrolleeAndPassportAndMarks(String email, HttpSession session) throws ServiceException {
-        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
-        EnrolleeMarkRegisterServiceImpl markRegisterService = EnrolleeMarkRegisterServiceImpl.getInstance();
+        EnrolleeService enrolleeService = EnrolleeServiceImpl.getInstance();
+        EnrolleeMarkRegisterService markRegisterService = EnrolleeMarkRegisterServiceImpl.getInstance();
         Enrollee enrollee;
         int enrolleeId;
         Optional<Enrollee> optionalEnrollee = enrolleeService.findEnrolleeByEmail(email);
@@ -43,8 +44,8 @@ public interface Command {
     }
 
     default boolean putEnrolleeFacultyAndSpecialtyInSession(int enrolleeId, HttpSession session) throws ServiceException {
-        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
-        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
+        FacultyService facultyService = FacultyServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
         boolean isAdded;
         Optional<Faculty> optionalFaculty = facultyService.findEnrolleeFaculty(enrolleeId);
         Optional<Specialty> optionalSpecialty = specialtyService.findEnrolleeSpecialty(enrolleeId);
@@ -59,9 +60,9 @@ public interface Command {
     }
 
     default boolean putFacultiesSpecialtiesSubjectsInRequest(HttpServletRequest request) throws ServiceException {
-        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
-        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
-        SubjectServiceImpl subjectService = SubjectServiceImpl.getInstance();
+        FacultyService facultyService = FacultyServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
+        SubjectService subjectService = SubjectServiceImpl.getInstance();
         boolean isAdded;
         List<Faculty> faculties = facultyService.findAllActiveFaculties();
         List<Specialty> specialties = specialtyService.findAllOpenSpecialties();

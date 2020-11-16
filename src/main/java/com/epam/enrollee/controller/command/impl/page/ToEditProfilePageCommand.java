@@ -8,6 +8,7 @@ import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.Specialty;
+import com.epam.enrollee.model.service.SpecialtyService;
 import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -24,7 +25,7 @@ public class ToEditProfilePageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router;
         String editPart = request.getParameter(RequestParameter.EDIT_PART);

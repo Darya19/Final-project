@@ -3,12 +3,12 @@ package com.epam.enrollee.controller.command.impl;
 import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Subject;
+import com.epam.enrollee.model.service.EnrolleeMarkRegisterService;
 import com.epam.enrollee.model.service.impl.EnrolleeMarkRegisterServiceImpl;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +27,7 @@ public class EditMarksCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeMarkRegisterServiceImpl registerService = EnrolleeMarkRegisterServiceImpl.getInstance();
+        EnrolleeMarkRegisterService registerService = EnrolleeMarkRegisterServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session = request.getSession();
         Router router;
@@ -38,15 +38,15 @@ public class EditMarksCommand implements Command {
             String key = String.valueOf(subject.getSubjectId());
             parameters.put(key, request.getParameter(key));
         }
-        parameters = registerService.checkParameters(parameters);
-        if (parameters.containsValue(EMPTY_VALUE)) {
-            request.setAttribute(AttributeName.PARAMETERS, parameters);
-            request.setAttribute(AttributeName.EDIT_PART, EDIT_MARKS);
-            router = new Router(PagePath.EDIT_PROFILE);
-        } else {
-            try {
+        try {
+            parameters = registerService.checkParameters(parameters);
+            if (parameters.containsValue(EMPTY_VALUE)) {
+                request.setAttribute(AttributeName.PARAMETERS, parameters);
+                request.setAttribute(AttributeName.EDIT_PART, EDIT_MARKS);
+                router = new Router(PagePath.EDIT_PROFILE);
+            } else {
                 Optional<EnrolleeMarkRegister> markRegister = registerService
-                        .updateEnrolleeRegister(enrollee.getUserId(), parameters);
+                        .updateEnrolleeMarks(enrollee.getUserId(), parameters);
                 if (markRegister.isPresent()) {
                     register = markRegister.get();
                     session.removeAttribute(AttributeName.REGISTER);
@@ -56,10 +56,10 @@ public class EditMarksCommand implements Command {
                     router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add updated marks in db");
                 }
-            } catch (ServiceException e) {
-                router = new Router(PagePath.ERROR_500);
-                logger.log(Level.ERROR, "Application error: ", e);
             }
+        } catch (ServiceException e) {
+            router = new Router(PagePath.ERROR_500);
+            logger.log(Level.ERROR, "Application error: ", e);
         }
         return router;
     }

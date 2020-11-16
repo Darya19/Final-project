@@ -7,6 +7,7 @@ import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Specialty;
+import com.epam.enrollee.model.service.SpecialtyService;
 import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
 import com.epam.enrollee.util.MapKeys;
 import org.apache.logging.log4j.Level;
@@ -26,7 +27,7 @@ public class EditSpecialtyCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session = request.getSession();
         Router router;

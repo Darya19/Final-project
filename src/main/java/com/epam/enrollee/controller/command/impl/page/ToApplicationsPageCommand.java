@@ -9,6 +9,9 @@ import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Specialty;
+import com.epam.enrollee.model.service.EnrolleeMarkRegisterService;
+import com.epam.enrollee.model.service.EnrolleeService;
+import com.epam.enrollee.model.service.SpecialtyService;
 import com.epam.enrollee.model.service.impl.EnrolleeMarkRegisterServiceImpl;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
@@ -26,9 +29,9 @@ public class ToApplicationsPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
-        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
-        EnrolleeMarkRegisterServiceImpl registerService = EnrolleeMarkRegisterServiceImpl.getInstance();
+        EnrolleeService enrolleeService = EnrolleeServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
+        EnrolleeMarkRegisterService registerService = EnrolleeMarkRegisterServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Map<EnrolleeMarkRegister, Enrollee> enrolleesMap = new TreeMap<>(Collections.reverseOrder());
         Router router;

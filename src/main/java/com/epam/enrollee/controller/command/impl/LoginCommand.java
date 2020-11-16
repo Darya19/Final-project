@@ -8,6 +8,8 @@ import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
 import com.epam.enrollee.model.entity.User;
+import com.epam.enrollee.model.service.FacultyService;
+import com.epam.enrollee.model.service.UserService;
 import com.epam.enrollee.model.service.impl.FacultyServiceImpl;
 import com.epam.enrollee.model.service.impl.UserServiceImpl;
 import com.epam.enrollee.model.type.RoleType;
@@ -30,8 +32,8 @@ public class LoginCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        UserServiceImpl userService = UserServiceImpl.getInstance();
-        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
+        UserService userService = UserServiceImpl.getInstance();
+        FacultyService facultyService = FacultyServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Map<String, String> parameters = new HashMap<>();
         Router router;

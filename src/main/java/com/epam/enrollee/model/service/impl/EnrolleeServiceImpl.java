@@ -2,6 +2,10 @@ package com.epam.enrollee.model.service.impl;
 
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.exception.ServiceException;
+import com.epam.enrollee.model.dao.EnrolleeDao;
+import com.epam.enrollee.model.dao.SpecialtyDao;
+import com.epam.enrollee.model.dao.SubjectDao;
+import com.epam.enrollee.model.dao.UserDao;
 import com.epam.enrollee.model.dao.impl.EnrolleeDaoImpl;
 import com.epam.enrollee.model.dao.impl.SpecialtyDaoImpl;
 import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
@@ -36,7 +40,7 @@ public class EnrolleeServiceImpl implements EnrolleeService {
 
     @Override
     public Optional<Enrollee> findEnrolleeByEmail(String email) throws ServiceException {
-        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         try {
             Optional<Enrollee> foundEnrollee = enrolleeDao.findEnrolleeByEmail(email);
             return foundEnrollee;
@@ -47,12 +51,11 @@ public class EnrolleeServiceImpl implements EnrolleeService {
     }
 
     @Override
-    public Map<String, String> checkParameters(Map<String, String> parameters)
-            throws ServiceException {
+    public Map<String, String> checkParameters(Map<String, String> parameters) throws ServiceException {
         ProjectValidator validator = new ProjectValidator();
-        UserDaoImpl userDao = UserDaoImpl.getInstance();
-        SpecialtyDaoImpl specialtyDao = SpecialtyDaoImpl.getInstance();
-        SubjectDaoImpl subjectDao = SubjectDaoImpl.getInstance();
+        UserDao userDao = UserDaoImpl.getInstance();
+        SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
+        SubjectDao subjectDao = SubjectDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         parameters = validator.validateRegistrationData(parameters);
         try {
@@ -75,8 +78,7 @@ public class EnrolleeServiceImpl implements EnrolleeService {
                     && !parameters.get(MapKeys.SPECIALTY_ID).isEmpty()) {
                 int intSpecialtyId = parser.parseToInt(parameters.get(MapKeys.SPECIALTY_ID));
                 int foundFacultyId;
-                Optional<Integer> optionalFacultyId = specialtyDao
-                        .findFacultyIdBySpecialtyId(intSpecialtyId);
+                Optional<Integer> optionalFacultyId = specialtyDao.findFacultyIdBySpecialtyId(intSpecialtyId);
                 List<Subject> subjects = subjectDao
                         .findSubjectsBySpecialtyId(intSpecialtyId);
                 if (optionalFacultyId.isPresent()) {
@@ -85,7 +87,7 @@ public class EnrolleeServiceImpl implements EnrolleeService {
                 } else {
                     parameters.put(MapKeys.FACULTY_ID, EMPTY_VALUE);
                 }
-                if (subjects.isEmpty()) {
+                if (!subjects.isEmpty()) {
                     Set<String> subjectsId = new HashSet<>();
                     subjectsId.add(parameters.get(MapKeys.SUBJECT_ID_1));
                     subjectsId.add(parameters.get(MapKeys.SUBJECT_ID_2));
@@ -125,7 +127,7 @@ public class EnrolleeServiceImpl implements EnrolleeService {
 
     @Override
     public boolean create(Map<String, String> parameters) throws ServiceException {
-        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         Map<String, Object> createdObjects = new HashMap<>();
         try {
@@ -170,7 +172,7 @@ public class EnrolleeServiceImpl implements EnrolleeService {
 
     @Override
     public Optional<Passport> findEnrolleePassport(int enrolleeId) throws ServiceException {
-        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         try {
             Optional<Passport> passport = enrolleeDao.findPassportByEnrolleeId(enrolleeId);
             return passport;
@@ -183,7 +185,7 @@ public class EnrolleeServiceImpl implements EnrolleeService {
     @Override
     public Optional<Enrollee> updateEnrolleeNameInformation(Enrollee enrollee, Map<String, String> parameters)
             throws ServiceException {
-        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         enrollee.setFirstName(parameters.get(MapKeys.FIRST_NAME));
         enrollee.setLastName(parameters.get(MapKeys.LAST_NAME));
         enrollee.setMiddleName(parameters.get(MapKeys.MIDDLE_NAME));
@@ -198,7 +200,7 @@ public class EnrolleeServiceImpl implements EnrolleeService {
     @Override
     public Optional<Passport> updateEnrolleePassportInformation(Passport passport, Map<String, String> parameters)
             throws ServiceException {
-        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         passport.setPassportSeriesAndNumber(parameters.get(MapKeys.PASSPORT_SERIES_AND_NUMBER));
         passport.setPersonalNumber(parameters.get(MapKeys.PERSONAL_NUMBER));
         try {
@@ -210,21 +212,41 @@ public class EnrolleeServiceImpl implements EnrolleeService {
     }
 
     @Override
-    public Optional<Enrollee> updateEnrolleeSpecialty(Enrollee enrollee, String specialtyId) throws ServiceException {
-        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+    public boolean updateEnrolleeFaculty(Enrollee enrollee, String facultyId) throws ServiceException {
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
-        Optional<Enrollee> updatedEnrollee;
+        boolean isUpdated;
+        try {
+            if (validator.isIntParameterValid(facultyId)) {
+                int intfacultyId = parser.parseToInt(facultyId);
+                enrollee.setChosenFacultyId(intfacultyId);
+                isUpdated = enrolleeDao.updateEnrolleeFaculty(enrollee);
+            } else {
+                isUpdated = false;
+            }
+            return isUpdated;
+        } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in updating enrollee specialty", e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean updateEnrolleeSpecialty(Enrollee enrollee, String specialtyId) throws ServiceException {
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
+        NumberParser parser = new NumberParser();
+        ProjectValidator validator = new ProjectValidator();
+        boolean isUpdated;
         try {
             if (validator.isIntParameterValid(specialtyId)) {
                 int intSpecialtyId = parser.parseToInt(specialtyId);
                 enrollee.setChosenSpecialtyId(intSpecialtyId);
-                updatedEnrollee = enrolleeDao.updateEnrolleeSpecialty(enrollee) ?
-                        Optional.of(enrollee) : Optional.empty();
+                isUpdated = enrolleeDao.updateEnrolleeSpecialty(enrollee);
             } else {
-                updatedEnrollee = Optional.empty();
+                isUpdated = false;
             }
-            return updatedEnrollee;
+            return isUpdated;
         } catch (DaoException e) {
             logger.log(Level.ERROR, "Error in updating enrollee specialty", e);
             throw new ServiceException(e);
@@ -233,7 +255,7 @@ public class EnrolleeServiceImpl implements EnrolleeService {
 
     @Override
     public boolean remove(Map<String, Object> parameters) throws ServiceException {
-        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         try {
             return enrolleeDao.remove(parameters);
         } catch (DaoException e) {
@@ -244,7 +266,7 @@ public class EnrolleeServiceImpl implements EnrolleeService {
 
     @Override
     public List<Enrollee> findAllUnarchivedEnrolleesOnSpecialty(String specialtyId) throws ServiceException {
-        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
         List<Enrollee> enrollees;
@@ -265,8 +287,8 @@ public class EnrolleeServiceImpl implements EnrolleeService {
 
     @Override
     public boolean changeApplicationStatus(String enrolleeId, String status, Specialty specialty) throws ServiceException {
-        EnrolleeDaoImpl enrolleeDao = EnrolleeDaoImpl.getInstance();
-        SpecialtyDaoImpl specialtyDao = SpecialtyDaoImpl.getInstance();
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
+        SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
         NumberParser parser = new NumberParser();
         ProjectValidator validator = new ProjectValidator();
         int intEnrolleeId;

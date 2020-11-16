@@ -21,7 +21,9 @@ public interface EnrolleeService extends BaseService {
     Optional<Passport> updateEnrolleePassportInformation(Passport passport, Map<String, String> parameters)
             throws ServiceException;
 
-    Optional<Enrollee> updateEnrolleeSpecialty(Enrollee enrollee, String specialtyId) throws ServiceException;
+    boolean updateEnrolleeFaculty(Enrollee enrollee, String specialtyId) throws ServiceException;
+
+    boolean updateEnrolleeSpecialty(Enrollee enrollee, String specialtyId) throws ServiceException;
 
     boolean remove(Map<String, Object> parameters) throws ServiceException;
 

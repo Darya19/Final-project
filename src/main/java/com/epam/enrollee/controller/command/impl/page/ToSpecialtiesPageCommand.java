@@ -8,6 +8,8 @@ import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
 import com.epam.enrollee.model.entity.Specialty;
+import com.epam.enrollee.model.service.FacultyService;
+import com.epam.enrollee.model.service.SpecialtyService;
 import com.epam.enrollee.model.service.impl.FacultyServiceImpl;
 import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
 import org.apache.logging.log4j.Level;
@@ -24,8 +26,8 @@ public class ToSpecialtiesPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
-        FacultyServiceImpl facultyService = FacultyServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
+        FacultyService facultyService = FacultyServiceImpl.getInstance();
         Router router;
         String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         try {

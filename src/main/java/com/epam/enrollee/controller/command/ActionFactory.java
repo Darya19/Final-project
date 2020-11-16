@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ActionFactory {
 
     public static Command defineCommand(HttpServletRequest request) {
-        Command current = null;
+        Command current;
         String action = request.getParameter(RequestParameter.COMMAND);
         if (action != null || !action.isEmpty()) {
             try {

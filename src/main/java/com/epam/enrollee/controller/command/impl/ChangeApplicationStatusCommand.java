@@ -9,6 +9,7 @@ import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Specialty;
+import com.epam.enrollee.model.service.EnrolleeService;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 import com.epam.enrollee.model.type.ApplicationStatus;
 import org.apache.logging.log4j.Level;
@@ -25,7 +26,7 @@ public class ChangeApplicationStatusCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
+        EnrolleeService enrolleeService = EnrolleeServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router;
         String enrolleeId = request.getParameter(RequestParameter.ENROLLEE_ID);

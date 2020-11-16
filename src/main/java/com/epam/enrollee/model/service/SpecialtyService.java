@@ -19,6 +19,8 @@ public interface SpecialtyService extends BaseService {
 
     List<Specialty> findOpenSpecialtiesOfFaculty(String facultyId) throws ServiceException;
 
+    List<Integer> findAllApplicationsBySpecialty(String specialtyId) throws ServiceException;
+
     List<Specialty> findActiveSpecialtiesOfFaculty(String facultyId) throws ServiceException;
 
     Optional<Specialty> findSpecialtyById(String specialtyId) throws ServiceException;

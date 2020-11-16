@@ -7,6 +7,7 @@ import com.epam.enrollee.controller.command.PagePath;
 import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
+import com.epam.enrollee.model.service.EnrolleeService;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 import com.epam.enrollee.model.type.RoleType;
 import com.epam.enrollee.util.MapKeys;
@@ -25,7 +26,7 @@ public class RegisterCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
+        EnrolleeService enrolleeService = EnrolleeServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session = request.getSession();
         Router router;
@@ -57,7 +58,7 @@ public class RegisterCommand implements Command {
                 if (putFacultiesSpecialtiesSubjectsInRequest(request)) {
                     router = new Router(PagePath.REGISTER);
                 } else {
-                    router = new Router(PagePath.ERROR_500);
+                    router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible create enrollee or register");
                 }
             } else {

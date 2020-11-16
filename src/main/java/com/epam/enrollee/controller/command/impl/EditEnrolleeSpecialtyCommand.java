@@ -8,6 +8,8 @@ import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.Specialty;
+import com.epam.enrollee.model.service.EnrolleeService;
+import com.epam.enrollee.model.service.SpecialtyService;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
 import org.apache.logging.log4j.Level;
@@ -26,12 +28,12 @@ public class EditEnrolleeSpecialtyCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
-        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
+        EnrolleeService enrolleeService = EnrolleeServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router;
+        boolean isUpdated;
         Enrollee enrollee = (Enrollee) session.getAttribute(AttributeName.ENROLLEE);
-        Optional<Enrollee> newEnrollee;
         String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
         try {
             if (specialtyId.equals(EMPTY_VALUE)) {
@@ -42,11 +44,11 @@ public class EditEnrolleeSpecialtyCommand implements Command {
                 request.setAttribute(AttributeName.SPECIALTIES, specialties);
                 router = new Router(PagePath.EDIT_PROFILE);
             } else {
-                newEnrollee = enrolleeService.updateEnrolleeSpecialty
+                isUpdated = enrolleeService.updateEnrolleeSpecialty
                         (enrollee, specialtyId);
                 Optional<Specialty> optionalSpecialty = specialtyService
                         .findSpecialtyById(specialtyId);
-                if (newEnrollee.isPresent() && optionalSpecialty.isPresent()) {
+                if (isUpdated && optionalSpecialty.isPresent()) {
                     session.removeAttribute(AttributeName.SPECIALTY);
                     session.setAttribute(AttributeName.SPECIALTY, optionalSpecialty.get());
                     router = new Router(PagePath.PROFILE);

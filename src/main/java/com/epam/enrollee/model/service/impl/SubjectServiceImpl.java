@@ -2,6 +2,7 @@ package com.epam.enrollee.model.service.impl;
 
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.exception.ServiceException;
+import com.epam.enrollee.model.dao.SubjectDao;
 import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
 import com.epam.enrollee.model.entity.Subject;
 import com.epam.enrollee.model.service.SubjectService;
@@ -37,7 +38,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public List<Subject> findAllSubjects() throws ServiceException {
-        SubjectDaoImpl dao = SubjectDaoImpl.getInstance();
+        SubjectDao dao = SubjectDaoImpl.getInstance();
         try {
             List<Subject> subjects = dao.findAll();
             return subjects;

@@ -44,6 +44,8 @@ public class EnrolleeDaoImpl implements EnrolleeDao {
             "WHERE passport_id=?";
     private static final String UPDATE_ENROLLEE_SPECIALTY = "UPDATE enrollee_specialty SET specialty_id_fk=? WHERE " +
             "enrollee_id_fk=?";
+    private static final String UPDATE_ENROLLEE_FACULTY = "UPDATE enrollee_faculty SET faculty_id_fk=? WHERE " +
+            "enrollee_id_fk=?";
     private static final String REMOVE_ENROLLEE = "DELETE FROM enrollee WHERE enrollee_id=?";
     private static final String REMOVE_PASSPORT = "DELETE FROM passport WHERE passport_id=?";
     private static final String REMOVE_MARKS = "DELETE FROM mark WHERE enrollee_id_fk=?";
@@ -267,6 +269,21 @@ public class EnrolleeDaoImpl implements EnrolleeDao {
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Impossible update enrollee specialty", e);
             throw new DaoException("Database issues while updating enrollee specialty", e);
+        }
+    }
+
+    @Override
+    public boolean updateEnrolleeFaculty(Enrollee enrollee) throws DaoException {
+        boolean isUpdated;
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_ENROLLEE_FACULTY)) {
+            statement.setInt(1, enrollee.getChosenFacultyId());
+            statement.setInt(2, enrollee.getUserId());
+            isUpdated = statement.executeUpdate() > 0;
+            return isUpdated;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Impossible update enrollee faculty", e);
+            throw new DaoException("Database issues while updating enrollee faculty", e);
         }
     }
 

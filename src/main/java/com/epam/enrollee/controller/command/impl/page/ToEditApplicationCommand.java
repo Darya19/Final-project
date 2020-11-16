@@ -10,8 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-
-public class ToRegisterPageCommand implements Command {
+public class ToEditApplicationCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();
 
@@ -20,7 +19,7 @@ public class ToRegisterPageCommand implements Command {
         Router router;
         try {
             if (putFacultiesSpecialtiesSubjectsInRequest(request)) {
-                router = new Router(PagePath.REGISTER);
+                router = new Router(PagePath.EDIT_APPLICATION);
             } else {
                 router = new Router(PagePath.ERROR);
                 logger.log(Level.ERROR, "Impossible find faculties, specialties,subjects");

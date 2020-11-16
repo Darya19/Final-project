@@ -31,7 +31,6 @@ public class ProjectServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request,
                                 HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
         Router router;
         RequestDispatcher dispatcher;
         Command command = ActionFactory.defineCommand(request);

@@ -7,6 +7,7 @@ import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Specialty;
+import com.epam.enrollee.model.service.SpecialtyService;
 import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
 import com.epam.enrollee.util.MapKeys;
 import org.apache.logging.log4j.Level;
@@ -25,7 +26,7 @@ public class AddSpecialtyCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        SpecialtyServiceImpl specialtyService = SpecialtyServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session = request.getSession();
         Router router;
@@ -33,12 +34,12 @@ public class AddSpecialtyCommand implements Command {
         parameters.put(MapKeys.SPECIALTY_NAME, request.getParameter(RequestParameter.SPECIALTY_NAME));
         parameters.put(MapKeys.NUMBER_OF_SEATS, request.getParameter(RequestParameter.NUMBER_OF_SEATS));
         parameters.put(MapKeys.FACULTY_ID, facultyId);
-        parameters = specialtyService.checkParameters(parameters);
-        if (parameters.containsValue(EMPTY_VALUE)) {
-            request.setAttribute(AttributeName.PARAMETERS, parameters);
-            router = new Router(PagePath.EDIT_SPECIALTY);
-        } else {
-            try {
+        try {
+            parameters = specialtyService.checkParameters(parameters);
+            if (parameters.containsValue(EMPTY_VALUE)) {
+                request.setAttribute(AttributeName.PARAMETERS, parameters);
+                router = new Router(PagePath.EDIT_SPECIALTY);
+            } else {
                 if (specialtyService.create(parameters)) {
                     List<Specialty> specialties = specialtyService.findActiveSpecialtiesOfFaculty
                             (facultyId);
@@ -48,10 +49,10 @@ public class AddSpecialtyCommand implements Command {
                     router = new Router(PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add specialty to db");
                 }
-            } catch (ServiceException e) {
-                router = new Router(PagePath.ERROR_500);
-                logger.log(Level.ERROR, "Application error: ", e);
             }
+        } catch (ServiceException e) {
+            router = new Router(PagePath.ERROR_500);
+            logger.log(Level.ERROR, "Application error: ", e);
         }
         return router;
     }

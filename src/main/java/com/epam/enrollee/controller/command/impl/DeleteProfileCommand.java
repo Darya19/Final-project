@@ -8,6 +8,7 @@ import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.Passport;
+import com.epam.enrollee.model.service.EnrolleeService;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
 import com.epam.enrollee.util.MapKeys;
 import org.apache.logging.log4j.Level;
@@ -25,7 +26,7 @@ public class DeleteProfileCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        EnrolleeServiceImpl enrolleeService = EnrolleeServiceImpl.getInstance();
+        EnrolleeService enrolleeService = EnrolleeServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Router router = null;
         Map<String, Object> parameters = new HashMap<>();
