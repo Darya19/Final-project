@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * The type Authentication filter.
+ */
 @WebFilter(urlPatterns = {"/*"})
 public class AuthenticationFilter implements Filter {
 

@@ -11,12 +11,32 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The interface Command.
+ */
 public interface Command {
 
+    /**
+     * The constant EMPTY_VALUE.
+     */
     String EMPTY_VALUE = "";
 
+    /**
+     * Execute router.
+     *
+     * @param request the request
+     * @return the router
+     */
     Router execute(HttpServletRequest request);
 
+    /**
+     * Put in session enrollee and passport and marks int.
+     *
+     * @param email   the email
+     * @param session the session
+     * @return the int
+     * @throws ServiceException the service exception
+     */
     default int putInSessionEnrolleeAndPassportAndMarks(String email, HttpSession session) throws ServiceException {
         EnrolleeService enrolleeService = EnrolleeServiceImpl.getInstance();
         EnrolleeMarkRegisterService markRegisterService = EnrolleeMarkRegisterServiceImpl.getInstance();
@@ -43,6 +63,14 @@ public interface Command {
         return enrolleeId;
     }
 
+    /**
+     * Put enrollee faculty and specialty in session boolean.
+     *
+     * @param enrolleeId the enrollee id
+     * @param session    the session
+     * @return the boolean
+     * @throws ServiceException the service exception
+     */
     default boolean putEnrolleeFacultyAndSpecialtyInSession(int enrolleeId, HttpSession session) throws ServiceException {
         FacultyService facultyService = FacultyServiceImpl.getInstance();
         SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
@@ -59,6 +87,13 @@ public interface Command {
         return isAdded;
     }
 
+    /**
+     * Put faculties specialties subjects in request boolean.
+     *
+     * @param request the request
+     * @return the boolean
+     * @throws ServiceException the service exception
+     */
     default boolean putFacultiesSpecialtiesSubjectsInRequest(HttpServletRequest request) throws ServiceException {
         FacultyService facultyService = FacultyServiceImpl.getInstance();
         SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();

@@ -16,6 +16,13 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * The type To faculties page command.
+ * Command to go to the faculties page. Command used by user with role user, guest, admin.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToFacultiesPageCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

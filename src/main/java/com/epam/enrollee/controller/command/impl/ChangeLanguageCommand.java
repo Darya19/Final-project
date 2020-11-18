@@ -9,6 +9,15 @@ import com.epam.enrollee.controller.router.Router;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+/**
+ * The type Change language command.
+ * Change language the user can at any page, Language type come with request from the user.
+ * The command can be used by the user with any role. Every changing forwards the
+ * user at home page.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class ChangeLanguageCommand implements Command {
 
     private static final String ENGLISH = "en";

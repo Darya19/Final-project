@@ -10,6 +10,13 @@ import com.epam.enrollee.model.type.RoleType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+/**
+ * The type To main page command.
+ * Command to go to the main page. Command used by user with role user, admin, guest.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToMainPageCommand implements Command {
 
     private static final String ENGLISH_LANGUAGE = "en";

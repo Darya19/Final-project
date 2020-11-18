@@ -3,6 +3,9 @@ package com.epam.enrollee.model.entity;
 import com.epam.enrollee.model.type.RecruitmentType;
 import com.epam.enrollee.model.type.StatusType;
 
+/**
+ * The type Specialty.
+ */
 public class Specialty {
 
     private int specialtyId;
@@ -11,45 +14,98 @@ public class Specialty {
     private int numberOfSeats;
     private StatusType specialtyStatus;
 
+    /**
+     * Instantiates a new Specialty.
+     */
     public Specialty() {
     }
 
+    /**
+     * Gets specialty id.
+     *
+     * @return the specialty id
+     */
     public int getSpecialtyId() {
         return specialtyId;
     }
 
+    /**
+     * Sets specialty id.
+     *
+     * @param specialtyId the specialty id
+     */
     public void setSpecialtyId(int specialtyId) {
         this.specialtyId = specialtyId;
     }
 
+    /**
+     * Gets specialty name.
+     *
+     * @return the specialty name
+     */
     public String getSpecialtyName() {
         return specialtyName;
     }
 
+    /**
+     * Sets specialty name.
+     *
+     * @param specialtyName the specialty name
+     */
     public void setSpecialtyName(String specialtyName) {
         this.specialtyName = specialtyName;
     }
 
+    /**
+     * Gets recruitment.
+     *
+     * @return the recruitment
+     */
     public RecruitmentType getRecruitment() {
         return recruitment;
     }
 
+    /**
+     * Sets recruitment.
+     *
+     * @param recruitment the recruitment
+     */
     public void setRecruitment(RecruitmentType recruitment) {
         this.recruitment = recruitment;
     }
 
+    /**
+     * Gets number of seats.
+     *
+     * @return the number of seats
+     */
     public int getNumberOfSeats() {
         return numberOfSeats;
     }
 
+    /**
+     * Sets number of seats.
+     *
+     * @param numberOfSeats the number of seats
+     */
     public void setNumberOfSeats(int numberOfSeats) {
         this.numberOfSeats = numberOfSeats;
     }
 
+    /**
+     * Gets specialty status.
+     *
+     * @return the specialty status
+     */
     public StatusType getSpecialtyStatus() {
         return specialtyStatus;
     }
 
+    /**
+     * Sets specialty status.
+     *
+     * @param specialtyStatus the specialty status
+     */
     public void setSpecialtyStatus(StatusType specialtyStatus) {
         this.specialtyStatus = specialtyStatus;
     }

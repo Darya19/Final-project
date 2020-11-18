@@ -20,6 +20,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
+/**
+ * The type Change application status command.
+ * Change status of the application which the enrollee sent to the specialty while registration.
+ * The status type come with request from the user.The command can be used by the user with
+ * role admin. The user accept or reject application and depending on user choice,
+ * the enrollee application status changing. It's display on applications page for the admin
+ * and profile page for the enrollee. *
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class ChangeApplicationStatusCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

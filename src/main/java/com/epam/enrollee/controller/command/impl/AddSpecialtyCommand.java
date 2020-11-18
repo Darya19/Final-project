@@ -20,6 +20,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Add specialty command.
+ * A specialty can be added by a user with the admin role. If the new specialty is successfully
+ * saved in the database, the user is redirected to the specialties page, otherwise returns to edit
+ * specialty page.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class AddSpecialtyCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

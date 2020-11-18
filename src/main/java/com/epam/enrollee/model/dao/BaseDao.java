@@ -9,16 +9,54 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The interface Base dao.
+ *
+ * @param <T> the type parameter
+ */
 public interface BaseDao<T> {
 
+    /**
+     * Add boolean.
+     *
+     * @param objectMap the object map
+     * @return the boolean
+     * @throws DaoException the dao exception
+     */
     boolean add(Map<String, Object> objectMap) throws DaoException;
 
+    /**
+     * Remove boolean.
+     *
+     * @param parameters the parameters
+     * @return the boolean
+     * @throws DaoException the dao exception
+     */
     boolean remove(Map<String, Object> parameters) throws DaoException;
 
+    /**
+     * Find by id optional.
+     *
+     * @param id the id
+     * @return the optional
+     * @throws DaoException the dao exception
+     */
     Optional<T> findById(int id) throws DaoException;
 
+    /**
+     * Find all list.
+     *
+     * @return the list
+     * @throws DaoException the dao exception
+     */
     List<T> findAll() throws DaoException;
 
+    /**
+     * Close statement.
+     *
+     * @param statement the statement
+     * @throws DaoException the dao exception
+     */
     default void closeStatement(Statement statement) throws DaoException {
         try {
             if (statement != null) {

@@ -16,6 +16,13 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
+/**
+ * The type To edit faculty page command.
+ * Command to go to the edit faculties page. Command used by user with role admin.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToEditFacultyPageCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

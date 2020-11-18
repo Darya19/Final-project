@@ -1,22 +1,45 @@
 package com.epam.enrollee.model.entity;
 
+/**
+ * The type Subject.
+ */
 public class Subject {
 
     private int subjectId;
     private String subjectName;
 
+    /**
+     * Gets subject id.
+     *
+     * @return the subject id
+     */
     public int getSubjectId() {
         return subjectId;
     }
 
+    /**
+     * Sets subject id.
+     *
+     * @param subjectId the subject id
+     */
     public void setSubjectId(int subjectId) {
         this.subjectId = subjectId;
     }
 
+    /**
+     * Gets subject name.
+     *
+     * @return the subject name
+     */
     public String getSubjectName() {
         return subjectName;
     }
 
+    /**
+     * Sets subject name.
+     *
+     * @param subjectName the subject name
+     */
     public void setSubjectName(String subjectName) {
         this.subjectName = subjectName;
     }

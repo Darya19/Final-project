@@ -9,6 +9,13 @@ import com.epam.enrollee.controller.router.Router;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+/**
+ * The type Pagination command.
+ * The command determines which part of the list of applications to display.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class PaginationCommand implements Command {
 
     @Override

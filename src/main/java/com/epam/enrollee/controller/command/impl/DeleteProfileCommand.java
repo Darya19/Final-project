@@ -20,6 +20,14 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Delete profile command.
+ * The command can be used by user with role user. If the profile is deleted successfully,
+ * the enrollee with all information about him deleting from database.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class DeleteProfileCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

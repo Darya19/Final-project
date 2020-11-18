@@ -21,8 +21,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Faculty dao.
+ */
 public class FacultyDaoImpl implements UniversityDao<Faculty> {
 
+    /**
+     * The constant instance.
+     */
     public static FacultyDaoImpl instance;
     private static Logger logger = LogManager.getLogger();
     private static final String FIND_FACULTY_BY_ENROLLEE_ID =
@@ -40,6 +46,11 @@ public class FacultyDaoImpl implements UniversityDao<Faculty> {
     private static final String ADD_FACULTY = "INSERT INTO faculty(faculty_name,faculty_description,faculty_status) " +
             "VALUES (?,?,?)";
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static FacultyDaoImpl getInstance() {
         if (instance == null) {
             instance = new FacultyDaoImpl();

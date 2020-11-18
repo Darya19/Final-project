@@ -17,6 +17,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * The type Change recruitment command.
+ * The required recruitment type come with request from the user.
+ * The command can be used by user with role admin.The recruitment change on close after checking
+ * active applications from user. If the specialty haven't applications, updated information displays
+ * at specialties page. Enrollee can't send application to the specialty with close recruitment.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class ChangeRecruitmentCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

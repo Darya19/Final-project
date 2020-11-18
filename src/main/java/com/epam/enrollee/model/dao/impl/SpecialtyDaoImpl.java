@@ -24,8 +24,14 @@ import java.util.Optional;
 
 import static com.epam.enrollee.model.dao.ColumnName.FACULTY_ID;
 
+/**
+ * The type Specialty dao.
+ */
 public class SpecialtyDaoImpl implements SpecialtyDao {
 
+    /**
+     * The constant instance.
+     */
     public static SpecialtyDaoImpl instance;
     private static Logger logger = LogManager.getLogger();
     private static final String FIND_ALL_SPECIALTIES = "SELECT specialty_id, specialty_name, recruitment, number_of_seats," +
@@ -58,6 +64,11 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     private static final String UPDATE_ENROLLEE_APPLICATION_STATUS = "UPDATE enrollee SET application_status=? " +
             "WHERE enrollee_id=?";
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SpecialtyDaoImpl getInstance() {
         if (instance == null) {
             instance = new SpecialtyDaoImpl();

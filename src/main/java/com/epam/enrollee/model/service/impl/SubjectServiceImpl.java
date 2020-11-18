@@ -13,11 +13,26 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Subject service.
+ * Class implements base service and subject service.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class SubjectServiceImpl implements SubjectService {
 
+    /**
+     * The constant instance.
+     */
     public static SubjectServiceImpl instance;
     private static Logger logger = LogManager.getLogger();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SubjectServiceImpl getInstance() {
         if (instance == null) {
             instance = new SubjectServiceImpl();

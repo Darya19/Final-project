@@ -30,6 +30,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type New application command.
+ * The command creates a new application for the applicant if the old application is archived.
+ * The command can be used by user with role user.If the application is successfully created
+ * and saved in the database, it is displayed in the list of applications for the selected
+ * specialty and in the user profile, the old application is deleted.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class NewApplicationCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

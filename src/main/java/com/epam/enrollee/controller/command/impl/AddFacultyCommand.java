@@ -19,6 +19,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Add faculty command.
+ * A faculty can be added by a user with the admin role. If the new faculty is successfully
+ * saved in the database, the user is redirected to the faculties page, otherwise returns to edit
+ * faculty page.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class AddFacultyCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

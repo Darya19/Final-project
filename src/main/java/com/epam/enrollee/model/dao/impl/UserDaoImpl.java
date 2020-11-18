@@ -20,8 +20,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type User dao.
+ */
 public class UserDaoImpl implements UserDao {
 
+    /**
+     * The constant instance.
+     */
     public static UserDaoImpl instance;
     private static Logger logger = LogManager.getLogger();
     private static final String FIND_USER_BY_ID = "SELECT enrollee_id, email, role, status FROM enrollee WHERE id=?";
@@ -29,6 +35,11 @@ public class UserDaoImpl implements UserDao {
     private static final String FIND_ALL_USERS = "SELECT enrollee_id, email, role FROM user";
     private static final String FIND_PASSWORD_BY_EMAIL = "SELECT password from enrollee WHERE email=?";
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static UserDaoImpl getInstance() {
         if (instance == null) {
             instance = new UserDaoImpl();

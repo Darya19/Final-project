@@ -19,8 +19,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Enrollee dao.
+ */
 public class EnrolleeDaoImpl implements EnrolleeDao {
 
+    /**
+     * The constant instance.
+     */
     public static EnrolleeDaoImpl instance;
     private static Logger logger = LogManager.getLogger();
     private static final String FIND_ENROLLEE_BY_EMAIL = "SELECT enrollee_id, email, role, enrollee_first_name, " +
@@ -59,6 +65,11 @@ public class EnrolleeDaoImpl implements EnrolleeDao {
     private static final String UPDATE_APPLICATION_STATUS_BY_ENROLLEE_ID = "UPDATE enrollee SET application_status=? " +
             "WHERE enrollee_id=?";
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static EnrolleeDaoImpl getInstance() {
         if (instance == null) {
             instance = new EnrolleeDaoImpl();

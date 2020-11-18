@@ -1,7 +1,6 @@
 package com.epam.enrollee.tag;
 
 import com.epam.enrollee.controller.command.AttributeName;
-import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.type.ApplicationStatus;
@@ -16,6 +15,14 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * The type Custom tag.
+ * Tag determines which part of the application list to display based on the page number which
+ * comes from pagination command.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class CustomTag extends TagSupport {
 
     private static final String CONTENT_PAGE = "/prop/pagecontent";

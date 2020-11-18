@@ -20,6 +20,16 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Register command.
+ * The command processes the data received with the request. In case of successful validation,
+ * it saves them to the database and creates an object for the possible further work of the user
+ * in the system, and also redirects the user to the profile page. If incorrect data is entered,
+ * the user is returned to the registration page.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class RegisterCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

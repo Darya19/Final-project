@@ -21,6 +21,16 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type Edit enrollee specialty command.
+ * The specialty id come with request from user. The command can be used by user with role user.
+ * The enrollee can change the specialty at the chosen faculty if the status of his application
+ *  is being considered. If enrollee specialty edition passed successfully, His application is
+ *  displayed in the list of the selected specialty. And the admin can accept or reject it.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class EditEnrolleeSpecialtyCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

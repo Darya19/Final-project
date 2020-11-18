@@ -10,6 +10,13 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * The type To edit application command.
+ * Command to go to the edit application page. Command used by user with role user.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToEditApplicationCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

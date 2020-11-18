@@ -20,6 +20,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Edit faculty command.
+ * A faculty can be edited by a user with the admin role. Parameters for updating come from the
+ * request. If the faculty is successfully saved in the database, the user is redirected to the
+ * faculties page. If the data is not entered correctly, the user is returned to the edit profile
+ * page.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class EditFacultyCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

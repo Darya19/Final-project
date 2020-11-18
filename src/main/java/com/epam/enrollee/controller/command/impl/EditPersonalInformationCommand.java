@@ -21,6 +21,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Edit personal information command.
+ * A user with the user role can edit personal data. Parameters for change come with a request
+ * from the page. If the data is successfully edited, the user is redirected to the profile page,
+ * if the data is not entered correctly, the user is returned to the edit profile page.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class EditPersonalInformationCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

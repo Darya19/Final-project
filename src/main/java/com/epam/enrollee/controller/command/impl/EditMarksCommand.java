@@ -20,6 +20,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Edit marks command.
+ * Marks values and specialties id come with request from user. The command can be used by
+ * user with role user. The enrollee can change marks value (without changing subjects)
+ * if the status of his application is being considered. If enrollee marks edition passed
+ * successfully, his application displays in the list of applications with calculated average mark.
+ * And the admin can accept or reject it. If the data is not entered correctly, the user is returned
+ * to the edit profile page.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class EditMarksCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

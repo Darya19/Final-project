@@ -26,6 +26,15 @@ import java.util.Map;
 import java.util.Optional;
 
 
+/**
+ * The type Login command.
+ * Command for determining the role of the user for further work in the system.
+ * After verification, user data is saved to the session. In case of incorrectly entered data,
+ * the user is returned to the login page.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class LoginCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

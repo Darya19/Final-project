@@ -16,6 +16,13 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
+/**
+ * The type To edit specialty page command.
+ * Command to go to the edit specialty page. Command used by user with role admin.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToEditSpecialtyPageCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

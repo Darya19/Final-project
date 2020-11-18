@@ -17,6 +17,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * The type Delete specialty command.
+ * Delete a specialty, the specialty id come with request from user.
+ * The command can be used by user with role admin. If the specialty is deleted successfully,
+ * the specialty don't displays at the page specialties. The specialty is not deleted from
+ * the database,but is marked with a status delete
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class DeleteSpecialtyCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

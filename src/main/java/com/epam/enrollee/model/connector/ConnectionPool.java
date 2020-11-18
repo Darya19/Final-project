@@ -13,8 +13,14 @@ import java.util.ResourceBundle;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
+/**
+ * The enum Connection pool.
+ */
 public enum ConnectionPool {
 
+    /**
+     * Instance connection pool.
+     */
     INSTANCE;
 
     private static final int DEFAULT_POOL_SIZE = 4;
@@ -41,6 +47,11 @@ public enum ConnectionPool {
         }
     }
 
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     */
     public ProxyConnection getConnection() {
         ProxyConnection connection = null;
         try {
@@ -52,6 +63,11 @@ public enum ConnectionPool {
         return connection;
     }
 
+    /**
+     * Realise connection.
+     *
+     * @param connection the connection
+     */
     public void realiseConnection(Connection connection) {
         if (connection.getClass().equals(ProxyConnection.class)) {
             if (givenAwayConnections.remove(connection)) {
@@ -64,6 +80,9 @@ public enum ConnectionPool {
         }
     }
 
+    /**
+     * Destroy pool.
+     */
     public void destroyPool() {
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {
@@ -75,6 +94,9 @@ public enum ConnectionPool {
         deregisterDrivers();
     }
 
+    /**
+     * Deregister drivers.
+     */
     public void deregisterDrivers() {
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         while (drivers.hasMoreElements()) {

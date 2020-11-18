@@ -9,8 +9,8 @@ import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Subject;
 import com.epam.enrollee.model.service.EnrolleeMarkRegisterService;
-import com.epam.enrollee.parser.NumberParser;
 import com.epam.enrollee.util.MapKeys;
+import com.epam.enrollee.util.NumberParser;
 import com.epam.enrollee.validator.ProjectValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -21,11 +21,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Enrollee mark register service.
+ * Class implements base service and enrollee mark register service.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class EnrolleeMarkRegisterServiceImpl implements EnrolleeMarkRegisterService {
 
+    /**
+     * The constant instance.
+     */
     public static EnrolleeMarkRegisterServiceImpl instance;
     private static Logger logger = LogManager.getLogger();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static EnrolleeMarkRegisterServiceImpl getInstance() {
         if (instance == null) {
             instance = new EnrolleeMarkRegisterServiceImpl();
@@ -64,7 +79,7 @@ public class EnrolleeMarkRegisterServiceImpl implements EnrolleeMarkRegisterServ
         EnrolleeMarkRegisterDao registerDao = EnrolleeMarkRegisterDaoImpl.getInstance();
         SubjectDao subjectDao = SubjectDaoImpl.getInstance();
         List<Subject> subjectsForUpdate = new ArrayList<>();
-        NumberParser parser = new NumberParser();
+        NumberParser parser = NumberParser.getInstance();
         Map<Subject, Integer> currentRegister = markRegister.getTestsSubjectsAndMarks();
         subjectsForUpdate.addAll(currentRegister.keySet());
         for (Subject subject : subjectsForUpdate) {
@@ -117,7 +132,7 @@ public class EnrolleeMarkRegisterServiceImpl implements EnrolleeMarkRegisterServ
         EnrolleeMarkRegisterDao registerDao = EnrolleeMarkRegisterDaoImpl.getInstance();
         SubjectDao subjectDao = SubjectDaoImpl.getInstance();
         EnrolleeMarkRegister register = new EnrolleeMarkRegister();
-        NumberParser parser = new NumberParser();
+        NumberParser parser = NumberParser.getInstance();
         try {
             for (Map.Entry<String, String> pair : parameters.entrySet()) {
                 String key = pair.getKey();
@@ -144,7 +159,7 @@ public class EnrolleeMarkRegisterServiceImpl implements EnrolleeMarkRegisterServ
 
     @Override
     public Map<String, String> checkParameters(Map<String, String> parameters) {
-        ProjectValidator validator = new ProjectValidator();
+        ProjectValidator validator = ProjectValidator.getInstance();
         for (Map.Entry<String, String> pair : parameters.entrySet()) {
             String key = pair.getKey();
             String value = pair.getValue();

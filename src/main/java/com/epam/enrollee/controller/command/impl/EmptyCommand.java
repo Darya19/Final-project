@@ -10,6 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import static com.epam.enrollee.controller.command.PagePath.ERROR_404;
 
+/**
+ * The type Empty command.
+ * If request come from page with empty parameter command. Servlet call Empty command.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class EmptyCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

@@ -17,6 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * The type To admin specialties page command.
+ * Command to go to the admin specialties page. Command used by user with role admin.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToAdminSpecialtiesPageCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

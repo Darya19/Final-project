@@ -23,6 +23,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
+/**
+ * The type To applications page command.
+ * Command to go to the applications page. Command used by user with role admin.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToApplicationsPageCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

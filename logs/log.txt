@@ -1,0 +1,24 @@
+2020-11-17 15:04:17 [main] ERROR enrollee.model.service.impl.UserServiceImpl- Error in checking email and password
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 15:04:24 [main] ERROR enrollee.model.service.impl.SubjectServiceImpl- Error in finding all subjects
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 15:23:48 [main] ERROR enrollee.model.service.impl.SubjectServiceImpl- Error in finding all subjects
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 15:25:08 [main] ERROR enrollee.model.service.impl.SubjectServiceImpl- Error in finding all subjects
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 15:26:49 [main] ERROR enrollee.model.service.impl.SubjectServiceImpl- Error in finding all subjects
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 15:27:31 [main] ERROR enrollee.model.service.impl.SubjectServiceImpl- Error in finding all subjects
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 15:43:36 [main] ERROR enrollee.model.service.impl.SpecialtyServiceImpl- Error in finding specialty by id
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 15:43:52 [main] ERROR enrollee.model.service.impl.SpecialtyServiceImpl- Error in finding specialty by id
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 15:46:20 [main] ERROR enrollee.model.service.impl.SpecialtyServiceImpl- Error in finding specialty by id
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 19:01:44 [main] ERROR enrollee.model.service.impl.FacultyServiceImpl- Error in checking applications
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 19:24:28 [main] ERROR enrollee.model.service.impl.EnrolleeServiceImpl- Error while checking enrollee email
+com.epam.enrollee.exception.DaoException: null
+2020-11-17 19:25:16 [main] ERROR enrollee.model.service.impl.EnrolleeServiceImpl- Error while checking enrollee email
+com.epam.enrollee.exception.DaoException: null

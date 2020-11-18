@@ -6,6 +6,13 @@ import com.epam.enrollee.controller.router.Router;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * The type To login page command.
+ * Command to go to the login page. Command used by user with role guest.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToLoginPageCommand implements Command {
 
     @Override

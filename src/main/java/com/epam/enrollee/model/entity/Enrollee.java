@@ -2,6 +2,9 @@ package com.epam.enrollee.model.entity;
 
 import com.epam.enrollee.model.type.ApplicationStatus;
 
+/**
+ * The type Enrollee.
+ */
 public class Enrollee extends User {
 
     private String firstName;
@@ -11,54 +14,117 @@ public class Enrollee extends User {
     private int chosenSpecialtyId;
     private ApplicationStatus applicationStatus;
 
+    /**
+     * Instantiates a new Enrollee.
+     */
     public Enrollee() {
         super();
     }
 
+    /**
+     * Gets first name.
+     *
+     * @return the first name
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * Sets first name.
+     *
+     * @param firstName the first name
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    /**
+     * Gets last name.
+     *
+     * @return the last name
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * Sets last name.
+     *
+     * @param lastName the last name
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    /**
+     * Gets middle name.
+     *
+     * @return the middle name
+     */
     public String getMiddleName() {
         return middleName;
     }
 
+    /**
+     * Sets middle name.
+     *
+     * @param middleName the middle name
+     */
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
 
+    /**
+     * Gets chosen faculty id.
+     *
+     * @return the chosen faculty id
+     */
     public int getChosenFacultyId() {
         return chosenFacultyId;
     }
 
+    /**
+     * Sets chosen faculty id.
+     *
+     * @param chosenFacultyId the chosen faculty id
+     */
     public void setChosenFacultyId(int chosenFacultyId) {
         this.chosenFacultyId = chosenFacultyId;
     }
 
+    /**
+     * Gets chosen specialty id.
+     *
+     * @return the chosen specialty id
+     */
     public int getChosenSpecialtyId() {
         return chosenSpecialtyId;
     }
 
+    /**
+     * Sets chosen specialty id.
+     *
+     * @param chosenSpecialtyId the chosen specialty id
+     */
     public void setChosenSpecialtyId(int chosenSpecialtyId) {
         this.chosenSpecialtyId = chosenSpecialtyId;
     }
 
+    /**
+     * Gets application status.
+     *
+     * @return the application status
+     */
     public ApplicationStatus getApplicationStatus() {
         return applicationStatus;
     }
 
+    /**
+     * Sets application status.
+     *
+     * @param applicationStatus the application status
+     */
     public void setApplicationStatus(ApplicationStatus applicationStatus) {
         this.applicationStatus = applicationStatus;
     }

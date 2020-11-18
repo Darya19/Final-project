@@ -20,8 +20,14 @@ import java.util.Optional;
 import static com.epam.enrollee.model.dao.ColumnName.SUBJECT_ID;
 import static com.epam.enrollee.model.dao.ColumnName.SUBJECT_NAME;
 
+/**
+ * The type Subject dao.
+ */
 public class SubjectDaoImpl implements SubjectDao {
 
+    /**
+     * The constant instance.
+     */
     public static SubjectDaoImpl instance;
     private static Logger logger = LogManager.getLogger();
     private static final String FIND_ALL_SUBJECTS = "SELECT subject_id , subject_name FROM subject";
@@ -29,6 +35,11 @@ public class SubjectDaoImpl implements SubjectDao {
             "subject_specialty ON subject.subject_id = subject_specialty.subject_id_fk WHERE specialty_id_fk=?";
     private static final String FIND_SUBJECTS_BY_SUBJECT_ID = "SELECT subject_id, subject_name FROM subject WHERE subject_id=?";
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SubjectDaoImpl getInstance() {
         if (instance == null) {
             instance = new SubjectDaoImpl();

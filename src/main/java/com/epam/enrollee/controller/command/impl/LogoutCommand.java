@@ -6,6 +6,14 @@ import com.epam.enrollee.controller.router.Router;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * The type Logout command.
+ * The command deletes the current user session with all his data and
+ * redirects to the index page.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class LogoutCommand implements Command {
 
     @Override

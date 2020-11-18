@@ -11,6 +11,13 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 
+/**
+ * The type To register page command.
+ * Command to go to the register page. Command used by user with role guest.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToRegisterPageCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

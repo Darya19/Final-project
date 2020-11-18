@@ -18,6 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * The type To edit profile page command.
+ * Command to go to the edit profile page. Command used by user with role user.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToEditProfilePageCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

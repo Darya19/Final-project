@@ -20,6 +20,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type To specialties page command.
+ * Command to go to the specialties page. Command used by user with role user, admin, guest.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToSpecialtiesPageCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

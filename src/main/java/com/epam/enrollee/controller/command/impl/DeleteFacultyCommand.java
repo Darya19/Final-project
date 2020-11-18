@@ -16,6 +16,16 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * The type Delete faculty command.
+ * Delete a faculty, the faculty id come with request from user.
+ * The command can be used by user with role admin. If the faculty is deleted successfully,
+ * the faculty don't displays at the page faculties. The faculty is not deleted from the database,
+ * but is marked with a status delete
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class DeleteFacultyCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

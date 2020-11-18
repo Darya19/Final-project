@@ -17,6 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * The type To admin faculties page command.
+ * Command to go to the admin faculties page. Command used by user with role admin.
+ *
+ *  @author Darya Shcherbina
+ *  @version 1.0
+ */
 public class ToAdminFacultiesPageCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();

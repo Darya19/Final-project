@@ -7,8 +7,8 @@ import com.epam.enrollee.model.dao.impl.SpecialtyDaoImpl;
 import com.epam.enrollee.model.entity.Specialty;
 import com.epam.enrollee.model.service.SpecialtyService;
 import com.epam.enrollee.model.type.RecruitmentType;
-import com.epam.enrollee.parser.NumberParser;
 import com.epam.enrollee.util.MapKeys;
+import com.epam.enrollee.util.NumberParser;
 import com.epam.enrollee.validator.ProjectValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -16,11 +16,26 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * The type Specialty service.
+ * Class implements base service and specialty service.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class SpecialtyServiceImpl implements SpecialtyService {
 
+    /**
+     * The constant instance.
+     */
     public static SpecialtyServiceImpl instance;
     private static Logger logger = LogManager.getLogger();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SpecialtyServiceImpl getInstance() {
         if (instance == null) {
             instance = new SpecialtyServiceImpl();
@@ -31,7 +46,7 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     @Override
     public boolean create(Map<String, String> parameters) throws ServiceException {
         SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
+        NumberParser parser = NumberParser.getInstance();
         Map<String, Object> objectMap = new HashMap<>();
         int numberOfSeats = parser.parseToInt(parameters.get(MapKeys.NUMBER_OF_SEATS));
         int facultyId = parser.parseToInt(parameters.get(MapKeys.FACULTY_ID));
@@ -49,8 +64,8 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     @Override
     public boolean remove(String specialtyId) throws ServiceException {
         SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
-        ProjectValidator validator = new ProjectValidator();
+        NumberParser parser = NumberParser.getInstance();
+        ProjectValidator validator = ProjectValidator.getInstance();
         int intSpecialtyId;
         if (validator.isIntParameterValid(specialtyId)) {
             try {
@@ -92,7 +107,8 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     @Override
     public boolean update(Map<String, String> parameters) throws ServiceException {
         SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
+        NumberParser parser = NumberParser.getInstance();
+        ;
         Map<String, Object> objectParameters = new HashMap<>();
         int intSpecialtyId;
         int number;
@@ -112,8 +128,9 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     @Override
     public List<Specialty> findOpenSpecialtiesOfFaculty(String facultyId) throws ServiceException {
         SpecialtyDao dao = SpecialtyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
-        ProjectValidator validator = new ProjectValidator();
+        NumberParser parser = NumberParser.getInstance();
+        ;
+        ProjectValidator validator = ProjectValidator.getInstance();
         List<Specialty> specialties;
         int intFacultyId;
         if (validator.isIntParameterValid(facultyId)) {
@@ -133,8 +150,9 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     @Override
     public List<Specialty> findActiveSpecialtiesOfFaculty(String facultyId) throws ServiceException {
         SpecialtyDao dao = SpecialtyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
-        ProjectValidator validator = new ProjectValidator();
+        NumberParser parser = NumberParser.getInstance();
+        ;
+        ProjectValidator validator = ProjectValidator.getInstance();
         List<Specialty> specialties = null;
         int intFacultyId;
         if (validator.isIntParameterValid(facultyId)) {
@@ -154,8 +172,9 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     @Override
     public Optional<Specialty> findSpecialtyById(String specialtyId) throws ServiceException {
         SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
-        ProjectValidator validator = new ProjectValidator();
+        NumberParser parser = NumberParser.getInstance();
+        ;
+        ProjectValidator validator = ProjectValidator.getInstance();
         int intSpecialtyId;
         if (validator.isIntParameterValid(specialtyId)) {
             intSpecialtyId = parser.parseToInt(specialtyId);
@@ -175,8 +194,9 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     public boolean changeSpecialtyRecruitment(String specialtyId, String recruitment, List<Integer> application)
             throws ServiceException {
         SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
-        ProjectValidator validator = new ProjectValidator();
+        NumberParser parser = NumberParser.getInstance();
+        ;
+        ProjectValidator validator = ProjectValidator.getInstance();
         int intSpecialtyId;
         boolean isChanged;
         if (validator.isIntParameterValid(specialtyId)
@@ -201,8 +221,8 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     @Override
     public boolean checkConsideredApplications(String specialtyId) throws ServiceException {
         SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
-        ProjectValidator validator = new ProjectValidator();
+        NumberParser parser = NumberParser.getInstance();
+        ProjectValidator validator = ProjectValidator.getInstance();
         int intSpecialtyId;
         if (validator.isIntParameterValid(specialtyId)) {
             try {
@@ -221,8 +241,9 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     @Override
     public List<Integer> findAllApplicationsBySpecialty(String specialtyId) throws ServiceException {
         SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
-        ProjectValidator validator = new ProjectValidator();
+        NumberParser parser = NumberParser.getInstance();
+        ;
+        ProjectValidator validator = ProjectValidator.getInstance();
         int intSpecialtyId;
         if (validator.isIntParameterValid(specialtyId)) {
             try {
@@ -240,7 +261,7 @@ public class SpecialtyServiceImpl implements SpecialtyService {
 
     @Override
     public Map<String, String> checkParameters(Map<String, String> parameters) {
-        ProjectValidator validator = new ProjectValidator();
+        ProjectValidator validator = ProjectValidator.getInstance();
         boolean isNameValid;
         boolean isNumberValid;
         if (parameters.get(MapKeys.SPECIALTY_ID) != null) {

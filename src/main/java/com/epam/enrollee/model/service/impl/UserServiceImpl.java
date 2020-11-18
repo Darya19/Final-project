@@ -15,11 +15,26 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type User service.
+ * Class implements base service and user service.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class UserServiceImpl implements UserService {
 
+    /**
+     * The constant instance.
+     */
     public static UserServiceImpl instance;
     private static Logger logger = LogManager.getLogger();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static UserServiceImpl getInstance() {
         if (instance == null) {
             instance = new UserServiceImpl();

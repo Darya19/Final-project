@@ -18,8 +18,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Enrollee mark register dao.
+ */
 public class EnrolleeMarkRegisterDaoImpl implements EnrolleeMarkRegisterDao {
 
+    /**
+     * The constant instance.
+     */
     public static EnrolleeMarkRegisterDaoImpl instance;
     private static Logger logger = LogManager.getLogger();
     private static final String FIND_ENROLLEE_REGISTER_BY_ENROLLEE_ID = "SELECT subject_id, subject_name, mark_value " +
@@ -29,6 +35,11 @@ public class EnrolleeMarkRegisterDaoImpl implements EnrolleeMarkRegisterDao {
     private static final String UPDATE_ENROLLEE_REGISTER = "UPDATE mark SET mark_value=?, subject_id_fk=? WHERE " +
             "enrollee_id_fk=? and subject_id_fk=?";
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static EnrolleeMarkRegisterDaoImpl getInstance() {
         if (instance == null) {
             instance = new EnrolleeMarkRegisterDaoImpl();

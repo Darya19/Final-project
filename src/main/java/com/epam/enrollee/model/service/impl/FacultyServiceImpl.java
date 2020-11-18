@@ -9,8 +9,8 @@ import com.epam.enrollee.model.dao.impl.SpecialtyDaoImpl;
 import com.epam.enrollee.model.entity.Faculty;
 import com.epam.enrollee.model.entity.Specialty;
 import com.epam.enrollee.model.service.FacultyService;
-import com.epam.enrollee.parser.NumberParser;
 import com.epam.enrollee.util.MapKeys;
+import com.epam.enrollee.util.NumberParser;
 import com.epam.enrollee.validator.ProjectValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -21,11 +21,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Faculty service.
+ * Class implements base service and faculty service.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
+ */
 public class FacultyServiceImpl implements FacultyService {
 
+    /**
+     * The constant instance.
+     */
     public static FacultyServiceImpl instance;
     private static Logger logger = LogManager.getLogger();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static FacultyServiceImpl getInstance() {
         if (instance == null) {
             instance = new FacultyServiceImpl();
@@ -54,8 +69,8 @@ public class FacultyServiceImpl implements FacultyService {
     public boolean removeFacultyAndItsSpecialties(String facultyId) throws ServiceException {
         UniversityDao facultyDao = FacultyDaoImpl.getInstance();
         SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
-        ProjectValidator validator = new ProjectValidator();
+        NumberParser parser = NumberParser.getInstance();
+        ProjectValidator validator = ProjectValidator.getInstance();
         int intFacultyId;
         if (validator.isIntParameterValid(facultyId)) {
             try {
@@ -77,14 +92,14 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public boolean checkConsideredApplications(String facultyId) throws ServiceException {
         UniversityDao facultyDao = FacultyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
-        ProjectValidator validator = new ProjectValidator();
+        NumberParser parser = NumberParser.getInstance();
+        ProjectValidator validator = ProjectValidator.getInstance();
         int intFacultyId;
         if (validator.isIntParameterValid(facultyId)) {
             try {
                 intFacultyId = parser.parseToInt(facultyId);
-                List<Integer> foundEnrolleId = facultyDao.findConsideredEnrolleeIdById(intFacultyId);
-                return foundEnrolleId.size() > 0;
+                List<Integer> foundEnrolleeId = facultyDao.findConsideredEnrolleeIdById(intFacultyId);
+                return foundEnrolleeId.size() > 0;
             } catch (DaoException e) {
                 logger.log(Level.ERROR, "Error in checking applications", e);
                 throw new ServiceException(e);
@@ -109,7 +124,7 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public boolean update(Map<String, String> parameters) throws ServiceException {
         FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
+        NumberParser parser = NumberParser.getInstance();
         Map<String, Object> objectParameters = new HashMap<>();
         int intFacultyId;
         try {
@@ -127,8 +142,8 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public Optional<Faculty> findFacultyById(String facultyId) throws ServiceException {
         FacultyDaoImpl facultyDao = FacultyDaoImpl.getInstance();
-        NumberParser parser = new NumberParser();
-        ProjectValidator validator = new ProjectValidator();
+        NumberParser parser = NumberParser.getInstance();
+        ProjectValidator validator = ProjectValidator.getInstance();
         int intFacultyId = 0;
         if (validator.isIntParameterValid(facultyId)) {
             intFacultyId = parser.parseToInt(facultyId);
@@ -156,7 +171,7 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public Map<String, String> checkParameters(Map<String, String> parameters) {
-        ProjectValidator validator = new ProjectValidator();
+        ProjectValidator validator = ProjectValidator.getInstance();
         boolean isNameValid;
         if (parameters.get(MapKeys.FACULTY_ID) != null) {
             boolean isFacultyIdValid;
