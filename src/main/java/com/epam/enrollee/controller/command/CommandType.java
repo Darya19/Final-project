@@ -5,6 +5,9 @@ import com.epam.enrollee.controller.command.impl.page.*;
 
 /**
  * The enum Command type.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public enum CommandType {
     /**

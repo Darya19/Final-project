@@ -52,4 +52,3 @@ public class ToEditSpecialtyPageCommand implements Command {
         return router;
     }
 }
-

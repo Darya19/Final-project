@@ -45,7 +45,8 @@
                     <div class="form-row">
                         <c:forEach items="${register.testsSubjectsAndMarks}" var="register">
                             <div class="col-7">
-                                <input class="form-control" type="text" placeholder="${register.key.subjectName}" readonly>
+                                <input class="form-control" type="text" placeholder="${register.key.subjectName}"
+                                       readonly>
                             </div>
 
                             <div class="col">
@@ -53,10 +54,10 @@
                                        name="${register.key.subjectId}" required value="${register.value}">
                             </div>
                         </c:forEach>
-                    <c:if test="${not empty parameters}">
-                        <small><label class="alert-danger"> <fmt:message
-                                key="editprofile.editerror"/></label></small>
-                    </c:if></div>
+                        <c:if test="${not empty parameters}">
+                            <small><label class="alert-danger"> <fmt:message
+                                    key="editprofile.editerror"/></label></small>
+                        </c:if></div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-block" type="submit"><fmt:message
                                 key="editprofile.edit"/></button>
@@ -73,12 +74,12 @@
                         <input class="form-control" type="text"
                                id="first_name" name="first_name" required
                                value="${enrollee.firstName}">
-                        </div>
+                    </div>
                     <div><fmt:message key="editprofile.lastname"/>
                         <input class="form-control" type="text"
                                id="last_name" name="last_name" required
                                value="${enrollee.lastName}">
-               </div>
+                    </div>
                     <div><fmt:message key="editprofile.middlename"/>
                         <input class="form-control" type="text"
                                id="middle_name" name="middle_name"
@@ -105,8 +106,7 @@
             </c:if>
         </div>
     </section>
-
 </main>
-<c:import url="//jsp//fragment//footer.jsp"/>
+<c:import url="/jsp/fragment/footer.jsp"/>
 </body>
 </html>

@@ -2,7 +2,6 @@ package com.epam.enrollee.model.dao.impl;
 
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.model.connector.ConnectionPool;
-import com.epam.enrollee.model.dao.BaseDao;
 import com.epam.enrollee.model.dao.ColumnName;
 import com.epam.enrollee.model.dao.UserDao;
 import com.epam.enrollee.model.entity.User;
@@ -22,6 +21,9 @@ import java.util.Optional;
 
 /**
  * The type User dao.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class UserDaoImpl implements UserDao {
 

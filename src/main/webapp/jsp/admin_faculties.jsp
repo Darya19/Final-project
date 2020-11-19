@@ -8,7 +8,7 @@
     <title><fmt:message key="adminfaculties.title"/></title>
 </head>
 <body>
-<c:import url="//jsp//fragment//header.jsp"/>
+<c:import url="/jsp/fragment/header.jsp"/>
 <main class="page page-information">
     <section class="lean-block clean-testimonials dark">
         <div class="container">
@@ -72,6 +72,6 @@
         </div>
     </section>
 </main>
-<c:import url="//jsp//fragment//footer.jsp"/>
+<c:import url="/jsp/fragment/footer.jsp"/>
 </body>
 </html>

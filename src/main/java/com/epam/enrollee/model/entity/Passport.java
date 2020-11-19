@@ -2,6 +2,9 @@ package com.epam.enrollee.model.entity;
 
 /**
  * The type Passport.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class Passport {
 
@@ -71,9 +74,11 @@ public class Passport {
         Passport passport = (Passport) o;
 
         if (getPassportId() != passport.getPassportId()) return false;
-        if (getPassportSeriesAndNumber() != null ? !getPassportSeriesAndNumber().equals(passport.getPassportSeriesAndNumber()) : passport.getPassportSeriesAndNumber() != null)
+        if (getPassportSeriesAndNumber() != null ? !getPassportSeriesAndNumber().equals(passport.getPassportSeriesAndNumber())
+                : passport.getPassportSeriesAndNumber() != null)
             return false;
-        return getPersonalNumber() != null ? getPersonalNumber().equals(passport.getPersonalNumber()) : passport.getPersonalNumber() == null;
+        return getPersonalNumber() != null ? getPersonalNumber().equals(passport.getPersonalNumber())
+                : passport.getPersonalNumber() == null;
     }
 
     @Override

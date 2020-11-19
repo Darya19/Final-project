@@ -26,6 +26,9 @@ import static com.epam.enrollee.model.dao.ColumnName.FACULTY_ID;
 
 /**
  * The type Specialty dao.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class SpecialtyDaoImpl implements SpecialtyDao {
 
@@ -291,7 +294,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     public boolean updateClosedRecruitmentBySpecialtyId(int specialtyId) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
-             PreparedStatement statement = connection.prepareStatement (UPDATE_RECRUITMENT_BY_SPECIALTY_ID)) {
+             PreparedStatement statement = connection.prepareStatement(UPDATE_RECRUITMENT_BY_SPECIALTY_ID)) {
             statement.setString(1, RecruitmentType.OPENED.getType());
             statement.setInt(2, specialtyId);
             isUpdated = statement.executeUpdate() > 0;

@@ -7,4 +7,3 @@
 <jsp:forward page="projectServlet?command=to_main_page"/>
 </body>
 </html>
-

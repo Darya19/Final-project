@@ -9,6 +9,11 @@ import java.util.Optional;
 
 /**
  * The interface Enrollee dao.
+ * The interface defines methods for working with the enrollee and passport tables in database.
+ * Interface extends base service.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public interface EnrolleeDao extends BaseDao<Enrollee> {
 

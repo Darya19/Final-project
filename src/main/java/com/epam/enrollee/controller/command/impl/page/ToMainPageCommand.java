@@ -33,9 +33,3 @@ public class ToMainPageCommand implements Command {
         return router;
     }
 }
-
-
-
-
-
-

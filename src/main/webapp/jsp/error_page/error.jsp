@@ -5,18 +5,18 @@
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
-    <title><fmt:message key="incorrectdata.title"/> </title>
+    <title><fmt:message key="incorrectdata.title"/></title>
 </head>
 <body>
-<c:import url="//jsp//fragment//header.jsp"/>
+<c:import url="/jsp/fragment/header.jsp"/>
 <main class="page landing-page">
     <section class="">
         <img src="/img/error.jpg" alt=""/>
         <div class="text">
-            <h5 class="text-center" ><fmt:message key="incorrectdata.note"/> </h5>
+            <h5 class="text-center"><fmt:message key="incorrectdata.note"/></h5>
         </div>
     </section>
 </main>
-<c:import url="//jsp//fragment//footer.jsp"/>
+<c:import url="/jsp/fragment/footer.jsp"/>
 </body>
 </html>

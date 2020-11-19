@@ -5,8 +5,11 @@ import java.util.Map;
 
 /**
  * The type Enrollee mark register.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
-public class EnrolleeMarkRegister implements Comparable<EnrolleeMarkRegister>{
+public class EnrolleeMarkRegister implements Comparable<EnrolleeMarkRegister> {
 
     private Map<Subject, Integer> testsSubjectsAndMarks;
     private int averageMark;
@@ -102,7 +105,8 @@ public class EnrolleeMarkRegister implements Comparable<EnrolleeMarkRegister>{
         EnrolleeMarkRegister register = (EnrolleeMarkRegister) o;
 
         if (getAverageMark() != register.getAverageMark()) return false;
-        return getTestsSubjectsAndMarks() != null ? getTestsSubjectsAndMarks().equals(register.getTestsSubjectsAndMarks()) : register.getTestsSubjectsAndMarks() == null;
+        return getTestsSubjectsAndMarks() != null ? getTestsSubjectsAndMarks().equals(register.getTestsSubjectsAndMarks())
+                : register.getTestsSubjectsAndMarks() == null;
     }
 
     @Override
@@ -123,6 +127,6 @@ public class EnrolleeMarkRegister implements Comparable<EnrolleeMarkRegister>{
 
     @Override
     public int compareTo(EnrolleeMarkRegister register) {
-        return (int)(this.averageMark - register.getAverageMark());
+        return (int) (this.averageMark - register.getAverageMark());
     }
 }

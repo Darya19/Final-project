@@ -5,17 +5,17 @@
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
-<c:choose>
-<c:when test="${not empty faculty}">
-    <title><fmt:message key="editfaculty.edittitle"/></title>
-</c:when>
-    <c:otherwise>
-        <title><fmt:message key="editfaculty.addtitle"/></title>
-    </c:otherwise>
-</c:choose>
+    <c:choose>
+        <c:when test="${not empty faculty}">
+            <title><fmt:message key="editfaculty.edittitle"/></title>
+        </c:when>
+        <c:otherwise>
+            <title><fmt:message key="editfaculty.addtitle"/></title>
+        </c:otherwise>
+    </c:choose>
 </head>
 <body>
-<c:import url="//jsp//fragment//header.jsp"/>
+<c:import url="/jsp/fragment/header.jsp"/>
 <main class="page registration-page">
     <section class="clean-block clean-form dark">
         <div class="container">
@@ -31,10 +31,10 @@
             </div>
             <form name="AddFacultyForm" method="POST" action="projectServlet">
                 <c:choose>
-                <c:when test="${not empty faculty}">
-                <input type="hidden" name="command" value="edit_faculty"/>
-                    <input type="hidden" name="faculty_id" value="${faculty.facultyId}">
-                </c:when>
+                    <c:when test="${not empty faculty}">
+                        <input type="hidden" name="command" value="edit_faculty"/>
+                        <input type="hidden" name="faculty_id" value="${faculty.facultyId}">
+                    </c:when>
                     <c:otherwise>
                         <input type="hidden" name="command" value="add_faculty"/>
                     </c:otherwise>
@@ -45,7 +45,8 @@
                            autofocus value="${faculty.facultyName}"
                            required pattern="[a-zA-ZА-Яа-я\s]{2,40}">
                     <c:if test="${not empty parameters and empty parameters['faculty_name'] }">
-                        <small><label class="alert-danger"> <fmt:message key="editfaculty.facultyerror"/></label></small>
+                        <small><label class="alert-danger"> <fmt:message
+                                key="editfaculty.facultyerror"/></label></small>
                     </c:if>
                 </div>
 
@@ -57,8 +58,8 @@
                 </div>
                 <c:choose>
                     <c:when test="${not empty faculty}">
-                <button class="btn btn-primary btn-block" type="submit"><fmt:message
-                        key="editfaculty.editbutton"/></button>
+                        <button class="btn btn-primary btn-block" type="submit"><fmt:message
+                                key="editfaculty.editbutton"/></button>
                     </c:when>
                     <c:otherwise>
                         <button class="btn btn-primary btn-block" type="submit"><fmt:message
@@ -69,6 +70,6 @@
         </div>
     </section>
 </main>
-<c:import url="//jsp//fragment//footer.jsp"/>
+<c:import url="/jsp/fragment/footer.jsp"/>
 </body>
 </html>

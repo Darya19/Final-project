@@ -22,6 +22,9 @@ import static com.epam.enrollee.model.dao.ColumnName.SUBJECT_NAME;
 
 /**
  * The type Subject dao.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class SubjectDaoImpl implements SubjectDao {
 

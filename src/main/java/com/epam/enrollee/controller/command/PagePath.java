@@ -2,6 +2,9 @@ package com.epam.enrollee.controller.command;
 
 /**
  * The type Page path.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class PagePath {
     /**

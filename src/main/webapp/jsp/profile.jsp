@@ -115,5 +115,4 @@
 </main>
 <c:import url="/jsp/fragment/footer.jsp"/>
 </body>
-
 </html>

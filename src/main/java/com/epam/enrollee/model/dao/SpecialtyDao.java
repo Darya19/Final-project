@@ -8,6 +8,11 @@ import java.util.Optional;
 
 /**
  * The interface Specialty dao.
+ * The interface defines methods for working with the specialty table in database.
+ * Interface extends university and base service.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public interface SpecialtyDao extends UniversityDao<Specialty> {
 

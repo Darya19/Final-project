@@ -2,8 +2,11 @@ package com.epam.enrollee.exception;
 
 /**
  * The type Service exception.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
-public class ServiceException extends Exception{
+public class ServiceException extends Exception {
     /**
      * Instantiates a new Service exception.
      */

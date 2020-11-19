@@ -2,6 +2,10 @@ package com.epam.enrollee.model.dao;
 
 /**
  * The type Column name.
+ * Column names in database.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class ColumnName {
 

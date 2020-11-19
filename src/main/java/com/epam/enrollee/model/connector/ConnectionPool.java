@@ -15,6 +15,10 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * The enum Connection pool.
+ * The pool for connections to database.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public enum ConnectionPool {
 

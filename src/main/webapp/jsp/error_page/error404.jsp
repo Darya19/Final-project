@@ -5,10 +5,10 @@
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
-    <title><fmt:message key="error.title"/> </title>
+    <title><fmt:message key="error.title"/></title>
 </head>
 <body>
-<c:import url="//jsp//fragment//header.jsp"/>
+<c:import url="/jsp/fragment/header.jsp"/>
 <main class="page landing-page">
     <section class="">
         <img src="/img/err404.jpg" alt=""/>
@@ -18,6 +18,6 @@
         </div>
     </section>
 </main>
-<c:import url="//jsp//fragment//footer.jsp"/>
+<c:import url="/jsp/fragment/footer.jsp"/>
 </body>
 </html>

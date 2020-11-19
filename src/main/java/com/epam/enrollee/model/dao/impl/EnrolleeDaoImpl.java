@@ -21,6 +21,9 @@ import java.util.Optional;
 
 /**
  * The type Enrollee dao.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class EnrolleeDaoImpl implements EnrolleeDao {
 

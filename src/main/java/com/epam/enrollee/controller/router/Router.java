@@ -2,6 +2,10 @@ package com.epam.enrollee.controller.router;
 
 /**
  * The type Router.
+ * Define type for going to the next page
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class Router {
 
@@ -21,7 +25,6 @@ public class Router {
 
     private Type type;
     private String page;
-
 
     /**
      * Instantiates a new Router.

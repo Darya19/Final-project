@@ -7,6 +7,11 @@ import java.util.List;
 
 /**
  * The interface Subject dao.
+ * The interface defines methods for working with the subject table in database.
+ * Interface extends base service.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public interface SubjectDao extends BaseDao<Subject> {
 

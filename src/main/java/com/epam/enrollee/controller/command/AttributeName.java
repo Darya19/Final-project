@@ -2,6 +2,9 @@ package com.epam.enrollee.controller.command;
 
 /**
  * The type Attribute name.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class AttributeName {
 

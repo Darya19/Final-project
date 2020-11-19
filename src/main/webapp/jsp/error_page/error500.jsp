@@ -8,7 +8,7 @@
     <title>error500</title>
 </head>
 <body>
-<c:import url="//jsp//fragment//header.jsp"/>
+<c:import url="/jsp/fragment/header.jsp"/>
 <main class="page landing-page">
     <section class="">
         <img src="/img/er500.jpg" alt=""/>
@@ -18,6 +18,6 @@
         </div>
     </section>
 </main>
-<c:import url="//jsp//fragment//footer.jsp"/>
+<c:import url="/jsp/fragment/footer.jsp"/>
 </body>
 </html>

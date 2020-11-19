@@ -8,7 +8,7 @@
     <title><fmt:message key="adminspecialties.title"/></title>
 </head>
 <body>
-<c:import url="//jsp//fragment//header.jsp"/>
+<c:import url="/jsp/fragment/header.jsp"/>
 <main class="page page-information">
     <section class="lean-block clean-testimonials dark">
         <div class="container">
@@ -27,7 +27,8 @@
                         type="button"
                         onclick='location.href = "projectServlet?command=to_edit_specialty_page"'>
                     <fmt:message key="adminspecialties.addbutton"/>
-                </button></div>
+                </button>
+            </div>
             <table class="table">
                 <caption><fmt:message key="adminspecialties.note"/></caption>
                 <thead class="thead-light">
@@ -51,22 +52,22 @@
                             </button>
                         </td>
                         <c:if test="${specialty.recruitment eq ('OPENED')}">
-                        <td>
-                            <button class="btn btn-outline-primary btn-sm"
-                                    type="button"
-                                    onclick='location.href = "projectServlet?command=to_applications_page&specialty_id=${specialty.specialtyId}"'>
-                                <fmt:message key="adminspecialties.showbutton"/>
-                            </button>
-                        </td>
-
-                        <td>
-                            <div>
+                            <td>
                                 <button class="btn btn-outline-primary btn-sm"
                                         type="button"
-                                        onclick='location.href = "projectServlet?command=to_edit_specialty_page&specialty_id=${specialty.specialtyId}"'>
-                                    <fmt:message key="adminspecialties.editbutton"/></button>
-                            </div>
-                        </td>
+                                        onclick='location.href = "projectServlet?command=to_applications_page&specialty_id=${specialty.specialtyId}"'>
+                                    <fmt:message key="adminspecialties.showbutton"/>
+                                </button>
+                            </td>
+
+                            <td>
+                                <div>
+                                    <button class="btn btn-outline-primary btn-sm"
+                                            type="button"
+                                            onclick='location.href = "projectServlet?command=to_edit_specialty_page&specialty_id=${specialty.specialtyId}"'>
+                                        <fmt:message key="adminspecialties.editbutton"/></button>
+                                </div>
+                            </td>
                         </c:if>
                         <td>
                             <div>
@@ -81,15 +82,16 @@
                 </tbody>
             </table>
             <p></p>
-                <div class="col-md-10 right-button">
-                    <button class="btn btn-primary btn-sm "
-                            type="button"
-                            onclick='location.href = "projectServlet?command=to_admin_faculties_page"'>
-                        <fmt:message key="adminspecialties.backbutton"/>
-                    </button></div>
+            <div class="col-md-10 right-button">
+                <button class="btn btn-primary btn-sm "
+                        type="button"
+                        onclick='location.href = "projectServlet?command=to_admin_faculties_page"'>
+                    <fmt:message key="adminspecialties.backbutton"/>
+                </button>
+            </div>
         </div>
     </section>
 </main>
-<c:import url="//jsp//fragment//footer.jsp"/>
+<c:import url="/jsp/fragment/footer.jsp"/>
 </body>
 </html>

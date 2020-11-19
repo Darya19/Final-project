@@ -13,6 +13,10 @@ import java.util.Optional;
 
 /**
  * The interface Command.
+ * Interface for working with the command parameter that came with the request.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public interface Command {
 

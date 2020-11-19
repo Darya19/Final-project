@@ -22,3 +22,5 @@ com.epam.enrollee.exception.DaoException: null
 com.epam.enrollee.exception.DaoException: null
 2020-11-17 19:25:16 [main] ERROR enrollee.model.service.impl.EnrolleeServiceImpl- Error while checking enrollee email
 com.epam.enrollee.exception.DaoException: null
+2020-11-19 10:45:11 [main] ERROR enrollee.model.service.impl.EnrolleeServiceImpl- Error while checking enrollee email
+com.epam.enrollee.exception.DaoException: null

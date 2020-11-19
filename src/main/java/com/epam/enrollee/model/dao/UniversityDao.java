@@ -8,8 +8,12 @@ import java.util.Optional;
 
 /**
  * The interface University dao.
+ * The interface defines methods for working with the specialty and faculty tables in database.
+ * Interface extends base service.
  *
  * @param <T> the type parameter
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public interface UniversityDao<T> extends BaseDao<T> {
 

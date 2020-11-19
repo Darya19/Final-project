@@ -6,6 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * The type Action factory.
+ * Determines the type of command for its subsequent execution.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class ActionFactory {
 
@@ -18,7 +22,7 @@ public class ActionFactory {
     public static Command defineCommand(HttpServletRequest request) {
         Command current;
         String action = request.getParameter(RequestParameter.COMMAND);
-        if (action != null || !action.isEmpty()) {
+        if (action != null) {
             try {
                 CommandType commandType = CommandType.valueOf(action.toUpperCase());
                 current = commandType.getCommand();

@@ -4,6 +4,9 @@ import com.epam.enrollee.model.type.ApplicationStatus;
 
 /**
  * The type Enrollee.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class Enrollee extends User {
 
@@ -173,5 +176,3 @@ public class Enrollee extends User {
         return sb.toString();
     }
 }
-
-

@@ -2,6 +2,9 @@ package com.epam.enrollee.exception;
 
 /**
  * The type Dao exception.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class DaoException extends Exception {
     /**

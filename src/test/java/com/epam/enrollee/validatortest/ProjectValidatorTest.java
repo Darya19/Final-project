@@ -97,11 +97,3 @@ public class ProjectValidatorTest {
         assertEquals(actual, expected);
     }
 }
-
-
-
-
-
-
-
-

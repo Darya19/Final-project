@@ -50,7 +50,6 @@ public class SubjectServiceImpl implements SubjectService {
         throw new UnsupportedOperationException("Subject parameters is always true");
     }
 
-
     @Override
     public List<Subject> findAllSubjects() throws ServiceException {
         SubjectDao dao = SubjectDaoImpl.getInstance();
@@ -62,5 +61,4 @@ public class SubjectServiceImpl implements SubjectService {
             throw new ServiceException(e);
         }
     }
-
 }

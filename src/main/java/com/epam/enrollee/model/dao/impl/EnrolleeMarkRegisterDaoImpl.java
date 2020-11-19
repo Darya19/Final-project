@@ -20,6 +20,9 @@ import java.util.Optional;
 
 /**
  * The type Enrollee mark register dao.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class EnrolleeMarkRegisterDaoImpl implements EnrolleeMarkRegisterDao {
 
@@ -67,7 +70,6 @@ public class EnrolleeMarkRegisterDaoImpl implements EnrolleeMarkRegisterDao {
             throw new DaoException("Database issues while updating mark register by enrollee id", e);
         }
     }
-
 
     @Override
     public boolean update(EnrolleeMarkRegister register, int enrolleeId, List<Subject> subjectsForUpdate) throws DaoException {
@@ -124,4 +126,3 @@ public class EnrolleeMarkRegisterDaoImpl implements EnrolleeMarkRegisterDao {
         return register;
     }
 }
-

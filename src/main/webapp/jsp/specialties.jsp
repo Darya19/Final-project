@@ -8,7 +8,7 @@
     <title>${faculty.facultyName}</title>
 </head>
 <body>
-<c:import url="//jsp//fragment//header.jsp"/>
+<c:import url="/jsp/fragment/header.jsp"/>
 <main class="page faq-page">
     <section class="clean-block clean-faq dark">
         <div class="container">
@@ -43,6 +43,6 @@
         </button>
     </div>
 </main>
-<c:import url="//jsp//fragment//footer.jsp"/>
+<c:import url="/jsp/fragment/footer.jsp"/>
 </body>
 </html>

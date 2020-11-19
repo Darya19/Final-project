@@ -234,10 +234,6 @@ q
 Asrc/main/java/com/epam/enrollee/model/service/FacultyService.java,f\4\f471440b483a8c97b8308cb26c9d5ee6febba019
 s
 Csrc/main/java/com/epam/enrollee/model/service/SpecialtyService.java,8\4\84885553b57e64efb3c8cf0bf41c302e868ad04e
-^
-.src/main/resources/prop/pagecontent.properties,0\9\09a1b1bb7ceea0eecb437b079d68e88d898910be
-a
-1src/main/resources/prop/pagecontent_en.properties,8\3\83999c2cbdac22c5ff46f1d1b0716e0ab6e1415c
 X
 (src/main/webapp/jsp/edit_application.jsp,e\6\e699505e54dcbd4bf76ea188f8f756157ad7788e
 f

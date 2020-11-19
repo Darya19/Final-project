@@ -86,15 +86,13 @@ public class CustomTag extends TagSupport {
                 }
             }
             out.write("</tbody>");
-            out.write("<a href=\"projectServlet?command=pagination" +
-                    "&page_number=\"" + (pageNumber - 1) + "\">");
+            out.write("<a href=\"projectServlet?command=pagination&page_number=\"" + (pageNumber - 1) + "\">");
             if (pageNumber > 1) {
                 out.write(String.valueOf(pageNumber - 1));
             }
             out.write("</a>");
             out.write(String.valueOf(pageNumber));
-            out.write("<a href=\"projectServlet?command=pagination" +
-                    "&page_number=\"" + (pageNumber + 1) + "\">");
+            out.write("<a href=\"projectServlet?command=pagination&page_number=\"" + (pageNumber + 1) + "\">");
             if (toIndex < enrolleeObjects.size()) {
                 out.write(String.valueOf(pageNumber + 1));
             }

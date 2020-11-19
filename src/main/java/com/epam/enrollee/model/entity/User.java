@@ -5,6 +5,9 @@ import com.epam.enrollee.model.type.StatusType;
 
 /**
  * The type User.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class User {
 

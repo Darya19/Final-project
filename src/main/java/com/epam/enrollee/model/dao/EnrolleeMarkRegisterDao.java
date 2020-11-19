@@ -9,6 +9,11 @@ import java.util.Optional;
 
 /**
  * The interface Enrollee mark register dao.
+ * The interface defines methods for working with the mark table in database.
+ * Interface extends base service.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public interface EnrolleeMarkRegisterDao {
 

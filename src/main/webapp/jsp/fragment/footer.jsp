@@ -15,8 +15,8 @@
                 <ul>
                     <li><a href="projectServlet?command=to_main_page"><fmt:message key="footer.home"/></a></li>
                     <p></p>
-                        <li><a href="projectServlet?command=to_login_page"><fmt:message key="footer.login"/></a>
-                        </li>
+                    <li><a href="projectServlet?command=to_login_page"><fmt:message key="footer.login"/></a>
+                    </li>
                 </ul>
             </div>
             <div class="col-sm-4">

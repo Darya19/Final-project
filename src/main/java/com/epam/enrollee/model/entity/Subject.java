@@ -2,6 +2,9 @@ package com.epam.enrollee.model.entity;
 
 /**
  * The type Subject.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class Subject {
 

@@ -4,6 +4,9 @@ import com.epam.enrollee.model.type.StatusType;
 
 /**
  * The type Faculty.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class Faculty {
 
@@ -92,9 +95,11 @@ public class Faculty {
         Faculty faculty = (Faculty) o;
 
         if (getFacultyId() != faculty.getFacultyId()) return false;
-        if (getFacultyName() != null ? !getFacultyName().equals(faculty.getFacultyName()) : faculty.getFacultyName() != null)
+        if (getFacultyName() != null ? !getFacultyName().equals(faculty.getFacultyName())
+                : faculty.getFacultyName() != null)
             return false;
-        if (getFacultyDescription() != null ? !getFacultyDescription().equals(faculty.getFacultyDescription()) : faculty.getFacultyDescription() != null)
+        if (getFacultyDescription() != null ? !getFacultyDescription().equals(faculty.getFacultyDescription())
+                : faculty.getFacultyDescription() != null)
             return false;
         return getFacultyStatus() == faculty.getFacultyStatus();
     }

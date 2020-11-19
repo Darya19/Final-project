@@ -5,6 +5,9 @@ import com.epam.enrollee.model.type.StatusType;
 
 /**
  * The type Specialty.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class Specialty {
 
@@ -119,7 +122,8 @@ public class Specialty {
 
         if (getSpecialtyId() != specialty.getSpecialtyId()) return false;
         if (getNumberOfSeats() != specialty.getNumberOfSeats()) return false;
-        if (getSpecialtyName() != null ? !getSpecialtyName().equals(specialty.getSpecialtyName()) : specialty.getSpecialtyName() != null)
+        if (getSpecialtyName() != null ? !getSpecialtyName().equals(specialty.getSpecialtyName())
+                : specialty.getSpecialtyName() != null)
             return false;
         if (getRecruitment() != specialty.getRecruitment()) return false;
         return getSpecialtyStatus() == specialty.getSpecialtyStatus();

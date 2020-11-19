@@ -7,6 +7,11 @@ import java.util.Optional;
 
 /**
  * The interface User dao.
+ * The interface defines methods for working with the enrollee table in database.
+ * Interface extends base service.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public interface UserDao extends BaseDao<User> {
 

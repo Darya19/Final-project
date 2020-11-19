@@ -7,6 +7,10 @@ import java.io.IOException;
 
 /**
  * The type Encoding filter.
+ * The filter encodes user requests into the specified encoding.
+ *
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 @WebFilter(urlPatterns = {"/*"},
         initParams = {
