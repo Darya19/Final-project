@@ -49,6 +49,9 @@ public class LoginCommand implements Command {
         String email = request.getParameter(RequestParameter.EMAIL);
         String password = request.getParameter(RequestParameter.PASSWORD);
         try {
+            if (session.getAttribute(AttributeName.PARAMETERS) != null) {
+                session.removeAttribute(AttributeName.PARAMETERS);
+            }
             if (userService.checkEmailAndPassword(email, password)) {
                 Optional<User> optionalUser = userService.findUserByEmail(email);
                 if (optionalUser.isPresent()) {
@@ -58,32 +61,32 @@ public class LoginCommand implements Command {
                         if (enrolleeId > 0 && isAdded) {
                             session.removeAttribute(AttributeName.ROLE);
                             session.setAttribute(AttributeName.ROLE, RoleType.USER);
-                            router = new Router(PagePath.PROFILE);
+                            router = new Router(Router.Type.REDIRECT, PagePath.PROFILE);
                         } else {
-                            router = new Router(PagePath.ERROR);
+                            router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                             logger.log(Level.ERROR, "Impossible find enrollee in db");
                         }
                     } else {
                         User user = optionalUser.get();
                         session.setAttribute(AttributeName.ENROLLEE, user);
                         List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                        request.setAttribute(AttributeName.FACULTIES, faculties);
+                        session.setAttribute(AttributeName.FACULTIES, faculties);
                         session.removeAttribute(AttributeName.ROLE);
                         session.setAttribute(AttributeName.ROLE, RoleType.ADMIN);
-                        router = new Router(PagePath.ADMIN_FACULTIES);
+                        router = new Router(Router.Type.REDIRECT, PagePath.ADMIN_FACULTIES);
                     }
                 } else {
-                    router = new Router(PagePath.ERROR);
+                    router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible find enrollee faculty or specialty in db");
                 }
             } else {
                 parameters.put(MapKeys.EMAIL, email);
                 parameters.put(MapKeys.PASSWORD, password);
-                request.setAttribute(AttributeName.PARAMETERS, parameters);
-                router = new Router(PagePath.LOGIN);
+                session.setAttribute(AttributeName.PARAMETERS, parameters);
+                router = new Router(Router.Type.REDIRECT, PagePath.LOGIN);
             }
         } catch (ServiceException e) {
-            router = new Router(PagePath.ERROR_500);
+            router = new Router(Router.Type.REDIRECT, PagePath.ERROR_500);
             logger.log(Level.ERROR, "Application error:", e);
         }
         return router;

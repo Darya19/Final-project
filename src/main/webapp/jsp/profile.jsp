@@ -27,7 +27,7 @@
                     <h6 class="text-muted"><fmt:message key="profile.passportseriesandnumber"/></h6>
                     <h5>${passport.passportSeriesAndNumber}</h5>
                     <button class="btn btn-outline-primary btn-sm" type="button"
-                            onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_personal_information"'>
+                            onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_edit_profile_page&edit_part=edit_personal_information"'>
                         <fmt:message key="profile.edit"/></button>
                 </div>
             </div>
@@ -62,12 +62,12 @@
                         </div>
                         <c:if test="${enrollee.applicationStatus eq 'ARCHIVED'}">
                             <button class="btn btn-outline-primary btn-sm" type="button"
-                                    onclick='location.href = "projectServlet?command=to_edit_application"'>
+                                    onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_edit_application"'>
                                 <fmt:message key="profile.add"/></button>
                         </c:if>
                         <c:if test="${enrollee.applicationStatus eq 'CONSIDERED'}">
                             <button class="btn btn-outline-primary btn-sm" type="button"
-                                    onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_specialty"'>
+                                    onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_edit_profile_page&edit_part=edit_specialty"'>
                                 <fmt:message key="profile.edit"/></button>
                         </c:if>
 
@@ -99,7 +99,7 @@
                         <p></p>
                         <c:if test="${enrollee.applicationStatus eq 'CONSIDERED'}">
                             <button class="btn btn-outline-primary btn-sm" type="button"
-                                    onclick='location.href = "projectServlet?command=to_edit_profile_page&edit_part=edit_marks"'>
+                                    onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_edit_profile_page&edit_part=edit_marks"'>
                                 <fmt:message key="profile.edit"/></button>
                         </c:if>
                     </div>
@@ -107,8 +107,9 @@
             </div>
             <ul>
                 <li class="nav-item" role="presentation"><a class="nav-link active"
-                                                            href="projectServlet?command=delete_profile"> <fmt:message
-                        key="profile.deleteprofile"/></a></li>
+                                                            href="${pageContext.request.contextPath}/projectServlet?command=delete_profile">
+                    <fmt:message
+                            key="profile.deleteprofile"/></a></li>
             </ul>
         </div>
     </section>

@@ -3,7 +3,6 @@ package com.epam.enrollee.controller.command.impl.page;
 import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.model.type.RoleType;
 
@@ -14,8 +13,8 @@ import javax.servlet.http.HttpSession;
  * The type To main page command.
  * Command to go to the main page. Command used by user with role user, admin, guest.
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class ToMainPageCommand implements Command {
 

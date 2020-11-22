@@ -3,7 +3,6 @@ package com.epam.enrollee.controller.command.impl;
 import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
@@ -25,8 +24,8 @@ import java.util.Map;
  * The command can be used by user with role user. If the profile is deleted successfully,
  * the enrollee with all information about him deleting from database.
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class DeleteProfileCommand implements Command {
 

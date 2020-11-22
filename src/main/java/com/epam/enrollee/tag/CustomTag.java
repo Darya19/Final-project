@@ -4,6 +4,8 @@ import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.type.ApplicationStatus;
+import com.epam.enrollee.util.NumberParser;
+import com.epam.enrollee.validator.ProjectValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,18 +31,25 @@ public class CustomTag extends TagSupport {
     private static final String ACCEPT_BUTTON = "applications.acceptbutton";
     private static final String REJECT_BUTTON = "applications.rejectbutton";
     private static final Logger logger = LogManager.getLogger();
-    private static final int PAGE_ROWS = 3;
+    private static final int PAGE_ROWS = 5;
 
     @Override
     public int doStartTag() throws JspException {
+        NumberParser parser = NumberParser.getInstance();
+        ProjectValidator validator = ProjectValidator.getInstance();
         HttpSession session = pageContext.getSession();
         Locale locale = new Locale((String) session.getAttribute(AttributeName.LOCALE));
         ResourceBundle bundle = ResourceBundle.getBundle(CONTENT_PAGE, locale);
         Map<EnrolleeMarkRegister, Enrollee> enrolleeMap =
                 (Map<EnrolleeMarkRegister, Enrollee>) session.getAttribute(AttributeName.ENROLLEES);
         List<List<Object>> enrolleeObjects = new ArrayList<>();
-        int pageNumber = (int) session.getAttribute(AttributeName.PAGE_NUMBER);
-        int fromIndex = pageNumber * PAGE_ROWS - PAGE_ROWS;
+        int intPage = 0;
+        String pageNumber = (String) session.getAttribute(AttributeName.PAGE_NUMBER);
+        if (validator.isIntParameterValid(pageNumber)) {
+            intPage = parser.parseToInt(pageNumber);
+        }
+
+        int fromIndex = intPage * PAGE_ROWS - PAGE_ROWS;
         int toIndex = fromIndex + PAGE_ROWS;
         int count = 0;
         try {
@@ -86,17 +95,19 @@ public class CustomTag extends TagSupport {
                 }
             }
             out.write("</tbody>");
-            out.write("<a href=\"projectServlet?command=pagination&page_number=\"" + (pageNumber - 1) + "\">");
-            if (pageNumber > 1) {
-                out.write(String.valueOf(pageNumber - 1));
+            out.write("<div class=\"text-center\">");
+            out.write("<a href=\"projectServlet?command=pagination&page_number=" + (intPage - 1) + "\">");
+            if (intPage > 1) {
+                out.write(String.valueOf(intPage - 1));
             }
             out.write("</a>");
-            out.write(String.valueOf(pageNumber));
-            out.write("<a href=\"projectServlet?command=pagination&page_number=\"" + (pageNumber + 1) + "\">");
+            out.write(pageNumber);
+            out.write("<a href=\"projectServlet?command=pagination&page_number=" + (intPage + 1) + "\">");
             if (toIndex < enrolleeObjects.size()) {
-                out.write(String.valueOf(pageNumber + 1));
+                out.write(String.valueOf(intPage + 1));
             }
             out.write("</a>");
+            out.write("</div>");
         } catch (IOException e) {
             logger.log(Level.ERROR, "Impossible write data on jsp page", e);
         }

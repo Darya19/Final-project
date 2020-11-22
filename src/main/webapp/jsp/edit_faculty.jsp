@@ -29,7 +29,7 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-            <form name="AddFacultyForm" method="POST" action="projectServlet">
+            <form name="AddFacultyForm" method="POST" action="/projectServlet">
                 <c:choose>
                     <c:when test="${not empty faculty}">
                         <input type="hidden" name="command" value="edit_faculty"/>
@@ -44,10 +44,6 @@
                     <input class="form-control item" type="text" id="faculty_name" name="faculty_name"
                            autofocus value="${faculty.facultyName}"
                            required pattern="[a-zA-ZА-Яа-я\s]{2,40}">
-                    <c:if test="${not empty parameters and empty parameters['faculty_name'] }">
-                        <small><label class="alert-danger"> <fmt:message
-                                key="editfaculty.facultyerror"/></label></small>
-                    </c:if>
                 </div>
 
                 <div class="form-group"><label for="faculty_description"><fmt:message key="editfaculty.description"/>
@@ -55,6 +51,10 @@
                     <textarea class="form-control item" type="text" id="faculty_description" name="faculty_description"
                               required placeholder="write here" cols="30" rows="5"> ${faculty.facultyDescription}
                     </textarea>
+                    <c:if test="${incorrect}">
+                        <small><label class="alert-danger"> <fmt:message
+                                key="editfaculty.facultyerror"/></label></small>
+                    </c:if>
                 </div>
                 <c:choose>
                     <c:when test="${not empty faculty}">

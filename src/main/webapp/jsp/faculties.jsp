@@ -25,7 +25,7 @@
                                 <h4 class="card-title">
                                     <button class="btn btn-outline-primary btn-lg"
                                             type="button"
-                                            onclick='location.href = "projectServlet?command=to_specialties_page&faculty_id=${faculty.facultyId}"'>
+                                            onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_specialties_page&faculty_id=${faculty.facultyId}"'>
                                         <fmt:message key="faculties.learnbutton"/></button>
                                 </h4>
                             </div>

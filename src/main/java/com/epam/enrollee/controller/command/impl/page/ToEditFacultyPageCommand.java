@@ -14,14 +14,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 /**
  * The type To edit faculty page command.
  * Command to go to the edit faculties page. Command used by user with role admin.
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class ToEditFacultyPageCommand implements Command {
 
@@ -30,13 +31,14 @@ public class ToEditFacultyPageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         FacultyService facultyService = FacultyServiceImpl.getInstance();
+        HttpSession session = request.getSession();
         Router router;
         String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         try {
             if (facultyId != null) {
                 Optional<Faculty> faculty = facultyService.findFacultyById(facultyId);
                 if (faculty.isPresent()) {
-                    request.setAttribute(AttributeName.FACULTY, faculty.get());
+                    session.setAttribute(AttributeName.FACULTY, faculty.get());
                     router = new Router(PagePath.EDIT_FACULTY);
                 } else {
                     router = new Router(PagePath.ERROR);

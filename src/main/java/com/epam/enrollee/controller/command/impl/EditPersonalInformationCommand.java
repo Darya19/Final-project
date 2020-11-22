@@ -51,10 +51,13 @@ public class EditPersonalInformationCommand implements Command {
         try {
             Map<String, String> checkedParameters = enrolleeService.checkParameters(parameters);
             if (checkedParameters.containsValue(EMPTY_VALUE)) {
-                request.setAttribute(AttributeName.PARAMETERS, checkedParameters);
-                request.setAttribute(AttributeName.EDIT_PART, EDIT_PERSONAL_INFORMATION);
-                router = new Router(PagePath.EDIT_PROFILE);
+                session.setAttribute(AttributeName.INCORRECT, true);
+                router = new Router(Router.Type.REDIRECT, PagePath.EDIT_PROFILE);
             } else {
+                if (session.getAttribute(AttributeName.INCORRECT) != null) {
+                    session.removeAttribute(AttributeName.INCORRECT);
+                }
+                session.removeAttribute(AttributeName.EDIT_PART);
                 enrollee = (Enrollee) session.getAttribute(AttributeName.ENROLLEE);
                 passport = (Passport) session.getAttribute(AttributeName.PASSPORT);
                 Optional<Enrollee> optionalEnrollee = enrolleeService.updateEnrolleeNameInformation(enrollee, parameters);
@@ -64,14 +67,14 @@ public class EditPersonalInformationCommand implements Command {
                     session.removeAttribute(AttributeName.PASSPORT);
                     session.setAttribute(AttributeName.ENROLLEE, optionalEnrollee.get());
                     session.setAttribute(AttributeName.PASSPORT, optionalPassport.get());
-                    router = new Router(PagePath.PROFILE);
+                    router = new Router(Router.Type.REDIRECT, PagePath.PROFILE);
                 } else {
-                    router = new Router(PagePath.ERROR);
+                    router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add updated enrollee personal information in db");
                 }
             }
         } catch (ServiceException e) {
-            router = new Router(PagePath.ERROR_500);
+            router = new Router(Router.Type.REDIRECT, PagePath.ERROR_500);
             logger.log(Level.INFO, "Application error: ", e);
         }
         return router;

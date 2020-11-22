@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -23,8 +24,8 @@ import java.util.List;
  * the faculty don't displays at the page faculties. The faculty is not deleted from the database,
  * but is marked with a status delete
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class DeleteFacultyCommand implements Command {
 
@@ -33,6 +34,7 @@ public class DeleteFacultyCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         FacultyService facultyService = FacultyServiceImpl.getInstance();
+        HttpSession session = request.getSession();
         Router router;
         String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         try {
@@ -42,9 +44,10 @@ public class DeleteFacultyCommand implements Command {
                 request.setAttribute(AttributeName.FACULTIES, faculties);
                 router = new Router(PagePath.ADMIN_FACULTIES);
             } else {
+                session.removeAttribute(AttributeName.FACULTIES);
                 if (facultyService.removeFacultyAndItsSpecialties(facultyId)) {
                     List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                    request.setAttribute(AttributeName.FACULTIES, faculties);
+                    session.setAttribute(AttributeName.FACULTIES, faculties);
                     router = new Router(PagePath.ADMIN_FACULTIES);
                 } else {
                     router = new Router(PagePath.ERROR);

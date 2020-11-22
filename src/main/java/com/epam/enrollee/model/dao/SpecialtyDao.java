@@ -36,6 +36,7 @@ public interface SpecialtyDao extends UniversityDao<Specialty> {
 
     /**
      * Find active specialties list by faculty id list.
+     * Find all specialties which belong required faculty and have active status type.
      *
      * @param facultyId the faculty id
      * @return the list

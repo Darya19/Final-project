@@ -27,8 +27,8 @@ import java.util.*;
  * The type To applications page command.
  * Command to go to the applications page. Command used by user with role admin.
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class ToApplicationsPageCommand implements Command {
 
@@ -44,7 +44,7 @@ public class ToApplicationsPageCommand implements Command {
         Router router;
         String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
         try {
-            session.setAttribute(AttributeName.PAGE_NUMBER, 1);
+            session.setAttribute(AttributeName.PAGE_NUMBER, "1");
             Optional<Specialty> specialty = specialtyService.findSpecialtyById(specialtyId);
             specialty.ifPresent(value -> session.setAttribute(AttributeName.SPECIALTY, value));
             List<Enrollee> enrollees = enrolleeService.findAllUnarchivedEnrolleesOnSpecialty(specialtyId);

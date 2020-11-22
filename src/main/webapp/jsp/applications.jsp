@@ -31,11 +31,6 @@
             </c:if>
             <p></p>
         </div>
-        <c:if test="${is_changed}">
-            <small>
-                <label class="alert-danger"> <fmt:message key="applications.acceptderror"/></label>
-            </small>
-        </c:if>
         <p></p>
         <table class="table">
             <thead class="thead-light">
@@ -53,7 +48,7 @@
         <div class="right-button">
             <button class="btn btn-primary btn-sm "
                     type="button"
-                    onclick='location.href = "projectServlet?command=to_admin_specialties_page&faculty_id=${faculty_id}"'>
+                    onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_admin_specialties_page&faculty_id=${faculty_id}"'>
                 <fmt:message key="applications.backbutton"/>
             </button>
         </div>

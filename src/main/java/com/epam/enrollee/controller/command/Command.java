@@ -92,13 +92,13 @@ public interface Command {
     }
 
     /**
-     * Put faculties specialties subjects in request boolean.
+     * Put faculties specialties subjects in session boolean.
      *
-     * @param request the request
+     * @param session the session
      * @return the boolean
      * @throws ServiceException the service exception
      */
-    default boolean putFacultiesSpecialtiesSubjectsInRequest(HttpServletRequest request) throws ServiceException {
+    default boolean putFacultiesSpecialtiesSubjectsInSession(HttpSession session) throws ServiceException {
         FacultyService facultyService = FacultyServiceImpl.getInstance();
         SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
         SubjectService subjectService = SubjectServiceImpl.getInstance();
@@ -107,13 +107,25 @@ public interface Command {
         List<Specialty> specialties = specialtyService.findAllOpenSpecialties();
         List<Subject> subjects = subjectService.findAllSubjects();
         if (!faculties.isEmpty() && !specialties.isEmpty() && !subjects.isEmpty()) {
-            request.setAttribute(AttributeName.FACULTIES, faculties);
-            request.setAttribute(AttributeName.SPECIALTIES, specialties);
-            request.setAttribute(AttributeName.SUBJECTS, subjects);
+            session.setAttribute(AttributeName.FACULTIES, faculties);
+            session.setAttribute(AttributeName.SPECIALTIES, specialties);
+            session.setAttribute(AttributeName.SUBJECTS, subjects);
             isAdded = true;
         } else {
             isAdded = false;
         }
         return isAdded;
+    }
+
+    /**
+     * Remove faculties specialties subjects from session boolean.
+     *
+     * @param session the session
+     * @throws ServiceException the service exception
+     */
+    default void removeFacultiesSpecialtiesSubjectsFromSession(HttpSession session) throws ServiceException {
+        session.removeAttribute(AttributeName.FACULTIES);
+        session.removeAttribute(AttributeName.SPECIALTIES);
+        session.removeAttribute(AttributeName.SUBJECTS);
     }
 }

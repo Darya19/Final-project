@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
  * The type To profile page command.
  * Command to go to the profile page. Command used by user with role user.
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class ToProfilePageCommand implements Command {
 

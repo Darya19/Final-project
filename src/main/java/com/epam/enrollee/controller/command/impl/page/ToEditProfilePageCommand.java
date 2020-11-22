@@ -22,8 +22,8 @@ import java.util.List;
  * The type To edit profile page command.
  * Command to go to the edit profile page. Command used by user with role user.
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class ToEditProfilePageCommand implements Command {
 
@@ -36,13 +36,13 @@ public class ToEditProfilePageCommand implements Command {
         HttpSession session = request.getSession();
         Router router;
         String editPart = request.getParameter(RequestParameter.EDIT_PART);
-        request.setAttribute(AttributeName.EDIT_PART, editPart);
+        session.setAttribute(AttributeName.EDIT_PART, editPart);
         try {
             if (editPart.equals(EDIT_SPECIALTY)) {
                 Enrollee enrollee = (Enrollee) session.getAttribute(AttributeName.ENROLLEE);
                 int facultyId = enrollee.getChosenFacultyId();
                 List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty(String.valueOf(facultyId));
-                request.setAttribute(AttributeName.SPECIALTIES, specialties);
+                session.setAttribute(AttributeName.SPECIALTIES, specialties);
             }
             router = new Router(PagePath.EDIT_PROFILE);
         } catch (ServiceException e) {

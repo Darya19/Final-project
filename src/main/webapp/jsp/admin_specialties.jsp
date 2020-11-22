@@ -25,7 +25,7 @@
             <div class="col-md-10 right-button">
                 <button class="btn btn-outline-primary btn-sm"
                         type="button"
-                        onclick='location.href = "projectServlet?command=to_edit_specialty_page"'>
+                        onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_edit_specialty_page"'>
                     <fmt:message key="adminspecialties.addbutton"/>
                 </button>
             </div>
@@ -47,7 +47,7 @@
                         <td>${specialty.recruitment}
                             <button class="btn btn-outline-primary btn-sm"
                                     type="button"
-                                    onclick='location.href = "projectServlet?command=change_recruitment&specialty_id=${specialty.specialtyId}&recruitment=${specialty.recruitment}"'>
+                                    onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=change_recruitment&specialty_id=${specialty.specialtyId}&recruitment=${specialty.recruitment}"'>
                                 <fmt:message key="adminspecialties.recrutmentbutton"/>
                             </button>
                         </td>
@@ -55,7 +55,7 @@
                             <td>
                                 <button class="btn btn-outline-primary btn-sm"
                                         type="button"
-                                        onclick='location.href = "projectServlet?command=to_applications_page&specialty_id=${specialty.specialtyId}"'>
+                                        onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_applications_page&specialty_id=${specialty.specialtyId}"'>
                                     <fmt:message key="adminspecialties.showbutton"/>
                                 </button>
                             </td>
@@ -64,7 +64,7 @@
                                 <div>
                                     <button class="btn btn-outline-primary btn-sm"
                                             type="button"
-                                            onclick='location.href = "projectServlet?command=to_edit_specialty_page&specialty_id=${specialty.specialtyId}"'>
+                                            onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_edit_specialty_page&specialty_id=${specialty.specialtyId}"'>
                                         <fmt:message key="adminspecialties.editbutton"/></button>
                                 </div>
                             </td>
@@ -73,7 +73,7 @@
                             <div>
                                 <button class="btn btn-outline-primary btn-sm"
                                         type="button"
-                                        onclick='location.href = "projectServlet?command=delete_specialty&specialty_id=${specialty.specialtyId}"'>
+                                        onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=delete_specialty&specialty_id=${specialty.specialtyId}"'>
                                     <fmt:message key="adminspecialties.deletebutton"/></button>
                             </div>
                         </td>
@@ -85,7 +85,7 @@
             <div class="col-md-10 right-button">
                 <button class="btn btn-primary btn-sm "
                         type="button"
-                        onclick='location.href = "projectServlet?command=to_admin_faculties_page"'>
+                        onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_admin_faculties_page"'>
                     <fmt:message key="adminspecialties.backbutton"/>
                 </button>
             </div>

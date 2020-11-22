@@ -68,14 +68,9 @@ public class NewApplicationCommand implements Command {
             EnrolleeMarkRegister registerInSession = (EnrolleeMarkRegister) session.getAttribute(AttributeName.REGISTER);
             parameters = enrolleeService.checkParameters(parameters);
             if (parameters.containsValue("")) {
-                request.setAttribute(AttributeName.PARAMETERS, parameters);
-                if (putFacultiesSpecialtiesSubjectsInRequest(request)) {
-                    router = new Router(PagePath.EDIT_APPLICATION);
-                } else {
-                    router = new Router(PagePath.ERROR);
-                    logger.log(Level.ERROR, "Impossible create enrollee or register");
-                }
+                router = new Router(Router.Type.REDIRECT, PagePath.EDIT_APPLICATION);
             } else {
+                removeFacultiesSpecialtiesSubjectsFromSession(session);
                 Optional<EnrolleeMarkRegister> register = registerService.updateEnrolleeRegister(enrollee.getUserId(),
                         registerInSession, parameters);
                 if (enrolleeService.updateEnrolleeFaculty(enrollee, facultyId) && enrolleeService.updateEnrolleeSpecialty
@@ -88,18 +83,18 @@ public class NewApplicationCommand implements Command {
                         session.setAttribute(AttributeName.FACULTY, faculty.get());
                         session.setAttribute(AttributeName.SPECIALTY, specialty.get());
                         enrollee.setApplicationStatus(ApplicationStatus.CONSIDERED);
-                        router = new Router(PagePath.PROFILE);
+                        router = new Router(Router.Type.REDIRECT, PagePath.PROFILE);
                     } else {
-                        router = new Router(PagePath.ERROR);
+                        router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                         logger.log(Level.ERROR, "Impossible create faculty or specialty for enrollee");
                     }
                 } else {
-                    router = new Router(PagePath.ERROR);
+                    router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                     logger.log(Level.ERROR, "Incorrect enrollee parameters");
                 }
             }
         } catch (ServiceException e) {
-            router = new Router(PagePath.ERROR_500);
+            router = new Router(Router.Type.REDIRECT, PagePath.ERROR_500);
             logger.log(Level.ERROR, "Application error:", e);
         }
         return router;

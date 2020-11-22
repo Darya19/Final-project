@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="ERROR">
+<Configuration status="INFO">
     <Properties>
-        <property name="pattern_file">
-            %d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{5}- %msg%n
-        </property>
+        <Property name="log-path">/logs/</Property>
     </Properties>
     <Appenders>
-        <File name="TxtFile" fileName="logs/log.txt" bufferedIO="true">
-            <PatternLayout pattern="${pattern_file}"/>
-        </File>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{ABSOLUTE} %-5level %logger{1} - %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
+
+        <RollingFile name="RollingFile" fileName="${log-path}/log.txt"
+                     filePattern="${log-path}/log-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="1024 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="4"/>
+        </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="debug">
-            <AppenderRef ref="TxtFile"/>
+        <Logger name="root" level="debug" additivity="false">
+            <appender-ref ref="RollingFile" level="debug"/>
+        </Logger>
+        <Root level="debug" additivity="false">
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
         </Root>
     </Loggers>
 </Configuration>

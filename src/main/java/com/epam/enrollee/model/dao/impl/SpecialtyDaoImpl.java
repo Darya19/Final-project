@@ -56,7 +56,8 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
             "and specialty_id_fk=?";
     private static final String ADD_SPECIALTY = "INSERT INTO specialty(specialty_name, faculty_id_fk, recruitment, " +
             "number_of_seats, specialty_status) VALUES (?,?,?,?,?)";
-    private static final String UPDATE_SPECIALTY_STATUS_BY_ID = "UPDATE specialty SET specialty_status=? WHERE specialty_id=?";
+    private static final String UPDATE_SPECIALTY_STATUS_BY_ID = "UPDATE specialty SET specialty_status=?, recruitment=?" +
+            " WHERE specialty_id=?";
     private static final String UPDATE_SPECIALTY_BY_ID = "UPDATE specialty SET specialty_name=?, number_of_seats=? WHERE " +
             "specialty_id=?";
     private static final String FIND_ENROLLE_ID_WITH_ACCEPTED_STATUS = "SELECT enrollee_id FROM enrollee JOIN " +
@@ -191,7 +192,8 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_SPECIALTY_STATUS_BY_ID)) {
             statement.setString(1, StatusType.DELETED.getStatus());
-            statement.setInt(2, specialtyId);
+            statement.setString(2, RecruitmentType.CLOSED.getType());
+            statement.setInt(3, specialtyId);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Impossible update specialty status by id", e);
@@ -201,7 +203,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
 
     @Override
     public Optional<Integer> findFacultyIdBySpecialtyId(int specialtyId) throws DaoException {
-        int foundFacultyId = 0;
+        int foundFacultyId;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_FACULTY_ID_BY_SPECIALTY_ID)) {
             statement.setInt(1, specialtyId);

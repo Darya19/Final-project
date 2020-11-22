@@ -18,15 +18,14 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Optional;
 
 /**
  * The type Edit enrollee specialty command.
  * The specialty id come with request from user. The command can be used by user with role user.
  * The enrollee can change the specialty at the chosen faculty if the status of his application
- *  is being considered. If enrollee specialty edition passed successfully, His application is
- *  displayed in the list of the selected specialty. And the admin can accept or reject it.
+ * is being considered. If enrollee specialty edition passed successfully, His application is
+ * displayed in the list of the selected specialty. And the admin can accept or reject it.
  *
  * @author Darya Shcherbina
  * @version 1.0
@@ -47,13 +46,12 @@ public class EditEnrolleeSpecialtyCommand implements Command {
         String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
         try {
             if (specialtyId.equals(EMPTY_VALUE)) {
-                request.setAttribute(AttributeName.EDIT_PART, EDIT_SPECIALTY);
-                int facultyId = enrollee.getChosenFacultyId();
-                List<Specialty> specialties = specialtyService.findOpenSpecialtiesOfFaculty
-                        (String.valueOf(facultyId));
-                request.setAttribute(AttributeName.SPECIALTIES, specialties);
-                router = new Router(PagePath.EDIT_PROFILE);
+                router = new Router(Router.Type.REDIRECT, PagePath.EDIT_PROFILE);
             } else {
+                if (session.getAttribute(AttributeName.EDIT_PART) != null) {
+                    session.removeAttribute(AttributeName.EDIT_PART);
+                    session.removeAttribute(AttributeName.SPECIALTIES);
+                }
                 isUpdated = enrolleeService.updateEnrolleeSpecialty
                         (enrollee, specialtyId);
                 Optional<Specialty> optionalSpecialty = specialtyService
@@ -61,14 +59,14 @@ public class EditEnrolleeSpecialtyCommand implements Command {
                 if (isUpdated && optionalSpecialty.isPresent()) {
                     session.removeAttribute(AttributeName.SPECIALTY);
                     session.setAttribute(AttributeName.SPECIALTY, optionalSpecialty.get());
-                    router = new Router(PagePath.PROFILE);
+                    router = new Router(Router.Type.REDIRECT, PagePath.PROFILE);
                 } else {
-                    router = new Router(PagePath.ERROR);
+                    router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add updated enrollee specialty in db");
                 }
             }
         } catch (ServiceException e) {
-            router = new Router(PagePath.ERROR_500);
+            router = new Router(Router.Type.REDIRECT, PagePath.ERROR_500);
             logger.log(Level.ERROR, "Application error: ", e);
         }
         return router;

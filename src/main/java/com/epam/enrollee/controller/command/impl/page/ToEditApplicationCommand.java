@@ -9,13 +9,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * The type To edit application command.
  * Command to go to the edit application page. Command used by user with role user.
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class ToEditApplicationCommand implements Command {
 
@@ -23,9 +24,10 @@ public class ToEditApplicationCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         Router router;
         try {
-            if (putFacultiesSpecialtiesSubjectsInRequest(request)) {
+            if (putFacultiesSpecialtiesSubjectsInSession(session)) {
                 router = new Router(PagePath.EDIT_APPLICATION);
             } else {
                 router = new Router(PagePath.ERROR);

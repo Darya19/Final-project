@@ -26,8 +26,8 @@ import java.util.Map;
  * saved in the database, the user is redirected to the specialties page, otherwise returns to edit
  * specialty page.
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class AddSpecialtyCommand implements Command {
 

@@ -15,7 +15,7 @@
         <div class="text">
             <p><fmt:message key="main.velcome" /></p>
             <h2><fmt:message key="main.bnu"/> </h2>
-            <button class="btn btn-outline-light btn-lg" type="button" onclick='location.href = "projectServlet?command=to_faculties_page"'><fmt:message key="main.facultybutton"/></button>
+            <button class="btn btn-outline-light btn-lg" type="button" onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_faculties_page"'><fmt:message key="main.facultybutton"/></button>
     </div>
     </section>
     <section class="clean-block clean-info dark">
@@ -30,7 +30,8 @@
                     <p></p>
                     <div class="getting-started-info">
                         <p><fmt:message key="main.description"/> </p>
-                    </div><button class="btn btn-outline-primary btn-lg" type="button" onclick='location.href = "projectServlet?command=to_register_page"'><fmt:message key="main.registerbutton"/> </button></div>
+                    </div><button class="btn btn-outline-primary btn-lg" type="button" onclick='
+                        location.href = "${pageContext.request.contextPath}/projectServlet?command=to_register_page"'><fmt:message key="main.registerbutton"/> </button></div>
             </div>
         </div>
     </section>

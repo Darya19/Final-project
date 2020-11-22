@@ -13,20 +13,26 @@
             <div class="col-sm-4">
                 <h5><fmt:message key="footer.start"/></h5>
                 <ul>
-                    <li><a href="projectServlet?command=to_main_page"><fmt:message key="footer.home"/></a></li>
+                    <li><a href="${pageContext.request.contextPath}/projectServlet?command=to_main_page"><fmt:message
+                            key="footer.home"/></a></li>
                     <p></p>
-                    <li><a href="projectServlet?command=to_login_page"><fmt:message key="footer.login"/></a>
+                    <li><a href="${pageContext.request.contextPath}/projectServlet?command=to_login_page"><fmt:message
+                            key="footer.login"/></a>
                     </li>
                 </ul>
             </div>
             <div class="col-sm-4">
                 <h5><fmt:message key="footer.resources"/></h5>
                 <ul>
-                    <li><a href="projectServlet?command=to_faculties_page"><fmt:message key="footer.faculties"/></a>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/projectServlet?command=to_faculties_page"><fmt:message
+                                key="footer.faculties"/></a>
                     </li>
                     <p></p>
                     <c:if test="${role eq 'USER'}">
-                        <li><a href="projectServlet?command=to_profile_page"><fmt:message key="footer.profile"/></a>
+                        <li>
+                            <a href="${pageContext.request.contextPath}/projectServlet?command=to_profile_page"><fmt:message
+                                    key="footer.profile"/></a>
                         </li>
                     </c:if>
                 </ul>

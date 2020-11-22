@@ -22,12 +22,13 @@
                 </small>
             </c:if>
             <p></p>
-                <div class="col-md-10 right-button">
+            <div class="col-md-10 right-button">
                 <button class="btn btn-outline-primary btn-sm"
                         type="button"
-                        onclick='location.href = "projectServlet?command=to_edit_faculty_page"'>
+                        onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_edit_faculty_page"'>
                     <fmt:message key="adminfaculties.addbutton"/>
-                </button></div>
+                </button>
+            </div>
             <table class="table">
                 <caption><fmt:message key="adminfaculties.note"/></caption>
                 <thead class="thead-light">
@@ -45,7 +46,7 @@
                         <td>
                             <button class="btn btn-outline-primary btn-sm"
                                     type="button"
-                                    onclick='location.href = "projectServlet?command=to_admin_specialties_page&faculty_id=${faculty.facultyId}"'>
+                                    onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_admin_specialties_page&faculty_id=${faculty.facultyId}"'>
                                 <fmt:message key="adminfaculties.showbutton"/>
                             </button>
                         </td>
@@ -53,7 +54,7 @@
                             <div>
                                 <button class="btn btn-outline-primary btn-sm"
                                         type="button"
-                                        onclick='location.href = "projectServlet?command=to_edit_faculty_page&faculty_id=${faculty.facultyId}"'>
+                                        onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_edit_faculty_page&faculty_id=${faculty.facultyId}"'>
                                     <fmt:message key="adminfaculties.editbutton"/></button>
                             </div>
                         </td>
@@ -61,9 +62,9 @@
                             <div>
                                 <button class="btn btn-outline-primary btn-sm"
                                         type="button"
-                                        onclick='location.href = "projectServlet?command=delete_faculty&faculty_id=${faculty.facultyId}"'>
+                                        onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=delete_faculty&faculty_id=${faculty.facultyId}"'>
                                     <fmt:message key="adminfaculties.deletebutton"/></button>
-                                </div>
+                            </div>
                         </td>
                     </tr>
                 </c:forEach>

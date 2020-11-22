@@ -53,24 +53,27 @@ public class EditMarksCommand implements Command {
         try {
             parameters = registerService.checkParameters(parameters);
             if (parameters.containsValue(EMPTY_VALUE)) {
-                request.setAttribute(AttributeName.PARAMETERS, parameters);
-                request.setAttribute(AttributeName.EDIT_PART, EDIT_MARKS);
-                router = new Router(PagePath.EDIT_PROFILE);
+                session.setAttribute(AttributeName.INCORRECT, true);
+                router = new Router(Router.Type.REDIRECT, PagePath.EDIT_PROFILE);
             } else {
+                if (session.getAttribute(AttributeName.INCORRECT) != null) {
+                    session.removeAttribute(AttributeName.INCORRECT);
+                }
+                session.removeAttribute(AttributeName.EDIT_PART);
                 Optional<EnrolleeMarkRegister> markRegister = registerService
                         .updateEnrolleeMarks(enrollee.getUserId(), parameters);
                 if (markRegister.isPresent()) {
                     register = markRegister.get();
                     session.removeAttribute(AttributeName.REGISTER);
                     session.setAttribute(AttributeName.REGISTER, register);
-                    router = new Router(PagePath.PROFILE);
+                    router = new Router(Router.Type.REDIRECT, PagePath.PROFILE);
                 } else {
-                    router = new Router(PagePath.ERROR);
+                    router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add updated marks in db");
                 }
             }
         } catch (ServiceException e) {
-            router = new Router(PagePath.ERROR_500);
+            router = new Router(Router.Type.REDIRECT, PagePath.ERROR_500);
             logger.log(Level.ERROR, "Application error: ", e);
         }
         return router;

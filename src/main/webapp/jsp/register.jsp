@@ -15,7 +15,7 @@
             <div class="block-heading">
                 <h2 class="text-info"><fmt:message key="register.title"/></h2>
             </div>
-            <form name="RegistrationForm" method="POST" action="projectServlet">
+            <form name="RegistrationForm" method="POST" action="/projectServlet">
                 <input type="hidden" name="command" value="register"/>
                 <div class="form-group">
                     <label for="first_name"><fmt:message key="register.firstname"/></label>

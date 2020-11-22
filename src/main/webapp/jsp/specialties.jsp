@@ -25,7 +25,8 @@
                     <div class="answer">
                         <c:if test="${empty enrollee and specialty.recruitment == 'OPENED'}">
                             <button class="btn btn-outline-primary btn-lg"
-                                    type="button" onclick='location.href = "projectServlet?command=to_register_page"'>
+                                    type="button"
+                                    onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_register_page"'>
                                 <fmt:message key="specialties.registerbutton"/></button>
                         </c:if>
                     </div>
@@ -38,7 +39,7 @@
     <div class="col-md-10 right-button">
         <button class="btn btn-primary btn-sm"
                 type="button"
-                onclick='location.href = "projectServlet?command=to_faculties_page"'>
+                onclick='location.href = "${pageContext.request.contextPath}/projectServlet?command=to_faculties_page"'>
             <fmt:message key="specialties.backbutton"/>
         </button>
     </div>

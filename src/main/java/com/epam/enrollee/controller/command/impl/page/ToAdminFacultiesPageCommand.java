@@ -3,7 +3,6 @@ package com.epam.enrollee.controller.command.impl.page;
 import com.epam.enrollee.controller.command.AttributeName;
 import com.epam.enrollee.controller.command.Command;
 import com.epam.enrollee.controller.command.PagePath;
-import com.epam.enrollee.controller.command.RequestParameter;
 import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Faculty;
@@ -21,8 +20,8 @@ import java.util.List;
  * The type To admin faculties page command.
  * Command to go to the admin faculties page. Command used by user with role admin.
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class ToAdminFacultiesPageCommand implements Command {
 
@@ -37,8 +36,11 @@ public class ToAdminFacultiesPageCommand implements Command {
             if (session.getAttribute(AttributeName.FACULTY_ID) != null) {
                 session.removeAttribute(AttributeName.FACULTY_ID);
             }
+            if (session.getAttribute(AttributeName.FACULTIES) != null) {
+                session.removeAttribute(AttributeName.FACULTIES);
+            }
             List<Faculty> faculties = facultyService.findAllActiveFaculties();
-            request.setAttribute(AttributeName.FACULTIES, faculties);
+            session.setAttribute(AttributeName.FACULTIES, faculties);
             router = new Router(PagePath.ADMIN_FACULTIES);
         } catch (ServiceException e) {
             router = new Router(PagePath.ERROR_500);

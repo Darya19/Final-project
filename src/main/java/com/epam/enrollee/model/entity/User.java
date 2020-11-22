@@ -1,7 +1,6 @@
 package com.epam.enrollee.model.entity;
 
 import com.epam.enrollee.model.type.RoleType;
-import com.epam.enrollee.model.type.StatusType;
 
 /**
  * The type User.

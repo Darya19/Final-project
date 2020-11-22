@@ -24,8 +24,8 @@ import java.util.List;
  * the specialty don't displays at the page specialties. The specialty is not deleted from
  * the database,but is marked with a status delete
  *
- *  @author Darya Shcherbina
- *  @version 1.0
+ * @author Darya Shcherbina
+ * @version 1.0
  */
 public class DeleteSpecialtyCommand implements Command {
 

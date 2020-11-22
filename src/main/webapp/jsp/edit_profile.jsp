@@ -16,7 +16,7 @@
                 <div class="block-heading">
                     <h2 class="text-info"><fmt:message key="editprofile.editspecialty"/></h2>
                 </div>
-                <form name="EditionSpecialtyForm" method="POST" action="projectServlet">
+                <form name="EditionSpecialtyForm" method="POST" action="/projectServlet">
                     <input type="hidden" name="command" value="edit_enrollee_specialty"/>
                     <div class="input-group mb-3">
                         <select class="custom-select" id="specialty_id" name="specialty_id">
@@ -40,7 +40,7 @@
                 <div class="block-heading">
                     <h2 class="text-info"><fmt:message key="editprofile.editmarks"/></h2>
                 </div>
-                <form name="EditionTestsResultForm" method="POST" action="projectServlet">
+                <form name="EditionTestsResultForm" method="POST" action="/projectServlet">
                     <input type="hidden" name="command" value="edit_marks"/>
                     <div class="form-row">
                         <c:forEach items="${register.testsSubjectsAndMarks}" var="register">
@@ -54,10 +54,11 @@
                                        name="${register.key.subjectId}" required value="${register.value}">
                             </div>
                         </c:forEach>
-                        <c:if test="${not empty parameters}">
-                            <small><label class="alert-danger"> <fmt:message
-                                    key="editprofile.editerror"/></label></small>
-                        </c:if></div>
+                    </div>
+                    <c:if test="${incorrect}">
+                        <small><label class="alert-danger"> <fmt:message
+                                key="editprofile.editerror"/></label></small>
+                    </c:if>
                     <div class="form-group">
                         <button class="btn btn-primary btn-block" type="submit"><fmt:message
                                 key="editprofile.edit"/></button>
@@ -68,7 +69,7 @@
                 <div class="block-heading">
                     <h2 class="text-info"><fmt:message key="editprofile.editpersonalinformation"/></h2>
                 </div>
-                <form name="EditionPersonalNumberForm" method="POST" action="projectServlet">
+                <form name="EditionPersonalNumberForm" method="POST" action="/projectServlet">
                     <input type="hidden" name="command" value="edit_personal_information"/>
                     <div><fmt:message key="editprofile.firstname"/>
                         <input class="form-control" type="text"
@@ -94,10 +95,12 @@
                                id="personal_number"
                                name="personal_number" required
                                value="${passport.personalNumber}">
-                        <c:if test="${not empty parameters}">
-                            <small><label class="alert-danger"> <fmt:message
-                                    key="editprofile.editerror"/></label></small>
-                        </c:if></div>
+                    </div>
+                    <p></p>
+                    <c:if test="${incorrect}">
+                        <small><label class="alert-danger"> <fmt:message
+                                key="editprofile.editerror"/></label></small>
+                    </c:if>
                     <div class="form-group">
                         <button class="btn btn-primary btn-block" type="submit"><fmt:message
                                 key="editprofile.edit"/></button>

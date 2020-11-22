@@ -43,7 +43,7 @@ public class ProjectServlet extends HttpServlet {
             dispatcher = getServletContext().getRequestDispatcher(router.getPage());
             dispatcher.forward(request, response);
         } else {
-            response.sendRedirect(router.getPage());
+            response.sendRedirect(request.getContextPath() + router.getPage());
         }
     }
 

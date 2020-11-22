@@ -14,7 +14,8 @@
 </head>
 <body>
 <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
-    <div class="container"><a class="navbar-brand logo" href="projectServlet?command=to_main_page">
+    <div class="container"><a class="navbar-brand logo"
+                              href="${pageContext.request.contextPath}/projectServlet?command=to_main_page">
         <em><fmt:message key="header.bnu"/></em></a>
         <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
             <span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon">
@@ -22,44 +23,46 @@
         <div class="collapse navbar-collapse" id="navcol-1">
             <ul class="nav navbar-nav ml-auto">
                 <li class="nav-item" role="presentation"><a class="nav-link active"
-                                                            href="projectServlet?command=change_language&locale=">
+                                                            href="${pageContext.request.contextPath}/projectServlet?command=change_language&locale=">
                     <fmt:message key="header.english"/></a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link active"
-                                                            href="projectServlet?command=change_language&locale=en">
+                                                            href="${pageContext.request.contextPath}/projectServlet?command=change_language&locale=en">
                     <fmt:message key="header.russian"/></a></li>
             </ul>
             <c:choose>
                 <c:when test="${role eq 'USER'}">
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item" role="presentation"><a class="nav-link active"
-                                                                    href="projectServlet?command=to_faculties_page">
+                                                                    href="${pageContext.request.contextPath}/projectServlet?command=to_faculties_page">
                             <fmt:message key="header.facultiesbutton"/></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link active"
-                                                                    href="projectServlet?command=logout"> <fmt:message
-                                key="header.logoutbutton"/></a></li>
+                                                                    href="${pageContext.request.contextPath}/projectServlet?command=logout">
+                            <fmt:message
+                                    key="header.logoutbutton"/></a></li>
                     </ul>
                 </c:when>
                 <c:when test="${role eq 'ADMIN'}">
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item" role="presentation"><a class="nav-link active"
-                                                                    href="projectServlet?command=to_admin_faculties_page">
+                                                                    href="${pageContext.request.contextPath}/projectServlet?command=to_admin_faculties_page">
                             <fmt:message key="header.adminfacultiesbutton"/></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link active"
-                                                                    href="projectServlet?command=logout"> <fmt:message
-                                key="header.logoutbutton"/></a></li>
+                                                                    href="${pageContext.request.contextPath}/projectServlet?command=logout">
+                            <fmt:message
+                                    key="header.logoutbutton"/></a></li>
 
                     </ul>
                 </c:when>
                 <c:otherwise>
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item" role="presentation"><a class="nav-link active"
-                                                                    href="projectServlet?command=to_faculties_page">
+                                                                    href="${pageContext.request.contextPath}/projectServlet?command=to_faculties_page">
                             <fmt:message key="header.facultiesbutton"/></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link active"
-                                                                    href="projectServlet?command=to_login_page">
+                                                                    href="${pageContext.request.contextPath}/projectServlet?command=to_login_page">
                             <fmt:message key="header.loginbutton"/></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link"
-                                                                    href="projectServlet?command=to_register_page">
+                                                                    href="${pageContext.request.contextPath}/projectServlet?command=to_register_page">
                             <fmt:message key="header.registerbutton"/></a></li>
                     </ul>
                 </c:otherwise>

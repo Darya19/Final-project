@@ -80,6 +80,10 @@ public class AttributeName {
      * The constant TYPE.
      */
     public static final String TYPE = "type";
+    /**
+     * The constant INCORRECT.
+     */
+    public static final String INCORRECT = "incorrect";
 
     private AttributeName() {
     }

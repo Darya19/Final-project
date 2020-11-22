@@ -62,16 +62,15 @@ public class RegisterCommand implements Command {
         parameters.put(MapKeys.REPEATED_PASSWORD, request.getParameter(RequestParameter.REPEATED_PASSWORD));
         parameters.put(MapKeys.EMAIL, request.getParameter(RequestParameter.EMAIL));
         try {
+            if (session.getAttribute(AttributeName.PARAMETERS) != null) {
+                session.removeAttribute(AttributeName.PARAMETERS);
+            }
             parameters = enrolleeService.checkParameters(parameters);
             if (parameters.containsValue("")) {
-                request.setAttribute(AttributeName.PARAMETERS, parameters);
-                if (putFacultiesSpecialtiesSubjectsInRequest(request)) {
-                    router = new Router(PagePath.REGISTER);
-                } else {
-                    router = new Router(PagePath.ERROR);
-                    logger.log(Level.ERROR, "Impossible create enrollee or register");
-                }
+                session.setAttribute(AttributeName.PARAMETERS, parameters);
+                router = new Router(Router.Type.REDIRECT, PagePath.REGISTER);
             } else {
+                removeFacultiesSpecialtiesSubjectsFromSession(session);
                 isRegister = enrolleeService.create(parameters);
                 if (isRegister) {
                     enrolleeId = putInSessionEnrolleeAndPassportAndMarks
@@ -80,20 +79,20 @@ public class RegisterCommand implements Command {
                         if (putEnrolleeFacultyAndSpecialtyInSession(enrolleeId, session)) {
                             session.removeAttribute(AttributeName.ROLE);
                             session.setAttribute(AttributeName.ROLE, RoleType.USER);
-                            router = new Router(PagePath.PROFILE);
+                            router = new Router(Router.Type.REDIRECT, PagePath.PROFILE);
                         } else {
-                            router = new Router(PagePath.ERROR);
+                            router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                             logger.log(Level.ERROR, "Impossible create faculty or specialty for enrollee");
                         }
-                    } else router = new Router(PagePath.ERROR);
+                    } else router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                     logger.log(Level.ERROR, "Incorrect enrollee id");
                 } else {
-                    router = new Router(PagePath.ERROR);
+                    router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add enroollee in db");
                 }
             }
         } catch (ServiceException e) {
-            router = new Router(PagePath.ERROR_500);
+            router = new Router(Router.Type.REDIRECT, PagePath.ERROR_500);
             logger.log(Level.ERROR, "Application error:", e);
         }
         return router;

@@ -16,7 +16,7 @@
             <div class="block-heading">
                 <h2 class="text-info"><fmt:message key="editapplication.title"/></h2>
             </div>
-            <form name="ApplicationForm" method="POST" action="projectServlet">
+            <form name="ApplicationForm" method="POST" action="/projectServlet">
                 <input type="hidden" name="command" value="new_application"/>
                 <h6><fmt:message key="editapplication.faculty"/></h6>
                 <div class="input-group mb-3">

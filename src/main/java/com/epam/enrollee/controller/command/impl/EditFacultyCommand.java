@@ -15,10 +15,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * The type Edit faculty command.
@@ -38,6 +38,7 @@ public class EditFacultyCommand implements Command {
     public Router execute(HttpServletRequest request) {
         FacultyService facultyService = FacultyServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
+        HttpSession session = request.getSession();
         Router router;
         String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
         parameters.put(MapKeys.FACULTY_ID, facultyId);
@@ -47,31 +48,29 @@ public class EditFacultyCommand implements Command {
             Map<String, String> checkedParameters = facultyService.checkParameters(parameters);
             if (!checkedParameters.get(MapKeys.FACULTY_ID).equals(EMPTY_VALUE)) {
                 if (checkedParameters.containsValue(EMPTY_VALUE)) {
-                    request.setAttribute(AttributeName.PARAMETERS, checkedParameters);
-                    Optional<Faculty> faculty = facultyService.findFacultyById(facultyId);
-                    if (faculty.isPresent()) {
-                        request.setAttribute(AttributeName.FACULTY, faculty.get());
-                        router = new Router(PagePath.EDIT_FACULTY);
-                    } else {
-                        router = new Router(PagePath.ERROR);
-                        logger.log(Level.ERROR, "impossible find chosen faculty.");
-                    }
+                    session.setAttribute(AttributeName.INCORRECT, true);
+                    router = new Router(Router.Type.REDIRECT, PagePath.EDIT_FACULTY);
                 } else {
+                    if (session.getAttribute(AttributeName.INCORRECT) != null) {
+                        session.removeAttribute(AttributeName.INCORRECT);
+                    }
+                    session.removeAttribute(AttributeName.FACULTY);
                     if (facultyService.update(checkedParameters)) {
+                        session.removeAttribute(AttributeName.FACULTIES);
                         List<Faculty> faculties = facultyService.findAllActiveFaculties();
-                        request.setAttribute(AttributeName.FACULTIES, faculties);
-                        router = new Router(PagePath.ADMIN_FACULTIES);
+                        session.setAttribute(AttributeName.FACULTIES, faculties);
+                        router = new Router(Router.Type.REDIRECT, PagePath.ADMIN_FACULTIES);
                     } else {
-                        router = new Router(PagePath.ERROR);
+                        router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                         logger.log(Level.ERROR, "Impossible update faculty");
                     }
                 }
             } else {
-                router = new Router(PagePath.ERROR);
+                router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                 logger.log(Level.ERROR, "Incorrect faculty id");
             }
         } catch (ServiceException e) {
-            router = new Router(PagePath.ERROR_500);
+            router = new Router(Router.Type.REDIRECT, PagePath.ERROR_500);
             logger.log(Level.INFO, "Application error: ", e);
         }
         return router;
