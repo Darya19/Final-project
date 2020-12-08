@@ -231,14 +231,12 @@ public class EnrolleeServiceImpl implements EnrolleeService {
         EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         NumberParser parser = NumberParser.getInstance();
         ProjectValidator validator = ProjectValidator.getInstance();
-        boolean isUpdated;
+        boolean isUpdated = false;
         try {
             if (validator.isIntParameterValid(facultyId)) {
                 int intFacultyId = parser.parseToInt(facultyId);
                 enrollee.setChosenFacultyId(intFacultyId);
                 isUpdated = enrolleeDao.updateEnrolleeFaculty(enrollee);
-            } else {
-                isUpdated = false;
             }
             return isUpdated;
         } catch (DaoException e) {
@@ -252,14 +250,12 @@ public class EnrolleeServiceImpl implements EnrolleeService {
         EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         NumberParser parser = NumberParser.getInstance();
         ProjectValidator validator = ProjectValidator.getInstance();
-        boolean isUpdated;
+        boolean isUpdated = false;
         try {
             if (validator.isIntParameterValid(specialtyId)) {
                 int intSpecialtyId = parser.parseToInt(specialtyId);
                 enrollee.setChosenSpecialtyId(intSpecialtyId);
                 isUpdated = enrolleeDao.updateEnrolleeSpecialty(enrollee);
-            } else {
-                isUpdated = false;
             }
             return isUpdated;
         } catch (DaoException e) {
@@ -284,20 +280,18 @@ public class EnrolleeServiceImpl implements EnrolleeService {
         EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
         NumberParser parser = NumberParser.getInstance();
         ProjectValidator validator = ProjectValidator.getInstance();
-        List<Enrollee> enrollees;
+        List<Enrollee> enrollees = new ArrayList<>();
         int intSpecialtyId;
         try {
             if (validator.isIntParameterValid(specialtyId)) {
                 intSpecialtyId = parser.parseToInt(specialtyId);
                 enrollees = enrolleeDao.findUnarchivedEnrolleeBySpecialtyId(intSpecialtyId);
-            } else {
-                enrollees = new ArrayList<>();
             }
+            return enrollees;
         } catch (DaoException e) {
             logger.log(Level.ERROR, "Error in finding enrollees by current specialty", e);
             throw new ServiceException(e);
         }
-        return enrollees;
     }
 
     @Override
@@ -307,30 +301,26 @@ public class EnrolleeServiceImpl implements EnrolleeService {
         NumberParser parser = NumberParser.getInstance();
         ProjectValidator validator = ProjectValidator.getInstance();
         int intEnrolleeId;
-        boolean isChanged;
-        if (validator.isIntParameterValid(enrolleeId)
-                && validator.isStringParameterValid(status)) {
-            try {
+        boolean isChanged = false;
+        try {
+            if (validator.isIntParameterValid(enrolleeId)
+                    && validator.isStringParameterValid(status)) {
                 intEnrolleeId = parser.parseToInt(enrolleeId);
                 if (status.equals(ApplicationStatus.ACCEPTED.getApplicationStatus())) {
                     int count = specialtyDao.findAllEnrolleeWithAcceptedApplicationStatus(specialty.getSpecialtyId());
                     if (count < specialty.getNumberOfSeats()) {
                         isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
                                 ApplicationStatus.ACCEPTED.getApplicationStatus());
-                    } else {
-                        isChanged = false;
                     }
                 } else {
                     isChanged = enrolleeDao.updateApplicationStatusByEnrolleeId(intEnrolleeId,
                             ApplicationStatus.REJECTED.getApplicationStatus());
                 }
-                return isChanged;
-            } catch (DaoException e) {
-                logger.log(Level.ERROR, "Error in changing application status", e);
-                throw new ServiceException(e);
             }
-        } else {
-            return false;
+            return isChanged;
+        } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in changing application status", e);
+            throw new ServiceException(e);
         }
     }
 }

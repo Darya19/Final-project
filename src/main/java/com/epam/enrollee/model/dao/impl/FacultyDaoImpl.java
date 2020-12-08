@@ -90,7 +90,7 @@ public class FacultyDaoImpl implements UniversityDao<Faculty> {
             List<Faculty> faculties = createFacultyListFromResultSet(resultSet);
             if (!faculties.isEmpty()) {
                 Faculty faculty = faculties.get(0);
-                return Optional.of(faculty);
+                return Optional.ofNullable(faculty);
             } else {
                 return Optional.empty();
             }
@@ -151,7 +151,7 @@ public class FacultyDaoImpl implements UniversityDao<Faculty> {
             ResultSet resultSet = statement.executeQuery();
             List<Faculty> foundFaculties = createFacultyListFromResultSet(resultSet);
             if (!foundFaculties.isEmpty()) {
-                return Optional.of(foundFaculties.get(0));
+                return Optional.ofNullable(foundFaculties.get(0));
             } else {
                 return Optional.empty();
             }

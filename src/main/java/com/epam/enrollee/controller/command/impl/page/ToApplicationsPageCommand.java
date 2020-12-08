@@ -51,9 +51,7 @@ public class ToApplicationsPageCommand implements Command {
             for (Enrollee enrollee : enrollees) {
                 int enrolleeId = enrollee.getUserId();
                 Optional<EnrolleeMarkRegister> register = registerService.findEnrolleeMarkRegister(enrolleeId);
-                if (register.isPresent()) {
-                    enrolleesMap.put(register.get(), enrollee);
-                }
+                register.ifPresent(r -> enrolleesMap.put(r, enrollee));
             }
             session.setAttribute(AttributeName.ENROLLEES, enrolleesMap);
             router = new Router(PagePath.APPLICATIONS);

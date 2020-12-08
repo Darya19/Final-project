@@ -131,19 +131,17 @@ public class SpecialtyServiceImpl implements SpecialtyService {
         NumberParser parser = NumberParser.getInstance();
         ;
         ProjectValidator validator = ProjectValidator.getInstance();
-        List<Specialty> specialties;
+        List<Specialty> specialties = new ArrayList<>();
         int intFacultyId;
-        if (validator.isIntParameterValid(facultyId)) {
-            intFacultyId = parser.parseToInt(facultyId);
-            try {
+        try {
+            if (validator.isIntParameterValid(facultyId)) {
+                intFacultyId = parser.parseToInt(facultyId);
                 specialties = dao.findOpenSpecialtiesListByFacultyId(intFacultyId);
-                return specialties;
-            } catch (DaoException e) {
-                logger.log(Level.ERROR, "Error in finding open specialties of faculty", e);
-                throw new ServiceException(e);
             }
-        } else {
-            return new ArrayList<>();
+            return specialties;
+        } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in finding open specialties of faculty", e);
+            throw new ServiceException(e);
         }
     }
 
@@ -151,21 +149,18 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     public List<Specialty> findActiveSpecialtiesOfFaculty(String facultyId) throws ServiceException {
         SpecialtyDao dao = SpecialtyDaoImpl.getInstance();
         NumberParser parser = NumberParser.getInstance();
-        ;
         ProjectValidator validator = ProjectValidator.getInstance();
-        List<Specialty> specialties = null;
+        List<Specialty> specialties = new ArrayList<>();
         int intFacultyId;
-        if (validator.isIntParameterValid(facultyId)) {
-            intFacultyId = parser.parseToInt(facultyId);
-            try {
+        try {
+            if (validator.isIntParameterValid(facultyId)) {
+                intFacultyId = parser.parseToInt(facultyId);
                 specialties = dao.findActiveSpecialtiesListByFacultyId(intFacultyId);
-                return specialties;
-            } catch (DaoException e) {
-                logger.log(Level.ERROR, "Error in finding active specialties of faculty", e);
-                throw new ServiceException(e);
             }
-        } else {
-            return new ArrayList<>();
+            return specialties;
+        } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in finding active specialties of faculty", e);
+            throw new ServiceException(e);
         }
     }
 
@@ -198,23 +193,21 @@ public class SpecialtyServiceImpl implements SpecialtyService {
         ;
         ProjectValidator validator = ProjectValidator.getInstance();
         int intSpecialtyId;
-        boolean isChanged;
-        if (validator.isIntParameterValid(specialtyId)
-                && validator.isStringParameterValid(recruitment)) {
-            try {
+        boolean isChanged = false;
+        try {
+            if (validator.isIntParameterValid(specialtyId)
+                    && validator.isStringParameterValid(recruitment)) {
                 intSpecialtyId = parser.parseToInt(specialtyId);
                 if (recruitment.equalsIgnoreCase(RecruitmentType.OPENED.getType())) {
                     isChanged = specialtyDao.updateOpenedRecruitmentBySpecialtyId(intSpecialtyId, application);
                 } else {
                     isChanged = specialtyDao.updateClosedRecruitmentBySpecialtyId(intSpecialtyId);
                 }
-                return isChanged;
-            } catch (DaoException e) {
-                logger.log(Level.ERROR, "Error in changing specialty recruitment", e);
-                throw new ServiceException(e);
             }
-        } else {
-            return false;
+            return isChanged;
+        } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in changing specialty recruitment", e);
+            throw new ServiceException(e);
         }
     }
 
@@ -224,17 +217,17 @@ public class SpecialtyServiceImpl implements SpecialtyService {
         NumberParser parser = NumberParser.getInstance();
         ProjectValidator validator = ProjectValidator.getInstance();
         int intSpecialtyId;
-        if (validator.isIntParameterValid(specialtyId)) {
-            try {
+        boolean isPresent = false;
+        try {
+            if (validator.isIntParameterValid(specialtyId)) {
                 intSpecialtyId = parser.parseToInt(specialtyId);
                 List<Integer> foundEnrolleeId = specialtyDao.findConsideredEnrolleeIdById(intSpecialtyId);
-                return foundEnrolleeId.size() > 0;
-            } catch (DaoException e) {
-                logger.log(Level.ERROR, "Error in checking applications", e);
-                throw new ServiceException(e);
+                isPresent = foundEnrolleeId.size() > 0;
             }
-        } else {
-            return false;
+            return isPresent;
+        } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in checking applications", e);
+            throw new ServiceException(e);
         }
     }
 
@@ -242,20 +235,18 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     public List<Integer> findAllApplicationsBySpecialty(String specialtyId) throws ServiceException {
         SpecialtyDao specialtyDao = SpecialtyDaoImpl.getInstance();
         NumberParser parser = NumberParser.getInstance();
-        ;
         ProjectValidator validator = ProjectValidator.getInstance();
+        List<Integer> foundEnrolleeId = new ArrayList<>();
         int intSpecialtyId;
-        if (validator.isIntParameterValid(specialtyId)) {
-            try {
+        try {
+            if (validator.isIntParameterValid(specialtyId)) {
                 intSpecialtyId = parser.parseToInt(specialtyId);
-                List<Integer> foundEnrolleeId = specialtyDao.findAllUnarchivedEnrolleeBySpecialtyId(intSpecialtyId);
-                return foundEnrolleeId;
-            } catch (DaoException e) {
-                logger.log(Level.ERROR, "Error in finding all applications", e);
-                throw new ServiceException(e);
+                foundEnrolleeId = specialtyDao.findAllUnarchivedEnrolleeBySpecialtyId(intSpecialtyId);
             }
-        } else {
-            return new ArrayList<>();
+            return foundEnrolleeId;
+        } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in finding all applications", e);
+            throw new ServiceException(e);
         }
     }
 
@@ -264,8 +255,8 @@ public class SpecialtyServiceImpl implements SpecialtyService {
         ProjectValidator validator = ProjectValidator.getInstance();
         boolean isNameValid;
         boolean isNumberValid;
+        boolean isSpecialtyIdValid;
         if (parameters.get(MapKeys.SPECIALTY_ID) != null) {
-            boolean isSpecialtyIdValid;
             isSpecialtyIdValid = validator.isIntParameterValid(parameters.get(MapKeys.SPECIALTY_ID));
             if (!isSpecialtyIdValid) {
                 parameters.put(MapKeys.SPECIALTY_ID, EMPTY_VALUE);

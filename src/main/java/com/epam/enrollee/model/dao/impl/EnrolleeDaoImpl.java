@@ -310,7 +310,7 @@ public class EnrolleeDaoImpl implements EnrolleeDao {
             List<Enrollee> enrollees = createEnrolleeListFromResultSet(resultSet);
             if (!enrollees.isEmpty()) {
                 Enrollee enrollee = enrollees.get(0);
-                return Optional.of(enrollee);
+                return Optional.ofNullable(enrollee);
             } else {
                 return Optional.empty();
             }
@@ -327,7 +327,7 @@ public class EnrolleeDaoImpl implements EnrolleeDao {
             statement.setInt(1, enrolleeId);
             ResultSet resultSet = statement.executeQuery();
             Passport passport = createPassportFromResultSet(resultSet);
-            return Optional.of(passport);
+            return Optional.ofNullable(passport);
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Impossible find passport", e);
             throw new DaoException("Database issues while finding passport", e);

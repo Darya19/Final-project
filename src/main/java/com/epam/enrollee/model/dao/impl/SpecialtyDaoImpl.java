@@ -110,7 +110,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
             List<Specialty> specialties = createSpecialtyListFromResultSet(resultSet);
             if (!specialties.isEmpty()) {
                 Specialty specialty = specialties.get(0);
-                return Optional.of(specialty);
+                return Optional.ofNullable(specialty);
             } else {
                 return Optional.empty();
             }
@@ -177,7 +177,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
             ResultSet resultSet = statement.executeQuery();
             List<Specialty> foundSpecialties = createSpecialtyListFromResultSet(resultSet);
             if (!foundSpecialties.isEmpty()) {
-                return Optional.of(foundSpecialties.get(0));
+                return Optional.ofNullable(foundSpecialties.get(0));
             } else {
                 return Optional.empty();
             }
@@ -210,7 +210,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 foundFacultyId = resultSet.getInt(FACULTY_ID);
-                return Optional.of(foundFacultyId);
+                return Optional.ofNullable(foundFacultyId);
             } else {
                 return Optional.empty();
             }

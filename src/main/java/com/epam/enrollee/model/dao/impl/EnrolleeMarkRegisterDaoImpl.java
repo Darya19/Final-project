@@ -105,7 +105,7 @@ public class EnrolleeMarkRegisterDaoImpl implements EnrolleeMarkRegisterDao {
             ResultSet resultSet = statement.executeQuery();
             EnrolleeMarkRegister register = createEnrolleeRegisterFromResultSet(resultSet);
             if (!register.getTestsSubjectsAndMarks().isEmpty()) {
-                return Optional.of(register);
+                return Optional.ofNullable(register);
             } else {
                 return Optional.empty();
             }

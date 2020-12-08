@@ -56,17 +56,11 @@ public class EnrolleeMarkRegisterServiceImpl implements EnrolleeMarkRegisterServ
     @Override
     public Optional<EnrolleeMarkRegister> findEnrolleeMarkRegister(int enrolleeId) throws ServiceException {
         EnrolleeMarkRegisterDao dao = EnrolleeMarkRegisterDaoImpl.getInstance();
-        EnrolleeMarkRegister register;
         try {
             Optional<EnrolleeMarkRegister> optionalRegister =
                     dao.findEnrolleeMarkRegisterByEnrolleeId(enrolleeId);
-            if (optionalRegister.isPresent()) {
-                register = optionalRegister.get();
-                register = calculateEnrolleeAverageMark(register);
-                return Optional.of(register);
-            } else {
-                return Optional.empty();
-            }
+            optionalRegister.ifPresent(this::calculateEnrolleeAverageMark);
+            return optionalRegister;
         } catch (DaoException e) {
             logger.log(Level.ERROR, "Error in finding register", e);
             throw new ServiceException(e);
@@ -78,10 +72,9 @@ public class EnrolleeMarkRegisterServiceImpl implements EnrolleeMarkRegisterServ
                                                                  Map<String, String> parameters) throws ServiceException {
         EnrolleeMarkRegisterDao registerDao = EnrolleeMarkRegisterDaoImpl.getInstance();
         SubjectDao subjectDao = SubjectDaoImpl.getInstance();
-        List<Subject> subjectsForUpdate = new ArrayList<>();
         NumberParser parser = NumberParser.getInstance();
         Map<Subject, Integer> currentRegister = markRegister.getTestsSubjectsAndMarks();
-        subjectsForUpdate.addAll(currentRegister.keySet());
+        List<Subject> subjectsForUpdate = new ArrayList<>(currentRegister.keySet());
         for (Subject subject : subjectsForUpdate) {
             currentRegister.remove(subject);
         }
@@ -95,25 +88,13 @@ public class EnrolleeMarkRegisterServiceImpl implements EnrolleeMarkRegisterServ
         int markValue4 = parser.parseToInt(parameters.get(MapKeys.MARK_4));
         try {
             Optional<Subject> subject = subjectDao.findById(subjectId1);
-            if (subject.isPresent()) {
-                Subject foundSubject = subject.get();
-                currentRegister.put(foundSubject, markValue1);
-            }
+           subject.ifPresent(s -> currentRegister.put(s, markValue1));
             Optional<Subject> subject2 = subjectDao.findById(subjectId2);
-            if (subject2.isPresent()) {
-                Subject foundSubject = subject2.get();
-                currentRegister.put(foundSubject, markValue2);
-            }
+            subject2.ifPresent(s -> currentRegister.put(s, markValue2));
             Optional<Subject> subject3 = subjectDao.findById(subjectId3);
-            if (subject3.isPresent()) {
-                Subject foundSubject = subject3.get();
-                currentRegister.put(foundSubject, markValue3);
-            }
+            subject3.ifPresent(s -> currentRegister.put(s, markValue3));
             Optional<Subject> subject4 = subjectDao.findById(subjectId4);
-            if (subject4.isPresent()) {
-                Subject foundSubject = subject4.get();
-                currentRegister.put(foundSubject, markValue4);
-            }
+            subject4.ifPresent(s -> currentRegister.put(s, markValue4));
             if (registerDao.update(markRegister, enrolleeId, subjectsForUpdate)) {
                 calculateEnrolleeAverageMark(markRegister);
                 return Optional.of(markRegister);

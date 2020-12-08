@@ -68,7 +68,7 @@ public class SubjectDaoImpl implements SubjectDao {
             ResultSet resultSet = statement.executeQuery();
             List<Subject> subjects = createSubjectListFromResultSet(resultSet);
             if (!subjects.isEmpty()) {
-                return Optional.of(subjects.get(0));
+                return Optional.ofNullable(subjects.get(0));
             } else {
                 return Optional.empty();
             }
@@ -98,11 +98,7 @@ public class SubjectDaoImpl implements SubjectDao {
             statement.setInt(1, specialtyId);
             ResultSet resultSet = statement.executeQuery();
             List<Subject> subjects = createSubjectListFromResultSet(resultSet);
-            if (!subjects.isEmpty()) {
-                return subjects;
-            } else {
-                return new ArrayList<>();
-            }
+            return subjects;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Impossible find subjects by specialty id", e);
             throw new DaoException("Database issues while finding subjects by specialty id", e);

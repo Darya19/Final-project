@@ -68,7 +68,7 @@ public class UserDaoImpl implements UserDao {
             List<User> foundUsers = createUserListFromResultSet(resultSet);
             if (!foundUsers.isEmpty()) {
                 User user = foundUsers.get(0);
-                return Optional.of(user);
+                return Optional.ofNullable(user);
             } else {
                 return Optional.empty();
             }
@@ -99,7 +99,7 @@ public class UserDaoImpl implements UserDao {
             ResultSet resultSet = statement.executeQuery();
             List<User> foundUsers = createUserListFromResultSet(resultSet);
             if (!foundUsers.isEmpty()) {
-                return Optional.of(foundUsers.get(0));
+                return Optional.ofNullable(foundUsers.get(0));
             } else {
                 return Optional.empty();
             }
@@ -116,7 +116,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return Optional.of(resultSet.getString(ColumnName.PASSWORD));
+                return Optional.ofNullable(resultSet.getString(ColumnName.PASSWORD));
             } else {
                 return Optional.empty();
             }

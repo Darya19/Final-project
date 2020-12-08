@@ -262,3 +262,11 @@ y
 Isrc/test/java/com/epam/enrollee/servicetest/impl/UserServiceImplTest.java,d\9\d96b6c53949d15b05751b74f240942183fe7e314
 n
 >src/test/java/com/epam/enrollee/utiltest/NumberParserTest.java,c\1\c1c81af5ac1b399d2c4cd085681670c75b85ed48
+^
+.src/main/resources/prop/pagecontent.properties,0\9\09a1b1bb7ceea0eecb437b079d68e88d898910be
+a
+1src/main/resources/prop/pagecontent_en.properties,8\3\83999c2cbdac22c5ff46f1d1b0716e0ab6e1415c
+M
+src/main/resources/log4j2.xml,3\6\36b9f0d33e4b7e602e3cd701314fae81543db66f
+S
+#target/login-1.0-SNAPSHOT/index.jsp,f\c\fc0db96fc330a5c6ce8077b7fd389d1853613d60

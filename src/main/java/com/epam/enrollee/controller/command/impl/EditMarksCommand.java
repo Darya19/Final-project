@@ -35,7 +35,6 @@ import java.util.Optional;
 public class EditMarksCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();
-    private static final String EDIT_MARKS = "edit_marks";
 
     @Override
     public Router execute(HttpServletRequest request) {
