@@ -84,8 +84,10 @@ public class RegisterCommand implements Command {
                             router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                             logger.log(Level.ERROR, "Impossible create faculty or specialty for enrollee");
                         }
-                    } else router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
-                    logger.log(Level.ERROR, "Incorrect enrollee id");
+                    } else {
+                        router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
+                        logger.log(Level.ERROR, "Incorrect enrollee id");
+                    }
                 } else {
                     router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                     logger.log(Level.ERROR, "Impossible add enroollee in db");

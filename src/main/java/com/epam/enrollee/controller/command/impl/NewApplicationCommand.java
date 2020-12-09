@@ -8,16 +8,10 @@ import com.epam.enrollee.controller.router.Router;
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
-import com.epam.enrollee.model.entity.Faculty;
-import com.epam.enrollee.model.entity.Specialty;
 import com.epam.enrollee.model.service.EnrolleeMarkRegisterService;
 import com.epam.enrollee.model.service.EnrolleeService;
-import com.epam.enrollee.model.service.FacultyService;
-import com.epam.enrollee.model.service.SpecialtyService;
 import com.epam.enrollee.model.service.impl.EnrolleeMarkRegisterServiceImpl;
 import com.epam.enrollee.model.service.impl.EnrolleeServiceImpl;
-import com.epam.enrollee.model.service.impl.FacultyServiceImpl;
-import com.epam.enrollee.model.service.impl.SpecialtyServiceImpl;
 import com.epam.enrollee.model.type.ApplicationStatus;
 import com.epam.enrollee.util.MapKeys;
 import org.apache.logging.log4j.Level;
@@ -45,16 +39,11 @@ public class NewApplicationCommand implements Command {
     public Router execute(HttpServletRequest request) {
         EnrolleeService enrolleeService = EnrolleeServiceImpl.getInstance();
         EnrolleeMarkRegisterService registerService = EnrolleeMarkRegisterServiceImpl.getInstance();
-        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
-        FacultyService facultyService = FacultyServiceImpl.getInstance();
         Map<String, String> parameters = new HashMap<>();
         HttpSession session = request.getSession();
-        boolean isUpdated;
         Router router;
-        String facultyId = request.getParameter(RequestParameter.FACULTY_ID);
-        String specialtyId = request.getParameter(RequestParameter.SPECIALTY_ID);
-        parameters.put(MapKeys.SPECIALTY_ID, specialtyId);
-        parameters.put(MapKeys.FACULTY_ID, facultyId);
+        parameters.put(MapKeys.SPECIALTY_ID, request.getParameter(RequestParameter.SPECIALTY_ID));
+        parameters.put(MapKeys.FACULTY_ID, request.getParameter(RequestParameter.FACULTY_ID));
         parameters.put(MapKeys.SUBJECT_ID_1, request.getParameter(RequestParameter.SUBJECT_ID_1));
         parameters.put(MapKeys.MARK_1, request.getParameter(RequestParameter.MARK_1));
         parameters.put(MapKeys.SUBJECT_ID_2, request.getParameter(RequestParameter.SUBJECT_ID_2));
@@ -65,29 +54,21 @@ public class NewApplicationCommand implements Command {
         parameters.put(MapKeys.MARK_4, request.getParameter(RequestParameter.MARK_4));
         try {
             Enrollee enrollee = (Enrollee) session.getAttribute(AttributeName.ENROLLEE);
-            EnrolleeMarkRegister registerInSession = (EnrolleeMarkRegister) session.getAttribute(AttributeName.REGISTER);
             parameters = enrolleeService.checkParameters(parameters);
             if (parameters.containsValue("")) {
                 router = new Router(Router.Type.REDIRECT, PagePath.EDIT_APPLICATION);
             } else {
                 removeFacultiesSpecialtiesSubjectsFromSession(session);
-                Optional<EnrolleeMarkRegister> register = registerService.updateEnrolleeRegister(enrollee.getUserId(),
-                        registerInSession, parameters);
-                if (enrolleeService.updateEnrolleeFaculty(enrollee, facultyId) && enrolleeService.updateEnrolleeSpecialty
-                        (enrollee, specialtyId) && register.isPresent()) {
-                    Optional<Specialty> specialty = specialtyService.findEnrolleeSpecialty(enrollee.getUserId());
-                    Optional<Faculty> faculty = facultyService.findEnrolleeFaculty(enrollee.getUserId());
-                    if (specialty.isPresent() && faculty.isPresent()) {
-                        session.removeAttribute(AttributeName.SPECIALTY);
-                        session.removeAttribute(AttributeName.FACULTY);
-                        session.setAttribute(AttributeName.FACULTY, faculty.get());
-                        session.setAttribute(AttributeName.SPECIALTY, specialty.get());
-                        enrollee.setApplicationStatus(ApplicationStatus.CONSIDERED);
-                        router = new Router(Router.Type.REDIRECT, PagePath.PROFILE);
-                    } else {
-                        router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
-                        logger.log(Level.ERROR, "Impossible create faculty or specialty for enrollee");
-                    }
+                Optional<EnrolleeMarkRegister> register = enrolleeService.updateEnrolleeApplication(enrollee, parameters);
+                if (register.isPresent()) {
+                    registerService.calculateEnrolleeAverageMark(register.get());
+                    session.removeAttribute(AttributeName.REGISTER);
+                    session.setAttribute(AttributeName.REGISTER, register.get());
+                    session.removeAttribute(AttributeName.SPECIALTY);
+                    session.removeAttribute(AttributeName.FACULTY);
+                    putEnrolleeFacultyAndSpecialtyInSession(enrollee.getUserId(), session);
+                    enrollee.setApplicationStatus(ApplicationStatus.CONSIDERED);
+                    router = new Router(Router.Type.REDIRECT, PagePath.PROFILE);
                 } else {
                     router = new Router(Router.Type.REDIRECT, PagePath.ERROR);
                     logger.log(Level.ERROR, "Incorrect enrollee parameters");

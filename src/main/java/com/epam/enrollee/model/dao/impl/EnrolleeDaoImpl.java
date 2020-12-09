@@ -5,7 +5,9 @@ import com.epam.enrollee.model.connector.ConnectionPool;
 import com.epam.enrollee.model.dao.ColumnName;
 import com.epam.enrollee.model.dao.EnrolleeDao;
 import com.epam.enrollee.model.entity.Enrollee;
+import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Passport;
+import com.epam.enrollee.model.entity.Subject;
 import com.epam.enrollee.model.type.ApplicationStatus;
 import com.epam.enrollee.model.type.RoleType;
 import com.epam.enrollee.util.MapKeys;
@@ -67,6 +69,9 @@ public class EnrolleeDaoImpl implements EnrolleeDao {
             "and application_status!=?";
     private static final String UPDATE_APPLICATION_STATUS_BY_ENROLLEE_ID = "UPDATE enrollee SET application_status=? " +
             "WHERE enrollee_id=?";
+    private static final String INSERT_ENROLLEE_REGISTER_BY_ENROLLEE_ID = "INSERT INTO mark (enrollee_id_fk, subject_id_fk, mark_value)" +
+            "VALUES (?,?,?)";
+    private static final String REMOVE_REGISTER_BY_ENROLLEE_ID = "DELETE from mark where enrollee_id_fk=?";
 
     /**
      * Gets instance.
@@ -236,6 +241,75 @@ public class EnrolleeDaoImpl implements EnrolleeDao {
     @Override
     public List<Enrollee> findAll() throws DaoException {
         throw new UnsupportedOperationException("Impossible find all enrollees");
+    }
+
+    @Override
+    public boolean updateEnrolleeApplication(Enrollee enrollee, EnrolleeMarkRegister register) throws DaoException {
+        boolean isFacultyUpdated;
+        boolean isSpecialtyUpdated;
+        boolean isRegisterRemoved;
+        boolean isRegisterUpdated;
+        boolean isStatusUpdated = false;
+        int countUpdate = 0;
+        Connection connection = ConnectionPool.INSTANCE.getConnection();
+        PreparedStatement registerRemoveStatement = null;
+        PreparedStatement registerAddStatement = null;
+        PreparedStatement specialtyStatement = null;
+        PreparedStatement facultyStatement = null;
+        PreparedStatement statusStatement;
+        try {
+            connection.setAutoCommit(false);
+            specialtyStatement = connection.prepareStatement(UPDATE_ENROLLEE_SPECIALTY);
+            facultyStatement = connection.prepareStatement(UPDATE_ENROLLEE_FACULTY);
+            registerAddStatement = connection.prepareStatement(INSERT_ENROLLEE_REGISTER_BY_ENROLLEE_ID);
+            registerRemoveStatement = connection.prepareStatement(REMOVE_REGISTER_BY_ENROLLEE_ID);
+            statusStatement = connection.prepareStatement(UPDATE_APPLICATION_STATUS_BY_ENROLLEE_ID);
+            facultyStatement.setInt(1, enrollee.getChosenFacultyId());
+            facultyStatement.setInt(2, enrollee.getUserId());
+            isFacultyUpdated = facultyStatement.executeUpdate() > 0;
+            specialtyStatement.setInt(1, enrollee.getChosenSpecialtyId());
+            specialtyStatement.setInt(2, enrollee.getUserId());
+            isSpecialtyUpdated = specialtyStatement.executeUpdate() > 0;
+            registerRemoveStatement.setInt(1, enrollee.getUserId());
+            isRegisterRemoved = registerRemoveStatement.executeUpdate() > 0;
+            if (isFacultyUpdated && isSpecialtyUpdated && isRegisterRemoved) {
+                registerAddStatement.setInt(1, enrollee.getUserId());
+                for (Map.Entry<Subject, Integer> pair : register.getTestsSubjectsAndMarks().entrySet()) {
+                    Subject subject = pair.getKey();
+                    int markValue = pair.getValue();
+                    registerAddStatement.setInt(1, enrollee.getUserId());
+                    registerAddStatement.setInt(2, subject.getSubjectId());
+                    registerAddStatement.setInt(3, markValue);
+                    countUpdate += registerAddStatement.executeUpdate();
+                }
+                isRegisterUpdated = countUpdate == 4;
+                if (isRegisterUpdated) {
+                    statusStatement.setString(1, ApplicationStatus.CONSIDERED.getApplicationStatus());
+                    statusStatement.setInt(2, enrollee.getUserId());
+                    isStatusUpdated = statusStatement.executeUpdate() > 0;
+                }
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                logger.log(Level.ERROR, "Impossible rollback committing", ex);
+            }
+            throw new DaoException("Impossible update new enrollee application", e);
+        } finally {
+            closeStatement(specialtyStatement);
+            closeStatement(facultyStatement);
+            closeStatement(registerAddStatement);
+            closeStatement(registerRemoveStatement);
+            try {
+                connection.setAutoCommit(true);
+                connection.close();
+            } catch (SQLException throwables) {
+                logger.log(Level.ERROR, "Impossible return connection to pool");
+            }
+        }
+        return isStatusUpdated;
     }
 
     @Override

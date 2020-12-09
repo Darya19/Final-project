@@ -2,6 +2,7 @@ package com.epam.enrollee.model.dao;
 
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.model.entity.Enrollee;
+import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Passport;
 
 import java.util.List;
@@ -89,4 +90,14 @@ public interface EnrolleeDao extends BaseDao<Enrollee> {
      * @throws DaoException the dao exception
      */
     boolean updateApplicationStatusByEnrolleeId(int enrolleeId, String applicationStatus) throws DaoException;
+
+    /**
+     * Update enrollee application boolean.
+     *
+     * @param enrollee the enrollee
+     * @param register the register
+     * @return the boolean
+     * @throws DaoException the dao exception
+     */
+    boolean updateEnrolleeApplication(Enrollee enrollee, EnrolleeMarkRegister register) throws DaoException;
 }

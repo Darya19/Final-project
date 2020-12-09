@@ -2,14 +2,8 @@ package com.epam.enrollee.model.service.impl;
 
 import com.epam.enrollee.exception.DaoException;
 import com.epam.enrollee.exception.ServiceException;
-import com.epam.enrollee.model.dao.EnrolleeDao;
-import com.epam.enrollee.model.dao.SpecialtyDao;
-import com.epam.enrollee.model.dao.SubjectDao;
-import com.epam.enrollee.model.dao.UserDao;
-import com.epam.enrollee.model.dao.impl.EnrolleeDaoImpl;
-import com.epam.enrollee.model.dao.impl.SpecialtyDaoImpl;
-import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
-import com.epam.enrollee.model.dao.impl.UserDaoImpl;
+import com.epam.enrollee.model.dao.*;
+import com.epam.enrollee.model.dao.impl.*;
 import com.epam.enrollee.model.entity.*;
 import com.epam.enrollee.model.service.EnrolleeService;
 import com.epam.enrollee.model.type.ApplicationStatus;
@@ -73,6 +67,7 @@ public class EnrolleeServiceImpl implements EnrolleeService {
         SubjectDao subjectDao = SubjectDaoImpl.getInstance();
         NumberParser parser = NumberParser.getInstance();
         parameters = validator.validateRegistrationData(parameters);
+        int foundFacultyId;
         try {
             if (parameters.containsKey(MapKeys.EMAIL) && !parameters.get(MapKeys.EMAIL).isEmpty()) {
                 Optional<User> user = userDao.findUserByEmail(parameters.get(MapKeys.EMAIL));
@@ -92,7 +87,6 @@ public class EnrolleeServiceImpl implements EnrolleeService {
             if (parameters.containsKey(MapKeys.SPECIALTY_ID)
                     && !parameters.get(MapKeys.SPECIALTY_ID).isEmpty()) {
                 int intSpecialtyId = parser.parseToInt(parameters.get(MapKeys.SPECIALTY_ID));
-                int foundFacultyId;
                 Optional<Integer> optionalFacultyId = specialtyDao.findFacultyIdBySpecialtyId(intSpecialtyId);
                 List<Subject> subjects = subjectDao
                         .findSubjectsBySpecialtyId(intSpecialtyId);
@@ -320,6 +314,44 @@ public class EnrolleeServiceImpl implements EnrolleeService {
             return isChanged;
         } catch (DaoException e) {
             logger.log(Level.ERROR, "Error in changing application status", e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Optional<EnrolleeMarkRegister> updateEnrolleeApplication(Enrollee enrollee, Map<String, String> parameters)
+            throws ServiceException {
+        EnrolleeMarkRegisterDao registerDao = EnrolleeMarkRegisterDaoImpl.getInstance();
+        EnrolleeDao enrolleeDao = EnrolleeDaoImpl.getInstance();
+        SubjectDao subjectDao = SubjectDaoImpl.getInstance();
+        NumberParser parser = NumberParser.getInstance();
+        EnrolleeMarkRegister currentRegister = new EnrolleeMarkRegister();
+        int specialtyId = parser.parseToInt(parameters.get(MapKeys.SPECIALTY_ID));
+        int facultyId = parser.parseToInt(parameters.get(MapKeys.FACULTY_ID));
+        int subjectId1 = parser.parseToInt(parameters.get(MapKeys.SUBJECT_ID_1));
+        int subjectId2 = parser.parseToInt(parameters.get(MapKeys.SUBJECT_ID_2));
+        int subjectId3 = parser.parseToInt(parameters.get(MapKeys.SUBJECT_ID_3));
+        int subjectId4 = parser.parseToInt(parameters.get(MapKeys.SUBJECT_ID_4));
+        int markValue1 = parser.parseToInt(parameters.get(MapKeys.MARK_1));
+        int markValue2 = parser.parseToInt(parameters.get(MapKeys.MARK_2));
+        int markValue3 = parser.parseToInt(parameters.get(MapKeys.MARK_3));
+        int markValue4 = parser.parseToInt(parameters.get(MapKeys.MARK_4));
+        try {
+            Optional<Subject> subject = subjectDao.findById(subjectId1);
+            subject.ifPresent(s -> currentRegister.put(s, markValue1));
+            Optional<Subject> subject2 = subjectDao.findById(subjectId2);
+            subject2.ifPresent(s -> currentRegister.put(s, markValue2));
+            Optional<Subject> subject3 = subjectDao.findById(subjectId3);
+            subject3.ifPresent(s -> currentRegister.put(s, markValue3));
+            Optional<Subject> subject4 = subjectDao.findById(subjectId4);
+            subject4.ifPresent(s -> currentRegister.put(s, markValue4));
+            enrollee.setChosenSpecialtyId(specialtyId);
+            enrollee.setChosenFacultyId(facultyId);
+            enrollee.setApplicationStatus(ApplicationStatus.CONSIDERED);
+            return enrolleeDao.updateEnrolleeApplication(enrollee, currentRegister) ? Optional.of(currentRegister)
+                    : Optional.empty();
+        } catch (DaoException e) {
+            logger.log(Level.ERROR, "Error in updating register", e);
             throw new ServiceException(e);
         }
     }

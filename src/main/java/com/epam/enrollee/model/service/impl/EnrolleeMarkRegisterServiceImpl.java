@@ -9,15 +9,12 @@ import com.epam.enrollee.model.dao.impl.SubjectDaoImpl;
 import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Subject;
 import com.epam.enrollee.model.service.EnrolleeMarkRegisterService;
-import com.epam.enrollee.util.MapKeys;
 import com.epam.enrollee.util.NumberParser;
 import com.epam.enrollee.validator.ProjectValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -68,46 +65,6 @@ public class EnrolleeMarkRegisterServiceImpl implements EnrolleeMarkRegisterServ
     }
 
     @Override
-    public Optional<EnrolleeMarkRegister> updateEnrolleeRegister(int enrolleeId, EnrolleeMarkRegister markRegister,
-                                                                 Map<String, String> parameters) throws ServiceException {
-        EnrolleeMarkRegisterDao registerDao = EnrolleeMarkRegisterDaoImpl.getInstance();
-        SubjectDao subjectDao = SubjectDaoImpl.getInstance();
-        NumberParser parser = NumberParser.getInstance();
-        Map<Subject, Integer> currentRegister = markRegister.getTestsSubjectsAndMarks();
-        List<Subject> subjectsForUpdate = new ArrayList<>(currentRegister.keySet());
-        for (Subject subject : subjectsForUpdate) {
-            currentRegister.remove(subject);
-        }
-        int subjectId1 = parser.parseToInt(parameters.get(MapKeys.SUBJECT_ID_1));
-        int subjectId2 = parser.parseToInt(parameters.get(MapKeys.SUBJECT_ID_2));
-        int subjectId3 = parser.parseToInt(parameters.get(MapKeys.SUBJECT_ID_3));
-        int subjectId4 = parser.parseToInt(parameters.get(MapKeys.SUBJECT_ID_4));
-        int markValue1 = parser.parseToInt(parameters.get(MapKeys.MARK_1));
-        int markValue2 = parser.parseToInt(parameters.get(MapKeys.MARK_2));
-        int markValue3 = parser.parseToInt(parameters.get(MapKeys.MARK_3));
-        int markValue4 = parser.parseToInt(parameters.get(MapKeys.MARK_4));
-        try {
-            Optional<Subject> subject = subjectDao.findById(subjectId1);
-           subject.ifPresent(s -> currentRegister.put(s, markValue1));
-            Optional<Subject> subject2 = subjectDao.findById(subjectId2);
-            subject2.ifPresent(s -> currentRegister.put(s, markValue2));
-            Optional<Subject> subject3 = subjectDao.findById(subjectId3);
-            subject3.ifPresent(s -> currentRegister.put(s, markValue3));
-            Optional<Subject> subject4 = subjectDao.findById(subjectId4);
-            subject4.ifPresent(s -> currentRegister.put(s, markValue4));
-            if (registerDao.update(markRegister, enrolleeId, subjectsForUpdate)) {
-                calculateEnrolleeAverageMark(markRegister);
-                return Optional.of(markRegister);
-            } else {
-                return Optional.empty();
-            }
-        } catch (DaoException e) {
-            logger.log(Level.ERROR, "Error in updating register", e);
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
     public Optional<EnrolleeMarkRegister> updateEnrolleeMarks(int enrolleeId, Map<String, String> parameters)
             throws ServiceException {
         EnrolleeMarkRegisterDao registerDao = EnrolleeMarkRegisterDaoImpl.getInstance();
@@ -151,7 +108,7 @@ public class EnrolleeMarkRegisterServiceImpl implements EnrolleeMarkRegisterServ
         return parameters;
     }
 
-    private EnrolleeMarkRegister calculateEnrolleeAverageMark(EnrolleeMarkRegister register) {
+    public EnrolleeMarkRegister calculateEnrolleeAverageMark(EnrolleeMarkRegister register) {
         Map<Subject, Integer> testsResults = register.getTestsSubjectsAndMarks();
         int averageMark = 0;
         for (Integer mark : testsResults.values()) {

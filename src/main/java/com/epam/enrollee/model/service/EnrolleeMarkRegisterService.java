@@ -38,15 +38,10 @@ public interface EnrolleeMarkRegisterService extends BaseService {
     Optional<EnrolleeMarkRegister> updateEnrolleeMarks(int enrolleeId, Map<String, String> parameters) throws ServiceException;
 
     /**
-     * Update enrollee register optional.
-     * Change the selected items and marks for them.
+     * Calculate enrollee average mark enrollee mark register.
      *
-     * @param enrolleId    the enrolle id
-     * @param markRegister the mark register
-     * @param parameters   the parameters
-     * @return the optional
-     * @throws ServiceException the service exception
+     * @param register the register
+     * @return the enrollee mark register
      */
-    public Optional<EnrolleeMarkRegister> updateEnrolleeRegister(int enrolleId, EnrolleeMarkRegister markRegister,
-                                                                 Map<String, String> parameters) throws ServiceException;
+    EnrolleeMarkRegister calculateEnrolleeAverageMark(EnrolleeMarkRegister register);
 }

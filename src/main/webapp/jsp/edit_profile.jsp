@@ -51,7 +51,7 @@
 
                             <div class="col">
                                 <input type="text" class="form-control" placeholder="mark" id="mark_4"
-                                       name="${register.key.subjectId}" required value="${register.value}">
+                                       name="${register.key.subjectId}" required pattern="[0-9]{1,3}" value="${register.value}">
                             </div>
                         </c:forEach>
                     </div>
@@ -73,27 +73,27 @@
                     <input type="hidden" name="command" value="edit_personal_information"/>
                     <div><fmt:message key="editprofile.firstname"/>
                         <input class="form-control" type="text"
-                               id="first_name" name="first_name" required
+                               id="first_name" name="first_name" required pattern="[a-zA-ZА-Яа-я]{2,40}"
                                value="${enrollee.firstName}">
                     </div>
                     <div><fmt:message key="editprofile.lastname"/>
                         <input class="form-control" type="text"
-                               id="last_name" name="last_name" required
+                               id="last_name" name="last_name" required pattern="[a-zA-ZА-Яа-я]{2,40}"
                                value="${enrollee.lastName}">
                     </div>
                     <div><fmt:message key="editprofile.middlename"/>
                         <input class="form-control" type="text"
                                id="middle_name" name="middle_name"
-                               required value="${enrollee.middleName}"></div>
+                               required pattern="[a-zA-ZА-Яа-я]{2,40}" value="${enrollee.middleName}"></div>
                     <div><fmt:message key="editprofile.passport"/>
                         <input class="form-control" type="text"
                                id="passport_series_and_number"
-                               name="passport_series_and_number" required
+                               name="passport_series_and_number" required pattern="[A-Z]{2}[0-9]{7}"
                                value="${passport.passportSeriesAndNumber}"></div>
                     <div><fmt:message key="editprofile.personalnumber"/>
                         <input class="form-control" type="text"
                                id="personal_number"
-                               name="personal_number" required
+                               name="personal_number" required pattern="[0-9A-Z]{14}"
                                value="${passport.personalNumber}">
                     </div>
                     <p></p>

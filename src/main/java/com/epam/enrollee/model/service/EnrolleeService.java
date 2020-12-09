@@ -2,6 +2,7 @@ package com.epam.enrollee.model.service;
 
 import com.epam.enrollee.exception.ServiceException;
 import com.epam.enrollee.model.entity.Enrollee;
+import com.epam.enrollee.model.entity.EnrolleeMarkRegister;
 import com.epam.enrollee.model.entity.Passport;
 import com.epam.enrollee.model.entity.Specialty;
 
@@ -115,4 +116,16 @@ public interface EnrolleeService extends BaseService {
      * @throws ServiceException the service exception
      */
     boolean changeApplicationStatus(String enrolleeId, String status, Specialty specialty) throws ServiceException;
+
+    /**
+     * Update enrollee application optional.
+     * Change the selected items and marks for them.
+     *
+     * @param enrollee   the enrollee
+     * @param parameters the parameters
+     * @return the optional
+     * @throws ServiceException the service exception
+     */
+    Optional<EnrolleeMarkRegister> updateEnrolleeApplication(Enrollee enrollee, Map<String, String> parameters)
+            throws ServiceException;
 }

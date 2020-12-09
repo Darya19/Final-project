@@ -266,7 +266,5 @@ n
 .src/main/resources/prop/pagecontent.properties,0\9\09a1b1bb7ceea0eecb437b079d68e88d898910be
 a
 1src/main/resources/prop/pagecontent_en.properties,8\3\83999c2cbdac22c5ff46f1d1b0716e0ab6e1415c
-M
-src/main/resources/log4j2.xml,3\6\36b9f0d33e4b7e602e3cd701314fae81543db66f
 S
 #target/login-1.0-SNAPSHOT/index.jsp,f\c\fc0db96fc330a5c6ce8077b7fd389d1853613d60
